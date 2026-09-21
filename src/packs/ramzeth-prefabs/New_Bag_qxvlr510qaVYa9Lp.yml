@@ -1,0 +1,40 @@
+_id: qxvlr510qaVYa9Lp
+name: New Bag
+pages: []
+folder: null
+flags:
+  multi-token-edit:
+    preset:
+      id: qxvlr510qaVYa9Lp
+      name: New Bag
+      data:
+        - uuids:
+            - sort: 1
+              uuid: Compendium.ramzeth-customs.ramzeth-prefabs.JournalEntry.iA6uuh0RUJ1BZR7k
+          searches:
+            inclusive: []
+            exclusive: []
+          virtualDirectory: true
+      sort: 0
+      documentName: Bag
+      addSubtract: []
+      randomize: []
+      img: icons/containers/bags/pack-engraved-leather-tan.webp
+      tags: []
+      metadata: {}
+categories: []
+sort: 0
+ownership:
+  default: 0
+  wVNliAa4T3oxpls8: 3
+_stats:
+  coreVersion: '14.367'
+  systemId: pf2e
+  systemVersion: 8.4.1
+  createdTime: 1789844981687
+  modifiedTime: 1789844991152
+  lastModifiedBy: wVNliAa4T3oxpls8
+  compendiumSource: null
+  duplicateSource: null
+  exportSource: null
+_key: '!journal!qxvlr510qaVYa9Lp'

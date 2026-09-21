@@ -1,0 +1,10 @@
+# Built compendium databases. Authored as YAML under src/packs/ and compiled
+# by the release workflow. Never committed: LevelDB is binary, churns on every
+# write and cannot be merged.
+#
+# The leading slash matters. Without it the pattern matches at any depth and
+# would swallow src/packs/ as well.
+/packs/
+
+/node_modules/
+/module.zip

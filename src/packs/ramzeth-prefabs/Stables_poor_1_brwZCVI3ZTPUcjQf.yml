@@ -1,0 +1,1169 @@
+_id: brwZCVI3ZTPUcjQf
+name: Stables_poor_1
+pages: []
+folder: 04bdrMVfyOEd8k1x
+flags:
+  multi-token-edit:
+    preset:
+      id: brwZCVI3ZTPUcjQf
+      name: Stables_poor_1
+      data:
+        - texture:
+            scaleX: 1
+            scaleY: 1
+            anchorX: 0.5
+            anchorY: 0.5
+            src: ASSETS/Images/Prefabs/stables_roof.png
+            tint: '#ffffff'
+            alphaThreshold: 0
+            fit: fill
+          width: 1200
+          height: 700
+          x: 3600
+          'y': 2950
+          rotation: 0
+          elevation: 11
+          name: ''
+          levels:
+            - defaultLevel0000
+          sort: 96
+          alpha: 1
+          flags:
+            tile-scroll:
+              enableScroll: false
+              scrollDirection: 0
+              enableRotate: false
+              scrollSpeed: 1
+              repeatx: 1
+              repeaty: 1
+              pivotx: 0.5
+              pivoty: 0.5
+              offsetx: 0
+              offsety: 0
+              parallax: 0
+            tagger: {}
+            betterroofs:
+              brMode: true
+              occlusionLinkId: ''
+              occlusionLinkSource: false
+            fxmaster:
+              restrictsParticles: true
+              restrictsFilters: true
+            fa-nexus:
+              placementLevelId: defaultLevel0000
+              shadow: false
+              shadowDilation: 1.6
+              shadowOffsetDistance: '0'
+              shadowOffsetAngle: '0'
+              shadowOffsetX: '0'
+              shadowOffsetY: '0'
+            monks-active-tiles:
+              active: true
+              record: false
+              restriction: all
+              controlled: all
+              trigger:
+                - enter
+              allowpaused: false
+              usealpha: false
+              pointer: false
+              vision: true
+              pertoken: false
+              minrequired: null
+              cooldown: null
+              chance: 100
+              fileindex: 0
+              actions: []
+              files: []
+            multi-token-edit:
+              links:
+                - id: Ard7zLoAPfDyop9O
+                  type: 0
+            multiface-tiles:
+              originalImage: ASSETS/Images/Prefabs/stables_roof.png
+          occlusion:
+            modes:
+              - 8
+            alpha: 0
+          restrictions:
+            light: true
+            weather: true
+          _id: m4eg7ScEOLCMf0Oa
+          hidden: false
+          locked: false
+          video:
+            loop: true
+            autoplay: true
+            volume: 0
+      sort: 300000
+      documentName: Tile
+      addSubtract: []
+      randomize: []
+      img: ASSETS/Images/Prefabs/stables.png
+      gridSize: 100
+      attached:
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: ASSETS/Images/Prefabs/stables.png
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+              fit: fill
+            width: 1140
+            height: 640
+            x: 3600
+            'y': 2950
+            rotation: 0
+            elevation: 0
+            name: ''
+            levels:
+              - defaultLevel0000
+            sort: 94
+            alpha: 1
+            flags:
+              tile-scroll:
+                enableScroll: false
+                scrollDirection: 0
+                enableRotate: false
+                scrollSpeed: 1
+                repeatx: 1
+                repeaty: 1
+                pivotx: 0.5
+                pivoty: 0.5
+                offsetx: 0
+                offsety: 0
+                parallax: 0
+              tagger:
+                tags: ''
+              betterroofs:
+                brMode: false
+                occlusionLinkId: ''
+                occlusionLinkSource: false
+              fxmaster:
+                restrictsParticles: false
+                restrictsFilters: false
+              fa-nexus:
+                placementLevelId: defaultLevel0000
+                shadow: false
+                shadowDilation: 1.6
+                shadowOffsetDistance: '0'
+                shadowOffsetAngle: '0'
+                shadowOffsetX: '0'
+                shadowOffsetY: '0'
+              monks-active-tiles:
+                active: true
+                record: false
+                restriction: all
+                controlled: all
+                trigger:
+                  - enter
+                allowpaused: false
+                usealpha: false
+                pointer: false
+                vision: true
+                pertoken: false
+                minrequired: null
+                cooldown: null
+                chance: 100
+                fileindex: 0
+                actions: []
+                files: []
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            occlusion:
+              modes: []
+              alpha: 0
+            restrictions:
+              light: false
+              weather: false
+            _id: CB3fuWYN9uheMDOg
+            hidden: false
+            locked: false
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Lightsources/Torches_and_Sconces/Lit/Wall_Torch_01_A_Lit_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 50
+            height: 50
+            x: 4100
+            'y': 2950
+            rotation: 315
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 95
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: svohTnqT1MOhWeEf
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Wall
+          data:
+            c:
+              - 3050
+              - 2950
+              - 3050
+              - 2650
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: Ui8KoKtGOoQZiPCd
+        - documentName: Wall
+          data:
+            c:
+              - 3050
+              - 2650
+              - 3850
+              - 2650
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: Y8qrbkDPgsGcpGRF
+        - documentName: Wall
+          data:
+            c:
+              - 3850
+              - 2650
+              - 4150
+              - 2950
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: 8jzNKUHyuam5gWdo
+        - documentName: Wall
+          data:
+            c:
+              - 4150
+              - 2950
+              - 4150
+              - 3250
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: nBypsuSeiiShs5nK
+        - documentName: Wall
+          data:
+            c:
+              - 4150
+              - 3250
+              - 3850
+              - 3250
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: dztcQCgWfNC0cmja
+        - documentName: Wall
+          data:
+            c:
+              - 3850
+              - 3250
+              - 3850
+              - 3150
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: U7lrlxkjyTfSKmmR
+        - documentName: Wall
+          data:
+            c:
+              - 3850
+              - 2650
+              - 3850
+              - 2950
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: ZpGTlxvscW08ewXB
+        - documentName: Wall
+          data:
+            c:
+              - 3250
+              - 2950
+              - 3250
+              - 2650
+            levels:
+              - defaultLevel0000
+            light: 0
+            move: 20
+            sight: 0
+            sound: 0
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: YPNPX5xaVE3TvqMH
+        - documentName: Wall
+          data:
+            c:
+              - 3450
+              - 2950
+              - 3450
+              - 2650
+            levels:
+              - defaultLevel0000
+            light: 0
+            move: 20
+            sight: 0
+            sound: 0
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: XWbd983VdXcZm8vi
+        - documentName: Wall
+          data:
+            c:
+              - 3650
+              - 2950
+              - 3650
+              - 2650
+            levels:
+              - defaultLevel0000
+            light: 0
+            move: 20
+            sight: 0
+            sound: 0
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: SeDUrkcSJEKmkx1o
+        - documentName: Wall
+          data:
+            c:
+              - 3650
+              - 2950
+              - 3750
+              - 2950
+            levels:
+              - defaultLevel0000
+            light: 0
+            move: 20
+            sight: 0
+            sound: 0
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: keijpjIxeAW7bLq1
+        - documentName: Wall
+          data:
+            c:
+              - 3450
+              - 2950
+              - 3550
+              - 2950
+            levels:
+              - defaultLevel0000
+            light: 0
+            move: 20
+            sight: 0
+            sound: 0
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: QrEpbSVhMTnvjcB3
+        - documentName: Wall
+          data:
+            c:
+              - 3250
+              - 2950
+              - 3350
+              - 2950
+            levels:
+              - defaultLevel0000
+            light: 0
+            move: 20
+            sight: 0
+            sound: 0
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: 8nVxxQ28r7bWGb9m
+        - documentName: Wall
+          data:
+            c:
+              - 3050
+              - 2950
+              - 3150
+              - 2950
+            levels:
+              - defaultLevel0000
+            light: 0
+            move: 20
+            sight: 0
+            sound: 0
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: F0enZakBPyA4Uhxc
+        - documentName: Wall
+          data:
+            c:
+              - 3150
+              - 2950
+              - 3250
+              - 2950
+            levels:
+              - defaultLevel0000
+            light: 0
+            move: 20
+            sight: 0
+            sound: 0
+            dir: 0
+            door: 1
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation:
+              type: slide
+              texture: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
+              direction: 1
+              double: false
+              duration: 750
+              flip: false
+              strength: 1
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: pYhRT9YbHcNiGWE4
+            doorSound: slidingWood
+        - documentName: Wall
+          data:
+            c:
+              - 3350
+              - 2950
+              - 3450
+              - 2950
+            levels:
+              - defaultLevel0000
+            light: 0
+            move: 20
+            sight: 0
+            sound: 0
+            dir: 0
+            door: 1
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation:
+              type: slide
+              texture: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
+              direction: 1
+              double: false
+              duration: 750
+              flip: false
+              strength: 1
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: 1b0bdYkt2zrDM3yy
+            doorSound: slidingWood
+        - documentName: Wall
+          data:
+            c:
+              - 3550
+              - 2950
+              - 3650
+              - 2950
+            levels:
+              - defaultLevel0000
+            light: 0
+            move: 20
+            sight: 0
+            sound: 0
+            dir: 0
+            door: 1
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation:
+              type: slide
+              texture: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
+              direction: 1
+              double: false
+              duration: 750
+              flip: false
+              strength: 1
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: hrSiwkHUzjVOaKVd
+            doorSound: slidingWood
+        - documentName: Wall
+          data:
+            c:
+              - 3750
+              - 2950
+              - 3850
+              - 2950
+            levels:
+              - defaultLevel0000
+            light: 0
+            move: 20
+            sight: 0
+            sound: 0
+            dir: 0
+            door: 1
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation:
+              type: slide
+              texture: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
+              direction: 1
+              double: false
+              duration: 750
+              flip: false
+              strength: 1
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: hZrGXz3WDNJ1rW12
+            doorSound: slidingWood
+        - documentName: Wall
+          data:
+            c:
+              - 3850
+              - 2950
+              - 3850
+              - 3150
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 1
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation:
+              type: swing
+              texture: fa-nexus-assets/Woodlands/Base_Woodlands_Settlement/Structures/Building/Doors/Double_Doors/Shack_Door_Double_Wood_Light_C1_2x1.webp
+              flip: false
+              double: true
+              direction: 1
+              duration: 750
+              strength: 1
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              monks-active-tiles:
+                entity: ''
+                open: false
+                close: false
+                lock: false
+                unlock: false
+                checklock: false
+                secret: false
+              tagger:
+                tags: ''
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _id: wFPz1nVQnybGplhq
+            doorSound: woodCreaky
+        - documentName: AmbientLight
+          data:
+            config:
+              dim: 15
+              bright: 7.5
+              negative: false
+              priority: 0
+              alpha: 0.5
+              angle: 360
+              color: '#ff8000'
+              coloration: 1
+              attenuation: 0.5
+              luminosity: 0.5
+              saturation: 0
+              contrast: 0
+              shadows: 0
+              animation:
+                type: flame
+                speed: 5
+                intensity: 5
+                reverse: false
+              darkness:
+                min: 0
+                max: 1
+            x: 4100
+            'y': 2950
+            elevation: 0
+            levels:
+              - defaultLevel0000
+            walls: true
+            vision: false
+            hidden: false
+            name: Ambient Light
+            _id: L7ecexvqwLhS5SLI
+            rotation: 0
+            locked: false
+            flags:
+              levels:
+                rangeTop: null
+              tagger:
+                tags: ''
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+        - documentName: AmbientSound
+          data:
+            name: Torch
+            path: ASSETS/Sounds/ambient/firesources/fireplace/open-fire-002.ogg
+            levels:
+              - defaultLevel0000
+            x: 4100
+            'y': 2950
+            radius: 20
+            flags:
+              levels:
+                rangeTop: null
+              tagger: {}
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            elevation: 0
+            volume: 0.7
+            easing: true
+            hidden: false
+            walls: true
+            darkness:
+              min: 0
+              max: 1
+            effects:
+              base:
+                type: ''
+                intensity: 5
+              muffled:
+                intensity: 5
+            _id: u26uNtSexO5aZCPF
+            repeat: false
+            locked: false
+        - documentName: Region
+          data:
+            name: Region (2)
+            shapes:
+              - type: polygon
+                points:
+                  - 3849.5
+                  - 2650
+                  - 3849.5
+                  - 3250
+                  - 4149.5
+                  - 3250
+                  - 4149.5
+                  - 2950
+                hole: false
+                origin: null
+            color: '#6228cc'
+            elevation:
+              bottom: 0
+              top: 10
+              topInclusive: false
+            levels:
+              - defaultLevel0000
+            restriction:
+              enabled: false
+              type: move
+              priority: 0
+            attachment:
+              token: null
+            visibility: 4
+            highlightMode: shapes
+            displayMeasurements: false
+            hidden: false
+            _id: eXUZNJWnShI9WYlE
+            behaviors:
+              - name: Adjust Darkness Level
+                type: adjustDarknessLevel
+                _id: Ro6cipjCRATnFMyq
+                system:
+                  mode: 2
+                  modifier: 1
+                disabled: false
+                flags: {}
+                _stats:
+                  coreVersion: '14.367'
+                  systemId: pf2e
+                  systemVersion: 8.4.1
+                  createdTime: 1788280895952
+                  modifiedTime: 1788280895952
+                  lastModifiedBy: wVNliAa4T3oxpls8
+                  compendiumSource: null
+                  duplicateSource: null
+                  exportSource: null
+            locked: false
+            ownership:
+              wVNliAa4T3oxpls8: 3
+              default: 0
+            flags:
+              pf2e:
+                areaShape: null
+              tokenmagic:
+                regionData:
+                  opacity: 1
+                  alpha: 0.5
+                filters: null
+                options: null
+              tagger:
+                tags: ''
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _shapeConstraints: null
+        - documentName: Region
+          data:
+            name: Region (3)
+            shapes:
+              - type: polygon
+                points:
+                  - 3874.5
+                  - 3150
+                  - 3912
+                  - 3150
+                  - 3912
+                  - 3187.5
+                  - 4049.5
+                  - 3187.5
+                  - 4049.5
+                  - 3137.5
+                  - 4074.5
+                  - 3125
+                  - 4074.5
+                  - 2950
+                  - 4024.5
+                  - 2900
+                  - 3962
+                  - 2825
+                  - 3924.5
+                  - 2787.5
+                  - 3924.5
+                  - 2987.5
+                  - 3862
+                  - 2987.5
+                  - 3862
+                  - 2675
+                  - 4137
+                  - 2962.5
+                  - 4137
+                  - 3237.5
+                  - 3862
+                  - 3237.5
+                  - 3862
+                  - 3150
+                hole: false
+                origin: null
+            color: '#ccab28'
+            elevation:
+              bottom: 0
+              top: 20
+              topInclusive: false
+            levels:
+              - defaultLevel0000
+            restriction:
+              enabled: false
+              type: move
+              priority: 0
+            attachment:
+              token: null
+            visibility: 4
+            highlightMode: shapes
+            displayMeasurements: false
+            hidden: false
+            _id: EpvvV4ijsRHNmCZV
+            behaviors:
+              - name: Difficult Terrain
+                type: modifyMovementCost
+                _id: U61BjPHtAE6q6rFX
+                system:
+                  difficulties:
+                    walk: 2
+                    fly: 1
+                    swim: 1
+                    burrow: 1
+                    deploy: 1
+                    travel: 2
+                disabled: false
+                flags: {}
+                _stats:
+                  coreVersion: '14.367'
+                  systemId: pf2e
+                  systemVersion: 8.4.1
+                  createdTime: 1788280895953
+                  modifiedTime: 1788280895953
+                  lastModifiedBy: wVNliAa4T3oxpls8
+                  compendiumSource: null
+                  duplicateSource: null
+                  exportSource: null
+            locked: false
+            ownership:
+              wVNliAa4T3oxpls8: 3
+              default: 0
+            flags:
+              pf2e:
+                areaShape: null
+              tokenmagic:
+                regionData:
+                  opacity: 1
+                  alpha: 0.5
+                filters: null
+                options: null
+              tagger:
+                tags: []
+              multi-token-edit:
+                links:
+                  - id: Ard7zLoAPfDyop9O
+                    type: 0
+            _shapeConstraints: null
+      tags: []
+      metadata:
+        coreVersion: '14.367'
+        levels:
+          - id: defaultLevel0000
+            name: Level
+            elevation:
+              top: 20
+              bottom: 0
+            visibility:
+              levels: []
+      preSpawnScript: ''
+      postSpawnScript: ''
+      spawnRandom: false
+      preserveLinks: false
+      folder: 04bdrMVfyOEd8k1x
+categories: []
+sort: 300000
+ownership:
+  default: 0
+  wVNliAa4T3oxpls8: 3
+_stats:
+  coreVersion: '14.367'
+  systemId: pf2e
+  systemVersion: 8.4.1
+  createdTime: 1788291750274
+  modifiedTime: 1788376441856
+  lastModifiedBy: wVNliAa4T3oxpls8
+  compendiumSource: null
+  duplicateSource: null
+  exportSource: null
+_key: '!journal!brwZCVI3ZTPUcjQf'

@@ -1,0 +1,61 @@
+{
+  "id": "ramzeth-customs",
+  "title": "Ramzeth Customs",
+  "description": "Personal library: prefabs, sounds and custom content.",
+  "version": "#{VERSION}#",
+  "authors": [
+    { "name": "Ramzeth" }
+  ],
+  "url": "#{URL}#",
+  "manifest": "#{MANIFEST}#",
+  "download": "#{DOWNLOAD}#",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14.367"
+  },
+  "esmodules": ["scripts/main.js"],
+  "styles": ["styles/main.css"],
+  "relationships": {
+      "requires": [
+          { "id": "lib-wrapper", "type": "module" }
+      ]
+  },
+  "packs": [
+    {
+      "name": "ramzeth-prefabs",
+      "label": "Ramzeth Prefabs",
+      "path": "packs/ramzeth-prefabs",
+      "type": "JournalEntry",
+      "ownership": {
+        "PLAYER": "NONE",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "ramzeth-sounds",
+      "label": "Ramzeth Sounds",
+      "path": "packs/ramzeth-sounds",
+      "type": "Playlist",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    },
+    {
+      "name": "ramzeth-spells",
+      "label": "Ramzeth Spells",
+      "path": "packs/ramzeth-spells",
+      "type": "Item",
+      "system": "pf2e",
+      "ownership": { "PLAYER": "OBSERVER", "TRUSTED": "OBSERVER", "ASSISTANT": "OWNER", "GAMEMASTER": "OWNER" }
+    }
+  ],
+  "packFolders": [
+    {
+      "name": "Ramzeth Customs",
+      "sorting": "m",
+      "color": "#6b4fa8",
+      "packs": ["ramzeth-prefabs", "ramzeth-sounds", "ramzeth-spells"]
+    }
+  ]
+}

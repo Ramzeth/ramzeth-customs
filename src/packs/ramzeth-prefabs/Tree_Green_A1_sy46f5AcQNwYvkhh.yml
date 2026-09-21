@@ -1,0 +1,534 @@
+_id: sy46f5AcQNwYvkhh
+name: Tree_Green_A1
+pages: []
+folder: tUTmEKToeB5fRlSE
+flags:
+  multi-token-edit:
+    preset:
+      id: sy46f5AcQNwYvkhh
+      uuid: Compendium.world.prefabs.JournalEntry.sy46f5AcQNwYvkhh
+      name: Tree_Green_A1
+      data:
+        - texture:
+            scaleX: 1
+            scaleY: 1
+            anchorX: 0.5
+            anchorY: 0.5
+            src: fa-nexus-assets/Woodlands/!Wilderness/Flora/Trees/Tree_Green_A1_6x6.webp
+            fit: fill
+            tint: '#ffffff'
+            alphaThreshold: 0.75
+          width: 480
+          height: 480
+          x: 4520
+          'y': 2800
+          rotation: 0
+          elevation: 15
+          hidden: false
+          locked: false
+          sort: 75
+          occlusion:
+            modes:
+              - 1
+            alpha: 0
+          restrictions:
+            light: true
+            weather: false
+          flags:
+            fa-nexus:
+              shadow: true
+              shadowAlpha: 0.65
+              shadowDilation: 1.6
+              shadowBlur: 1.8
+              shadowOffsetDistance: '40'
+              shadowOffsetAngle: '42'
+              shadowOffsetX: '29.9530377344363'
+              shadowOffsetY: '26.51066823902097'
+              shadowOnly: false
+              placementLevelId: defaultLevel0000
+            multi-token-edit:
+              links:
+                - id: 88PdYlm25LCBwfiW
+                  type: 0
+            multiface-tiles:
+              originalImage: fa-nexus-assets/Woodlands/!Wilderness/Flora/Trees/Tree_Green_A1_6x6.webp
+            tile-scroll:
+              enableScroll: false
+              scrollDirection: 0
+              enableRotate: false
+              scrollSpeed: 1
+              repeatx: 1
+              repeaty: 1
+              pivotx: 0.5
+              pivoty: 0.5
+              offsetx: 0
+              offsety: 0
+              parallax: 0
+            tagger:
+              tags: ''
+            betterroofs:
+              brMode: false
+              occlusionLinkId: ''
+              occlusionLinkSource: false
+            fxmaster:
+              restrictsParticles: false
+              restrictsFilters: false
+            monks-active-tiles:
+              active: false
+              record: false
+              restriction: all
+              controlled: all
+              trigger:
+                - ''
+              allowpaused: false
+              usealpha: false
+              pointer: false
+              vision: false
+              pertoken: false
+              minrequired: null
+              cooldown: null
+              chance: 0
+              fileindex: 0
+              actions: []
+              files: []
+          _id: o3arvnHu98YRnzag
+          levels:
+            - defaultLevel0000
+          alpha: 1
+          video:
+            loop: true
+            autoplay: true
+            volume: 0
+          name: ''
+      sort: 200000
+      folder: tUTmEKToeB5fRlSE
+      documentName: Tile
+      addSubtract: []
+      randomize: []
+      img: fa-nexus-assets/Woodlands/!Wilderness/Flora/Trees/Tree_Green_A1_6x6.webp
+      gridSize: 80
+      preSpawnScript: ''
+      postSpawnScript: ''
+      spawnRandom: false
+      attached:
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/Woodlands/!Wilderness/Flora/Trees/Tree_Shadows/Tree_Shadow_A1_6x6.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 480
+            height: 480
+            x: 4520
+            'y': 2800
+            rotation: 0
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 76
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: '2.3259406699226015'
+                shadowOffsetAngle: '64.5366549381284'
+                shadowOffsetX: '1'
+                shadowOffsetY: '2.1'
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: 88PdYlm25LCBwfiW
+                    type: 0
+              tile-scroll:
+                enableScroll: false
+                scrollDirection: 0
+                enableRotate: false
+                scrollSpeed: 1
+                repeatx: 1
+                repeaty: 1
+                pivotx: 0.5
+                pivoty: 0.5
+                offsetx: 0
+                offsety: 0
+                parallax: 0
+              tagger: {}
+              betterroofs:
+                brMode: false
+                occlusionLinkId: ''
+                occlusionLinkSource: false
+              fxmaster:
+                restrictsParticles: false
+                restrictsFilters: false
+              monks-active-tiles:
+                active: false
+                record: false
+                restriction: all
+                controlled: all
+                trigger:
+                  - ''
+                allowpaused: false
+                usealpha: false
+                pointer: false
+                vision: false
+                pertoken: false
+                minrequired: null
+                cooldown: null
+                chance: 0
+                fileindex: 0
+                actions: []
+                files: []
+            _id: b5RXD26rtcauBs1D
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+            name: ''
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/Woodlands/!Wilderness/Flora/Trees/Stumps/Stump_Light_B1_4x4.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 160
+            height: 160
+            x: 4520
+            'y': 2840
+            rotation: 0
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 77
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: 88PdYlm25LCBwfiW
+                    type: 0
+            _id: EMqTzV2jR5i23xae
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Wall
+          data:
+            c:
+              - 4500
+              - 2870
+              - 4510
+              - 2870
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: 88PdYlm25LCBwfiW
+                    type: 0
+            _id: AZKZg8YLHOdmc0U1
+        - documentName: Wall
+          data:
+            c:
+              - 4510
+              - 2870
+              - 4530
+              - 2870
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: 88PdYlm25LCBwfiW
+                    type: 0
+            _id: ooFXUZ7Km6aVBW0u
+        - documentName: Wall
+          data:
+            c:
+              - 4530
+              - 2870
+              - 4550
+              - 2840
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: 88PdYlm25LCBwfiW
+                    type: 0
+            _id: kpjo7SgGQZLnHmy0
+        - documentName: Wall
+          data:
+            c:
+              - 4550
+              - 2840
+              - 4540
+              - 2820
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: 88PdYlm25LCBwfiW
+                    type: 0
+            _id: 5o9FT5CGSRblGBrq
+        - documentName: Wall
+          data:
+            c:
+              - 4540
+              - 2820
+              - 4520
+              - 2820
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: 88PdYlm25LCBwfiW
+                    type: 0
+            _id: lROH5fup3lZrhp6X
+        - documentName: Wall
+          data:
+            c:
+              - 4520
+              - 2820
+              - 4500
+              - 2810
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: 88PdYlm25LCBwfiW
+                    type: 0
+            _id: r4KHnfCtaIEnHK4N
+        - documentName: Wall
+          data:
+            c:
+              - 4500
+              - 2810
+              - 4490
+              - 2830
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: 88PdYlm25LCBwfiW
+                    type: 0
+            _id: FezomTV65XUaIZWs
+        - documentName: Wall
+          data:
+            c:
+              - 4490
+              - 2830
+              - 4480
+              - 2850
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: 88PdYlm25LCBwfiW
+                    type: 0
+            _id: uJA5zFXeAazSIJ7X
+        - documentName: Wall
+          data:
+            c:
+              - 4480
+              - 2850
+              - 4500
+              - 2870
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: 88PdYlm25LCBwfiW
+                    type: 0
+            _id: D7VqiMCJ7JpubiHb
+      tags: []
+      preserveLinks: false
+      metadata:
+        coreVersion: '14.367'
+        levels:
+          - id: defaultLevel0000
+            name: ambush2
+            elevation:
+              top: 20
+              bottom: 0
+            visibility:
+              levels: []
+categories: []
+sort: 200000
+ownership:
+  default: 0
+  wVNliAa4T3oxpls8: 3
+_stats:
+  coreVersion: '14.367'
+  systemId: pf2e
+  systemVersion: 8.4.1
+  createdTime: 1787506224396
+  modifiedTime: 1789842943407
+  lastModifiedBy: wVNliAa4T3oxpls8
+  compendiumSource: null
+  duplicateSource: null
+  exportSource: null
+_key: '!journal!sy46f5AcQNwYvkhh'

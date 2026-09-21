@@ -1,0 +1,528 @@
+_id: AS1QHmZWFuVXqPNB
+name: Bush_1
+pages: []
+folder: FViqcV4NpwnvZWmx
+flags:
+  multi-token-edit:
+    preset:
+      id: AS1QHmZWFuVXqPNB
+      name: Bush_1
+      data:
+        - texture:
+            scaleX: 1
+            scaleY: 1
+            anchorX: 0.5
+            anchorY: 0.5
+            src: fa-nexus-assets/Woodlands/!Wilderness/Flora/Bushes/Bush_Green_E7_2x2.webp
+            fit: fill
+            tint: '#ffffff'
+            alphaThreshold: 0.75
+          width: 200
+          height: 200
+          x: 1800
+          'y': 1538
+          rotation: 0
+          elevation: 0
+          hidden: false
+          locked: false
+          sort: 1
+          occlusion:
+            modes:
+              - 2
+            alpha: 0
+          restrictions:
+            light: true
+            weather: false
+          flags:
+            fa-nexus:
+              shadow: true
+              shadowAlpha: 0.65
+              shadowDilation: 1.6
+              shadowBlur: 1.8
+              shadowOffsetDistance: '8'
+              shadowOffsetAngle: '40'
+              shadowOffsetX: '6.145770236779007'
+              shadowOffsetY: '5.1214751973158394'
+              shadowOnly: false
+              placementLevelId: defaultLevel0000
+            multi-token-edit:
+              links:
+                - id: X1gZk7Yik4NjOdXL
+                  type: 0
+            tile-scroll:
+              enableScroll: false
+              scrollDirection: 0
+              enableRotate: false
+              scrollSpeed: 1
+              repeatx: 1
+              repeaty: 1
+              pivotx: 0.5
+              pivoty: 0.5
+              offsetx: 0
+              offsety: 0
+              parallax: 0
+            tagger:
+              tags: ''
+            betterroofs:
+              brMode: false
+              occlusionLinkId: ''
+              occlusionLinkSource: false
+            fxmaster:
+              restrictsParticles: false
+              restrictsFilters: false
+            monks-active-tiles:
+              active: false
+              record: false
+              restriction: all
+              controlled: all
+              trigger:
+                - enter
+              allowpaused: false
+              usealpha: false
+              pointer: false
+              vision: false
+              pertoken: false
+              minrequired: null
+              cooldown: null
+              chance: 0
+              fileindex: -1
+              actions: []
+              files: []
+          _id: WnJ57LPpie2J18La
+          levels:
+            - defaultLevel0000
+          alpha: 1
+          video:
+            loop: true
+            autoplay: true
+            volume: 0
+          name: ''
+      sort: 100000
+      documentName: Tile
+      addSubtract: []
+      randomize: []
+      img: fa-nexus-assets/Woodlands/!Wilderness/Flora/Bushes/Bush_Green_E7_2x2.webp
+      gridSize: 100
+      attached:
+        - documentName: Wall
+          data:
+            c:
+              - 1783
+              - 1465
+              - 1783
+              - 1477
+            _id: j6eTbMm7lmikTyek
+            levels:
+              - defaultLevel0000
+            light: 10
+            move: 0
+            sight: 10
+            sound: 10
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: X1gZk7Yik4NjOdXL
+                    type: 0
+              monks-active-tiles:
+                entity: ''
+        - documentName: Wall
+          data:
+            c:
+              - 1783
+              - 1477
+              - 1833
+              - 1465
+            _id: TV0x8D6ZrDohEBsZ
+            levels:
+              - defaultLevel0000
+            light: 10
+            move: 0
+            sight: 10
+            sound: 10
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: X1gZk7Yik4NjOdXL
+                    type: 0
+              monks-active-tiles:
+                entity: ''
+        - documentName: Wall
+          data:
+            c:
+              - 1833
+              - 1465
+              - 1870
+              - 1490
+            _id: YUF6mSEV8bdcKlsO
+            levels:
+              - defaultLevel0000
+            light: 10
+            move: 0
+            sight: 10
+            sound: 10
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: X1gZk7Yik4NjOdXL
+                    type: 0
+              monks-active-tiles:
+                entity: ''
+        - documentName: Wall
+          data:
+            c:
+              - 1870
+              - 1490
+              - 1833
+              - 1515
+            _id: kRur8rXPCIYBKIJ3
+            levels:
+              - defaultLevel0000
+            light: 10
+            move: 0
+            sight: 10
+            sound: 10
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: X1gZk7Yik4NjOdXL
+                    type: 0
+              monks-active-tiles:
+                entity: ''
+        - documentName: Wall
+          data:
+            c:
+              - 1833
+              - 1515
+              - 1833
+              - 1527
+            _id: Yz6KfmE6Sjj430SY
+            levels:
+              - defaultLevel0000
+            light: 10
+            move: 0
+            sight: 10
+            sound: 10
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: X1gZk7Yik4NjOdXL
+                    type: 0
+              monks-active-tiles:
+                entity: ''
+        - documentName: Wall
+          data:
+            c:
+              - 1833
+              - 1527
+              - 1845
+              - 1540
+            _id: ThZ0ZNC8my4ucxWo
+            levels:
+              - defaultLevel0000
+            light: 10
+            move: 0
+            sight: 10
+            sound: 10
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: X1gZk7Yik4NjOdXL
+                    type: 0
+              monks-active-tiles:
+                entity: ''
+        - documentName: Wall
+          data:
+            c:
+              - 1845
+              - 1540
+              - 1858
+              - 1540
+            _id: fN6jEVopUdrsfNr5
+            levels:
+              - defaultLevel0000
+            light: 10
+            move: 0
+            sight: 10
+            sound: 10
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: X1gZk7Yik4NjOdXL
+                    type: 0
+              monks-active-tiles:
+                entity: ''
+        - documentName: Wall
+          data:
+            c:
+              - 1858
+              - 1540
+              - 1883
+              - 1552
+            _id: J5CmeLLRj7XBSoC3
+            levels:
+              - defaultLevel0000
+            light: 10
+            move: 0
+            sight: 10
+            sound: 10
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: X1gZk7Yik4NjOdXL
+                    type: 0
+              monks-active-tiles:
+                entity: ''
+        - documentName: Wall
+          data:
+            c:
+              - 1883
+              - 1552
+              - 1845
+              - 1590
+            _id: ngRAONvLyj6dEyom
+            levels:
+              - defaultLevel0000
+            light: 10
+            move: 0
+            sight: 10
+            sound: 10
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: X1gZk7Yik4NjOdXL
+                    type: 0
+              monks-active-tiles:
+                entity: ''
+        - documentName: Wall
+          data:
+            c:
+              - 1845
+              - 1590
+              - 1770
+              - 1602
+            _id: 0N4dK6pv5BwsGwEl
+            levels:
+              - defaultLevel0000
+            light: 10
+            move: 0
+            sight: 10
+            sound: 10
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: X1gZk7Yik4NjOdXL
+                    type: 0
+              monks-active-tiles:
+                entity: ''
+        - documentName: Wall
+          data:
+            c:
+              - 1770
+              - 1602
+              - 1733
+              - 1577
+            _id: Rcp35sEK1NcuNpAt
+            levels:
+              - defaultLevel0000
+            light: 10
+            move: 0
+            sight: 10
+            sound: 10
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: X1gZk7Yik4NjOdXL
+                    type: 0
+              monks-active-tiles:
+                entity: ''
+        - documentName: Wall
+          data:
+            c:
+              - 1733
+              - 1577
+              - 1720
+              - 1552
+            _id: dgwRTv9KByRCagaK
+            levels:
+              - defaultLevel0000
+            light: 10
+            move: 0
+            sight: 10
+            sound: 10
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: X1gZk7Yik4NjOdXL
+                    type: 0
+              monks-active-tiles:
+                entity: ''
+        - documentName: Wall
+          data:
+            c:
+              - 1720
+              - 1552
+              - 1783
+              - 1477
+            _id: 9zhV86qf7hXjEMsv
+            levels:
+              - defaultLevel0000
+            light: 10
+            move: 0
+            sight: 10
+            sound: 10
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: X1gZk7Yik4NjOdXL
+                    type: 0
+              monks-active-tiles:
+                entity: ''
+      tags: []
+      metadata:
+        coreVersion: '14.367'
+        levels:
+          - id: defaultLevel0000
+            name: Level
+            elevation:
+              top: 20
+              bottom: 0
+            visibility:
+              levels: []
+      preSpawnScript: ''
+      postSpawnScript: ''
+      spawnRandom: false
+      preserveLinks: false
+      folder: FViqcV4NpwnvZWmx
+categories: []
+sort: 100000
+ownership:
+  default: 0
+  wVNliAa4T3oxpls8: 3
+_stats:
+  coreVersion: '14.367'
+  systemId: pf2e
+  systemVersion: 8.4.1
+  createdTime: 1787508773550
+  modifiedTime: 1787508801580
+  lastModifiedBy: wVNliAa4T3oxpls8
+  compendiumSource: null
+  duplicateSource: null
+  exportSource: null
+_key: '!journal!AS1QHmZWFuVXqPNB'

@@ -1,0 +1,72 @@
+_id: MassEditMetaData
+name: '!!! METADATA: DO NOT DELETE !!!'
+flags:
+  multi-token-edit:
+    index:
+      MassEditMetaData: {}
+      KX7rvtB7PnIPq8gm:
+        img: fa-nexus-assets/Woodlands/!Wilderness/Flora/Trees/Bare_Trees/Tree_Branches/Tree_Branch_Ashen_A1_2x2.webp
+        documentName: Tile
+        tags: []
+      sy46f5AcQNwYvkhh:
+        img: fa-nexus-assets/Woodlands/!Wilderness/Flora/Trees/Tree_Green_A1_6x6.webp
+        documentName: Tile
+        tags: []
+      AS1QHmZWFuVXqPNB:
+        img: fa-nexus-assets/Woodlands/!Wilderness/Flora/Bushes/Bush_Green_E7_2x2.webp
+        documentName: Tile
+        tags: []
+      7DeZKvPLAqwMxyQn:
+        img: fa-nexus-assets/Woodlands/!Wilderness/Flora/Bushes/Bush_Green_E5_2x2.webp
+        documentName: Tile
+        tags: []
+      fxyZNXSDvmugktca:
+        img: fa-nexus-assets/Woodlands/!Wilderness/Flora/Bushes/Bush_Green_E6_2x2.webp
+        documentName: Tile
+        tags: []
+      brwZCVI3ZTPUcjQf:
+        img: ASSETS/Images/Prefabs/stables.png
+        documentName: Tile
+        tags: []
+      G4LJCPk983ByhvFT:
+        img: ASSETS/Images/Objects/Wood/log_pile_1.png
+        documentName: Tile
+        tags: []
+      MMgYQnMDg2r0jfEp:
+        img: ASSETS/Images/Prefabs/lumberjack_house_floor.jpg
+        documentName: Tile
+        tags: []
+      FDap7ATz1allKNmT:
+        img: ASSETS/Images/Prefabs/lumberjack_warehouse-floor.png
+        documentName: Tile
+        tags: []
+      q2ZgMCozvvVydMuU:
+        img: ASSETS/Images/Prefabs/bunkhouse_floor.png
+        documentName: Tile
+        tags: []
+      iA6uuh0RUJ1BZR7k:
+        img: fa-nexus-assets/!Core_Settlements/Structures/Building/Walls_and_Curbs/Wall_Stone_B/Wall_Stone_Earthy_B1_Straight_C_1x1.webp
+        documentName: Tile
+        tags: []
+      qxvlr510qaVYa9Lp:
+        img: icons/containers/bags/pack-engraved-leather-tan.webp
+        documentName: Bag
+        tags: []
+pages: []
+folder: null
+categories: []
+sort: 0
+ownership:
+  default: 0
+  wVNliAa4T3oxpls8: 3
+_stats:
+  coreVersion: '14.367'
+  systemId: pf2e
+  systemVersion: 8.4.1
+  createdTime: 1787506201283
+  modifiedTime: 1789844982072
+  lastModifiedBy: wVNliAa4T3oxpls8
+  compendiumSource: null
+  duplicateSource: null
+  exportSource: null
+_key: '!journal!MassEditMetaData'

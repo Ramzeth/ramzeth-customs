@@ -1,0 +1,53 @@
+name: Dungeon
+_id: OXRHhehzTVJxtnGf
+sounds:
+  - name: Music For Desperation
+    path: ASSETS/Music/Dungeon/Music%20for%20desperation.mp3
+    channel: ''
+    volume: 0.21
+    repeat: false
+    fade: null
+    description: ''
+    _id: uQ4fnmnSEU7szXrg
+    playing: false
+    sort: 0
+    flags: {}
+    pausedTime: null
+    _key: '!playlists.sounds!OXRHhehzTVJxtnGf.uQ4fnmnSEU7szXrg'
+  - name: 474 Kingdom Of Mist
+    path: ASSETS/Music/Dungeon/474_Kingdom_of_Mist.mp3
+    channel: ''
+    volume: 0.13
+    repeat: false
+    fade: null
+    description: ''
+    _id: ncedFEUkMMTnTUa1
+    playing: false
+    sort: 0
+    flags: {}
+    pausedTime: null
+    _key: '!playlists.sounds!OXRHhehzTVJxtnGf.ncedFEUkMMTnTUa1'
+channel: music
+mode: 1
+playing: false
+folder: 03QMrBXJShWeQCXW
+sorting: a
+ownership:
+  default: 0
+  tldr0KuKAT2WJlIS: 3
+flags: {}
+_stats:
+  coreVersion: '14.367'
+  systemId: pf2e
+  systemVersion: 8.4.1
+  createdTime: 1789542748703
+  modifiedTime: 1789542748703
+  lastModifiedBy: tldr0KuKAT2WJlIS
+  compendiumSource: null
+  duplicateSource: null
+  exportSource: null
+description: ''
+fade: null
+seed: null
+sort: 0
+_key: '!playlists!OXRHhehzTVJxtnGf'

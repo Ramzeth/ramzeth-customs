@@ -1,0 +1,3308 @@
+_id: q2ZgMCozvvVydMuU
+name: Lumber_bunkhouse
+pages: []
+folder: 04bdrMVfyOEd8k1x
+flags:
+  multi-token-edit:
+    preset:
+      id: q2ZgMCozvvVydMuU
+      name: Lumber_bunkhouse
+      data:
+        - texture:
+            scaleX: 1
+            scaleY: 1
+            anchorX: 0.5
+            anchorY: 0.5
+            src: ASSETS/Images/Prefabs/bunkhouse_roof.jpg.png
+            tint: '#ffffff'
+            alphaThreshold: 0.75
+            fit: fill
+          width: 1500
+          height: 800
+          x: 4250
+          'y': 1100
+          rotation: 0
+          elevation: 11
+          name: ''
+          levels:
+            - defaultLevel0000
+          sort: 106
+          alpha: 1
+          flags:
+            tile-scroll:
+              enableScroll: false
+              scrollDirection: 0
+              enableRotate: false
+              scrollSpeed: 1
+              repeatx: 1
+              repeaty: 1
+              pivotx: 0.5
+              pivoty: 0.5
+              offsetx: 0
+              offsety: 0
+              parallax: 0
+            tagger: {}
+            betterroofs:
+              brMode: true
+              occlusionLinkId: ''
+              occlusionLinkSource: false
+            fxmaster:
+              restrictsParticles: true
+              restrictsFilters: true
+            fa-nexus:
+              placementLevelId: defaultLevel0000
+              shadow: false
+              shadowDilation: 1.6
+              shadowOffsetDistance: '0'
+              shadowOffsetAngle: '0'
+              shadowOffsetX: '0'
+              shadowOffsetY: '0'
+            monks-active-tiles:
+              active: true
+              record: false
+              restriction: all
+              controlled: all
+              trigger:
+                - enter
+              allowpaused: false
+              usealpha: false
+              pointer: false
+              vision: true
+              pertoken: false
+              minrequired: null
+              cooldown: null
+              chance: 100
+              fileindex: 0
+              actions: []
+              files: []
+            multi-token-edit:
+              links:
+                - id: HWuLQTwbl8oIH8S7
+                  type: 0
+          occlusion:
+            modes:
+              - 8
+            alpha: 0
+          restrictions:
+            light: true
+            weather: true
+          _id: 7IG3wZSqaKZAT2gd
+          hidden: false
+          locked: false
+          video:
+            loop: true
+            autoplay: true
+            volume: 0
+      sort: 200000
+      documentName: Tile
+      addSubtract: []
+      randomize: []
+      img: ASSETS/Images/Prefabs/bunkhouse_floor.png
+      gridSize: 100
+      attached:
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: ASSETS/Images/Prefabs/bunkhouse_floor.png
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+              fit: fill
+            width: 1500
+            height: 800
+            x: 4250
+            'y': 1100
+            rotation: 0
+            elevation: 0
+            name: ''
+            levels:
+              - defaultLevel0000
+            sort: 60
+            alpha: 1
+            flags:
+              tile-scroll:
+                enableScroll: false
+                scrollDirection: 0
+                enableRotate: false
+                scrollSpeed: 1
+                repeatx: 1
+                repeaty: 1
+                pivotx: 0.5
+                pivoty: 0.5
+                offsetx: 0
+                offsety: 0
+                parallax: 0
+              tagger:
+                tags: ''
+              betterroofs:
+                brMode: false
+                occlusionLinkId: ''
+                occlusionLinkSource: false
+              fxmaster:
+                restrictsParticles: false
+                restrictsFilters: false
+              fa-nexus:
+                placementLevelId: defaultLevel0000
+                shadow: false
+                shadowDilation: 1.6
+                shadowOffsetDistance: '0'
+                shadowOffsetAngle: '0'
+                shadowOffsetX: '0'
+                shadowOffsetY: '0'
+              monks-active-tiles:
+                active: true
+                record: false
+                restriction: all
+                controlled: all
+                trigger:
+                  - enter
+                allowpaused: false
+                usealpha: false
+                pointer: false
+                vision: true
+                pertoken: false
+                minrequired: null
+                cooldown: null
+                chance: 100
+                fileindex: 0
+                actions: []
+                files: []
+              multiface-tiles:
+                originalImage: ASSETS/Images/Prefabs/bunkhouse_floor.png
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            occlusion:
+              modes: []
+              alpha: 0
+            restrictions:
+              light: false
+              weather: false
+            _id: 0cwYs9fEHKjuLXvW
+            hidden: false
+            locked: false
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Seating/Chairs/Broken/Chair_Broken_Wood_Ashen_B1_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4526
+            'y': 1252
+            rotation: 15
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 61
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: CCXKHb44C00ES9SX
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Seating/Chairs/Chair_Wood_Walnut_F_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4151
+            'y': 1089
+            rotation: 240
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 62
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: wMRLpleFLqLzR6bb
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Seating/Chairs/Chair_Wood_Walnut_F_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4007
+            'y': 981
+            rotation: 195
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 63
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: 3VKfl4FaNKud2QEJ
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Seating/Chairs/Chair_Wood_Walnut_F_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 3687
+            'y': 984
+            rotation: 150
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 64
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: DEqRzlXJiWHnrVqY
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Seating/Chairs/Chair_Wood_Walnut_F_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 3785
+            'y': 1227
+            rotation: 30
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 65
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: CVxoFx2sdHl2RIc7
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 221
+            height: 110
+            x: 3682
+            'y': 1064
+            rotation: 180
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 66
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: SsXCEUiQIQK1TDMv
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 221
+            height: 110
+            x: 3681
+            'y': 1147
+            rotation: 180
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 67
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: YLCfBLTNhJuNVzxM
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 221
+            height: 110
+            x: 3849
+            'y': 1063
+            rotation: 180
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 68
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: sbMIysED1HeKWoLj
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 221
+            height: 110
+            x: 3850
+            'y': 1144
+            rotation: 180
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 69
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: kShDvMA6aDRG0SEv
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 221
+            height: 110
+            x: 4021
+            'y': 1062
+            rotation: 180
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 70
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: IMz4EDRDOegqvRHT
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 89
+            height: 89
+            x: 4681
+            'y': 1060
+            rotation: 90
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 71
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: BkM9k2daUOfpFXzA
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 100
+            height: 100
+            x: 4680
+            'y': 1154
+            rotation: 270
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 72
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: kuek4WHrHlYXwZHD
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Structures/Statues/Bases/Base_Stone_Earthy_Rectangle_A_2x2.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 300
+            height: 300
+            x: 4519
+            'y': 1371
+            rotation: 180
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 73
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: AVzccJjhpGQFMc5S
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_D_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4976
+            'y': 1148
+            rotation: 270
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 74
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: 3XjGdBoXX4CpIeFF
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_D_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4976
+            'y': 1044
+            rotation: 90
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 75
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: Tkn6aRIUIDartTGw
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Dark_A5_2x2.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 221
+            height: 221
+            x: 3595
+            'y': 831
+            rotation: 0
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 76
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: hn46O8qwnm3lPhNr
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Cooking_Appliances/Stove_Rusty_D_Hot_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 150
+            height: 150
+            x: 4550
+            'y': 1400
+            rotation: 180
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 77
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: o2RYFnkWMXjk6EjR
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Ashen_A9_1x2.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 221
+            x: 3791
+            'y': 825
+            rotation: 0
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 78
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: pUw4oAm9jP2QwYCu
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Ashen_A9_1x2.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 221
+            x: 3617
+            'y': 1376
+            rotation: 180
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 79
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: RVcP1pYhjziyBUHI
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Ashen_A9_1x2.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 221
+            x: 4608
+            'y': 835
+            rotation: 0
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 80
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: SGUg3YdgWYGfaKju
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Ashen_A4_1x2.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 221
+            x: 4004
+            'y': 835
+            rotation: 0
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 81
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: sYQcIvDo9S2N6mya
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Ashen_A27_2x2.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 221
+            height: 221
+            x: 4381
+            'y': 834
+            rotation: 0
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 82
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: dlLOzBCK1gh5GI6p
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Light_A18_2x2.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 221
+            height: 221
+            x: 3803
+            'y': 1377
+            rotation: 180
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 83
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: caFYu9xsPfwfNDQe
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: 1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Light_A37_2x2.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 221
+            height: 221
+            x: 4003
+            'y': 1375
+            rotation: 180
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 84
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: 8UL4gZSD7DicpOu4
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 221
+            height: 110
+            x: 4019
+            'y': 1145
+            rotation: 180
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 85
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: J8NX23vuca7cT2Ux
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/Food/Rotten_Food/Rotten_Dishes/Food_Board_A1_Rotten_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4063
+            'y': 1055
+            rotation: 210
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 86
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: f5Z65ZJu2UaA9N1k
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/Food/Rotten_Food/Rotten_Dishes/Food_Board_A7_Rotten_2x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 221
+            height: 110
+            x: 3922
+            'y': 1101
+            rotation: 300
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 87
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: 4iZSmUZweCvVKjlm
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/Food/Rotten_Food/Rotten_Dishes/Food_Pan_A1_Rotten_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 3671
+            'y': 1058
+            rotation: 300
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 88
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: iGDQnHR5dqZnlmhg
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/Food/Rotten_Food/Rotten_Meats/Rotten_Butchered_Meats/Butchered_Meat_Pork_Face_A1_Rotten_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 3969
+            'y': 1125
+            rotation: 240
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 89
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: rBHOvlLE6K9yjnxd
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/!Arranged_Clutter/Table_Arrangements/Table_Arrangement_A148_2x2.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 221
+            height: 221
+            x: 3778
+            'y': 1103
+            rotation: 240
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 90
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: YYOiHvhPTZcc8MHc
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/Glassware/Milk_Containers/Milk_Bottle_A2_Spilled_Spoiled_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 3678
+            'y': 1140
+            rotation: 240
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 91
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: DhT62dyURMDunsrc
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_B7_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4897
+            'y': 801
+            rotation: 255
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 92
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: iZfY8nOiJZDtCF4X
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_B7_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4926
+            'y': 839
+            rotation: 210
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 93
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: Ftf00rsn8cmMZ28M
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_B7_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4838
+            'y': 778
+            rotation: 210
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 94
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: N4WSzTLWV9BVXsJG
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_B7_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4796
+            'y': 773
+            rotation: 180
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 95
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: IqpTd68wFpUtMwmE
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_A5_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4740
+            'y': 785
+            rotation: 180
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 96
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: mhrMcKpiIxe1EyhD
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_A5_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4733
+            'y': 838
+            rotation: 270
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 97
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: sRA1U4hfaoUjcWFN
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_A7_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4805
+            'y': 825
+            rotation: 270
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 98
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: tEUAKdnCj4x7FIWT
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_A7_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4854
+            'y': 821
+            rotation: 330
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 99
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: TUvsCqJe5HT9y7GU
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Combat/Weapons/Weapon_Racks/Weapon_Rack_Wood_Light_B_Empty_1x2.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 221
+            x: 4834
+            'y': 1441
+            rotation: 90
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 100
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: RR9ZeaY2ewDZKyDr
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Jackets_and_Cloaks/Cloak_Cloth_Brown_A1_1x2.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 221
+            x: 4773
+            'y': 1381
+            rotation: 90
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 101
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: sowd1rbeOTZh2XfA
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Jackets_and_Cloaks/Cloak_Cloth_Gray_C1_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4916
+            'y': 1393
+            rotation: 90
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 102
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: SjBrXtDuvBVr6U2I
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Decor/Clothing_Rails_and_Hangers/Hanging_Clothes/Hanging_Shirt_Cloth_Tan_Wood_Walnut_A1_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4866
+            'y': 1425
+            rotation: 75
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 103
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: 9inYS2i0mAVDwMVW
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Decor/Clothing_Rails_and_Hangers/Hanging_Clothes/Hanging_Pants_Cloth_Tan_Wood_Red_B1_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 4829
+            'y': 1431
+            rotation: 15
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 104
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: Y6s0kPe9IE3O983O
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/Horror/!Wilderness/Gore/Corpses/Humanoid/Modular/Humanoid_F10/Outfits/Commoner_Rags/Body_Humanoid_F10_Outfit_Commoner_Rags_10_B1_2x2.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 221
+            height: 221
+            x: 4866
+            'y': 1343
+            rotation: 15
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 105
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: PkEiJgEGCI5ims5T
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Tile
+          data:
+            texture:
+              scaleX: 1
+              scaleY: -1
+              anchorX: 0.5
+              anchorY: 0.5
+              src: fa-nexus-assets/!Core_Settlements/Lightsources/Candles/Arranged_Candles/Candles_Yellow_Arranged_A2_1x1.webp
+              fit: fill
+              tint: '#ffffff'
+              alphaThreshold: 0.75
+            width: 110
+            height: 110
+            x: 3700
+            'y': 1100
+            rotation: 270
+            elevation: 0
+            hidden: false
+            locked: false
+            sort: 107
+            occlusion:
+              modes:
+                - 2
+              alpha: 0
+            restrictions:
+              light: true
+              weather: false
+            flags:
+              fa-nexus:
+                shadow: true
+                shadowAlpha: 0.65
+                shadowDilation: 1.6
+                shadowBlur: 1.8
+                shadowOffsetDistance: 2.33
+                shadowOffsetAngle: 64.5
+                shadowOffsetX: 1
+                shadowOffsetY: 2.1
+                shadowOnly: false
+                placementLevelId: defaultLevel0000
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: lpVLHfJEiNvajsZr
+            levels:
+              - defaultLevel0000
+            alpha: 1
+            video:
+              loop: true
+              autoplay: true
+              volume: 0
+        - documentName: Wall
+          data:
+            c:
+              - 3500
+              - 1500
+              - 4100
+              - 1500
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: YHvWfoBhOasogIPz
+        - documentName: Wall
+          data:
+            c:
+              - 3500
+              - 1500
+              - 3500
+              - 1200
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: RSDOrlSzcPLcHLj8
+        - documentName: Wall
+          data:
+            c:
+              - 3500
+              - 1000
+              - 3500
+              - 700
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: kZ16DgNFmWoJfi1N
+        - documentName: Wall
+          data:
+            c:
+              - 3500
+              - 700
+              - 4100
+              - 700
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: UIVKykqOnP49yFoe
+        - documentName: Wall
+          data:
+            c:
+              - 4300
+              - 700
+              - 5000
+              - 700
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: SrnChI9UrzK3iee2
+        - documentName: Wall
+          data:
+            c:
+              - 5000
+              - 700
+              - 5000
+              - 1000
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: EdElhbp6XNEH1MGz
+        - documentName: Wall
+          data:
+            c:
+              - 5000
+              - 1200
+              - 5000
+              - 1500
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: ObFOcQplvU9omgy4
+        - documentName: Wall
+          data:
+            c:
+              - 5000
+              - 1500
+              - 4300
+              - 1500
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: BWgT9pSfiRQNn4fp
+        - documentName: Wall
+          data:
+            c:
+              - 4681
+              - 1002
+              - 4681
+              - 702
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: feIgHqHcQhFQ1gJT
+        - documentName: Wall
+          data:
+            c:
+              - 4681
+              - 1202
+              - 4681
+              - 1502
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: 76sIg06DMclSTQV7
+        - documentName: Wall
+          data:
+            c:
+              - 3500
+              - 1100
+              - 3500
+              - 1200
+            levels:
+              - defaultLevel0000
+            light: 30
+            move: 20
+            sight: 30
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: 10
+              sight: 10
+              sound: null
+              attenuation: true
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: ifLdflzTA9FPRDi2
+        - documentName: Wall
+          data:
+            c:
+              - 4100
+              - 1500
+              - 4200
+              - 1500
+            levels:
+              - defaultLevel0000
+            light: 30
+            move: 20
+            sight: 30
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: 10
+              sight: 10
+              sound: null
+              attenuation: true
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: fkUDAkWpaMLJZV9F
+        - documentName: Wall
+          data:
+            c:
+              - 4200
+              - 1500
+              - 4300
+              - 1500
+            levels:
+              - defaultLevel0000
+            light: 30
+            move: 20
+            sight: 30
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: 10
+              sight: 10
+              sound: null
+              attenuation: true
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: uiFT2tVeFQrEWXYi
+        - documentName: Wall
+          data:
+            c:
+              - 4100
+              - 700
+              - 4200
+              - 700
+            levels:
+              - defaultLevel0000
+            light: 30
+            move: 20
+            sight: 30
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: 10
+              sight: 10
+              sound: null
+              attenuation: true
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: R7fYdQ60gWVKFrEN
+        - documentName: Wall
+          data:
+            c:
+              - 4200
+              - 700
+              - 4300
+              - 700
+            levels:
+              - defaultLevel0000
+            light: 30
+            move: 20
+            sight: 30
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: 10
+              sight: 10
+              sound: null
+              attenuation: true
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: HgfRL2Gdl8egLdZ3
+        - documentName: Wall
+          data:
+            c:
+              - 3500
+              - 1100
+              - 3500
+              - 1000
+            levels:
+              - defaultLevel0000
+            light: 30
+            move: 20
+            sight: 30
+            sound: 20
+            dir: 0
+            door: 0
+            ds: 0
+            threshold:
+              light: 10
+              sight: 10
+              sound: null
+              attenuation: true
+            animation: null
+            flags:
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: zhnSmBEvnIZnIUMs
+        - documentName: Wall
+          data:
+            c:
+              - 5000
+              - 1000
+              - 5000
+              - 1200
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 1
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation:
+              type: swing
+              texture: fa-nexus-assets/Woodlands/Base_Woodlands_Settlement/Structures/Building/Doors/Double_Doors/Shack_Door_Double_Wood_Light_B1_2x1.webp
+              flip: false
+              double: true
+              direction: 1
+              duration: 750
+              strength: 0.85
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              monks-active-tiles:
+                entity: ''
+                open: false
+                close: false
+                lock: false
+                unlock: false
+                checklock: false
+                secret: false
+              tagger: {}
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: uSxZS1otCjaVReN8
+            doorSound: woodHeavy
+        - documentName: Wall
+          data:
+            c:
+              - 4681
+              - 1002
+              - 4681
+              - 1202
+            levels:
+              - defaultLevel0000
+            light: 20
+            move: 20
+            sight: 20
+            sound: 20
+            dir: 0
+            door: 1
+            ds: 0
+            threshold:
+              light: null
+              sight: null
+              sound: null
+              attenuation: false
+            animation:
+              type: swing
+              texture: fa-nexus-assets/Woodlands/Base_Woodlands_Settlement/Structures/Building/Doors/Double_Doors/Shack_Door_Double_Wood_Ashen_A1_2x1.webp
+              flip: false
+              double: true
+              direction: 1
+              duration: 750
+              strength: 0.9
+            flags:
+              wall-height:
+                top: 10
+                bottom: 0
+              monks-active-tiles:
+                entity: ''
+                open: false
+                close: false
+                lock: false
+                unlock: false
+                checklock: false
+                secret: false
+              tagger:
+                tags: ''
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _id: 9J3PzYSCiRLasYUZ
+            doorSound: woodBasic
+        - documentName: AmbientLight
+          data:
+            config:
+              dim: 20
+              bright: 5
+              negative: false
+              priority: 0
+              alpha: 0.5
+              angle: 360
+              color: '#ff8000'
+              coloration: 1
+              attenuation: 0.5
+              luminosity: 0.5
+              saturation: 0
+              contrast: 0
+              shadows: 0
+              animation:
+                type: flame
+                speed: 5
+                intensity: 5
+                reverse: false
+              darkness:
+                min: 0
+                max: 1
+            x: 4550
+            'y': 1350
+            elevation: 0
+            levels:
+              - defaultLevel0000
+            walls: true
+            vision: false
+            hidden: false
+            name: Oven
+            _id: 33McysOA0gtBNnvo
+            rotation: 4
+            locked: false
+            flags:
+              levels:
+                rangeTop: null
+              tagger: {}
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+        - documentName: AmbientLight
+          data:
+            config:
+              dim: 10
+              bright: 5
+              negative: false
+              priority: 0
+              alpha: 0.5
+              angle: 360
+              color: '#ff8000'
+              coloration: 1
+              attenuation: 0.5
+              luminosity: 0.5
+              saturation: 0
+              contrast: 0
+              shadows: 0
+              animation:
+                type: flame
+                speed: 5
+                intensity: 5
+                reverse: false
+              darkness:
+                min: 0
+                max: 1
+            x: 3752
+            'y': 1071
+            elevation: 0
+            levels:
+              - defaultLevel0000
+            walls: true
+            vision: false
+            hidden: false
+            name: Ambient Light (2)
+            _id: A0uh8YbBwBRL0lHu
+            rotation: 0
+            locked: false
+            flags:
+              levels:
+                rangeTop: null
+              tagger:
+                tags: ''
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+        - documentName: AmbientSound
+          data:
+            radius: 40
+            x: 4550
+            'y': 1400
+            name: Stove
+            path: ASSETS/Sounds/ambient/firesources/stove/Fire_stove_metal.mp3
+            levels:
+              - defaultLevel0000
+            flags:
+              levels:
+                rangeTop: null
+              tagger:
+                tags: ''
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            elevation: 0
+            volume: 0.99
+            easing: true
+            hidden: false
+            walls: true
+            darkness:
+              min: 0
+              max: 1
+            effects:
+              base:
+                type: ''
+                intensity: 5
+              muffled:
+                intensity: 5
+            _id: YghK9U6u8svF2aC9
+            repeat: false
+            locked: false
+        - documentName: Region
+          data:
+            name: Region
+            shapes:
+              - type: rectangle
+                x: 3550
+                'y': 750
+                width: 1400
+                height: 700
+                hole: false
+                anchorX: 0
+                anchorY: 0
+                rotation: 0
+                gridBased: false
+            color: '#a128cc'
+            elevation:
+              bottom: 0
+              top: 20
+              topInclusive: false
+            levels:
+              - defaultLevel0000
+            restriction:
+              enabled: false
+              type: move
+              priority: 0
+            attachment:
+              token: null
+            visibility: 4
+            highlightMode: shapes
+            displayMeasurements: false
+            hidden: false
+            _id: RZW1I5GZXp47ix4v
+            behaviors:
+              - name: Adjust Darkness Level
+                type: adjustDarknessLevel
+                _id: BjDlHtSfbOlagNeB
+                system:
+                  mode: 0
+                  modifier: 0.73
+                disabled: false
+                flags: {}
+                _stats:
+                  coreVersion: '14.367'
+                  systemId: pf2e
+                  systemVersion: 8.4.1
+                  createdTime: 1788375982534
+                  modifiedTime: 1788375982534
+                  lastModifiedBy: wVNliAa4T3oxpls8
+                  compendiumSource: null
+                  duplicateSource: null
+                  exportSource: null
+            locked: false
+            ownership:
+              wVNliAa4T3oxpls8: 3
+              default: 0
+            flags:
+              pf2e:
+                areaShape: null
+              tokenmagic:
+                regionData:
+                  opacity: 1
+                  alpha: 0.5
+                filters: null
+                options: null
+              tagger: {}
+              multi-token-edit:
+                links:
+                  - id: HWuLQTwbl8oIH8S7
+                    type: 0
+            _shapeConstraints: null
+      tags: []
+      metadata:
+        coreVersion: '14.367'
+        levels:
+          - id: defaultLevel0000
+            name: Level
+            elevation:
+              top: 20
+              bottom: 0
+            visibility:
+              levels: []
+      preSpawnScript: ''
+      postSpawnScript: ''
+      spawnRandom: false
+      preserveLinks: false
+      folder: 04bdrMVfyOEd8k1x
+categories: []
+sort: 200000
+ownership:
+  default: 0
+  wVNliAa4T3oxpls8: 3
+_stats:
+  coreVersion: '14.367'
+  systemId: pf2e
+  systemVersion: 8.4.1
+  createdTime: 1788376187379
+  modifiedTime: 1788376439675
+  lastModifiedBy: wVNliAa4T3oxpls8
+  compendiumSource: null
+  duplicateSource: null
+  exportSource: null
+_key: '!journal!q2ZgMCozvvVydMuU'

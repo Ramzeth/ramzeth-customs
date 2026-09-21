@@ -1,0 +1,53 @@
+name: Combat
+_id: IA79tPJjNbtw5OeA
+sounds:
+  - name: Combat Montage
+    path: ASSETS/Music/Combat/Combat%20Montage.mp3
+    channel: ''
+    volume: 0.06
+    repeat: true
+    fade: null
+    description: ''
+    _id: 08Jcp2uYaaQycvKf
+    playing: false
+    sort: 0
+    flags: {}
+    pausedTime: null
+    _key: '!playlists.sounds!IA79tPJjNbtw5OeA.08Jcp2uYaaQycvKf'
+  - name: 92 Skirmish
+    path: assets/Music/Combat/92_Skirmish.mp3
+    channel: ''
+    volume: 0.13
+    repeat: true
+    fade: null
+    description: ''
+    _id: vMYgi0qVieo5JW26
+    playing: false
+    sort: 0
+    flags: {}
+    pausedTime: null
+    _key: '!playlists.sounds!IA79tPJjNbtw5OeA.vMYgi0qVieo5JW26'
+channel: music
+mode: 2
+playing: false
+folder: 03QMrBXJShWeQCXW
+sorting: a
+flags: {}
+_stats:
+  coreVersion: '14.367'
+  systemId: pf2e
+  systemVersion: 8.4.1
+  createdTime: 1787505737345
+  modifiedTime: 1787505737345
+  lastModifiedBy: tldr0KuKAT2WJlIS
+  compendiumSource: null
+  duplicateSource: null
+  exportSource: null
+description: ''
+fade: null
+seed: null
+ownership:
+  default: 0
+  tldr0KuKAT2WJlIS: 3
+sort: 0
+_key: '!playlists!IA79tPJjNbtw5OeA'

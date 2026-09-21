@@ -1,0 +1,6 @@
+/* Fix: PF2e Encounter Builder makes actor names white regardless of theme */
+#actors .directory-item .entry-name,
+#actors .document-name,
+#actors li a {
+  color: var(--color-text-primary) !important;
+}

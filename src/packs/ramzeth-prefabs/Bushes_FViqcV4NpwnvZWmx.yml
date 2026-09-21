@@ -1,0 +1,23 @@
+name: Bushes
+type: JournalEntry
+sorting: m
+flags:
+  multi-token-edit:
+    types:
+      - ALL
+_id: FViqcV4NpwnvZWmx
+description: ''
+folder: tUTmEKToeB5fRlSE
+sort: 100000
+color: null
+_stats:
+  coreVersion: '14.367'
+  systemId: pf2e
+  systemVersion: 8.4.1
+  createdTime: 1787508152826
+  modifiedTime: 1789842939788
+  lastModifiedBy: wVNliAa4T3oxpls8
+  compendiumSource: null
+  duplicateSource: null
+  exportSource: null
+_key: '!folders!FViqcV4NpwnvZWmx'

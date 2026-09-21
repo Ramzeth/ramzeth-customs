@@ -1,0 +1,153 @@
+# Cuts a release whenever the version in VERSION changes.
+#
+# The version lives in its own file rather than in module.json, because
+# module.json is Foundry's artifact while VERSION is the repository's own
+# source of truth.
+#
+# The working cycle is therefore:
+#
+#   edit code → bump VERSION → commit → push → the release builds itself
+#
+# Ordinary commits that leave VERSION alone pass in silence: the job asks
+# whether a release with that version already exists and stops if it does.
+# Without that check every push would try to create the same release and fail.
+#
+# Everything happens in ONE job on purpose. The obvious alternative — one
+# workflow creates the release, a second reacts to it and attaches the files —
+# does not work: GitHub deliberately refuses to start a workflow from an event
+# raised with the built-in GITHUB_TOKEN, so the second would never run and the
+# release would sit there empty.
+name: Release
+
+on:
+   push:
+      branches: [main]
+   # For re-cutting a release by hand if one goes wrong.
+   workflow_dispatch:
+
+permissions:
+   contents: write
+
+env:
+   project_url: "https://github.com/${{github.repository}}"
+   # Always points at the newest release, which is how Foundry notices that an
+   # update exists. It must not name a specific version.
+   latest_manifest_url: "https://github.com/${{github.repository}}/releases/latest/download/module.json"
+   # Pinned on purpose. The CLI decides how YAML sources become LevelDB, so an
+   # unpinned version would silently change what gets shipped.
+   fvtt_cli_version: "3.0.4"
+
+jobs:
+   release:
+      runs-on: ubuntu-latest
+      steps:
+         - name: Check out the repository
+           uses: actions/checkout@v6
+
+         - name: Read the version
+           id: version
+           run: |
+              VERSION="$(tr -d ' \t\n\r' < VERSION)"
+              if [ -z "$VERSION" ]; then
+                 echo "::error::VERSION is empty"
+                 exit 1
+              fi
+              echo "value=$VERSION" >> "$GITHUB_OUTPUT"
+              echo "Version in VERSION: $VERSION"
+
+         - name: Has this version been released already?
+           id: check
+           env:
+              GH_TOKEN: ${{ github.token }}
+           run: |
+              if gh release view "${{ steps.version.outputs.value }}" >/dev/null 2>&1; then
+                 echo "exists=true" >> "$GITHUB_OUTPUT"
+                 echo "Release ${{ steps.version.outputs.value }} already exists — nothing to do."
+              else
+                 echo "exists=false" >> "$GITHUB_OUTPUT"
+                 echo "Version ${{ steps.version.outputs.value }} is new — building a release."
+              fi
+
+         # classic-level, which the CLI uses to write LevelDB, is a native
+         # module. Pinning Node keeps the runner on the same prebuilt binding
+         # every time.
+         - name: Set up Node
+           if: steps.check.outputs.exists == 'false'
+           uses: actions/setup-node@v4
+           with:
+              node-version: "22"
+
+         # Compendiums are stored in this repository as YAML under src/packs/
+         # and compiled back into the LevelDB databases Foundry actually reads.
+         # The resulting packs/ directory is gitignored and exists only here,
+         # on the runner.
+         #
+         # Only `pack` ever runs in CI. `unpack` is the local half of the
+         # cycle: it reads databases out of a Foundry installation, which a
+         # runner does not have.
+         #
+         # Pack names come from the manifest, so adding a compendium needs no
+         # edit here. The mkdir keeps an empty compendium working: git does not
+         # track empty directories, so a pack with no documents yet would
+         # otherwise have no source directory at all.
+         #
+         # Path asymmetry is the CLI's, not a typo: the LevelDB side is given
+         # as a parent directory with the compendium name appended, the YAML
+         # side as an exact path.
+         - name: Build the compendium packs
+           if: steps.check.outputs.exists == 'false'
+           run: |
+              npm install -g "@foundryvtt/foundryvtt-cli@${{ env.fvtt_cli_version }}"
+              for pack in $(jq -r '.packs[].name' module.json); do
+                 mkdir -p "src/packs/$pack"
+                 fvtt package pack -n "$pack" \
+                    --in "src/packs/$pack" \
+                    --out packs \
+                    --yaml
+              done
+
+         # Fills the manifest's placeholders on the runner only. Nothing is
+         # committed back, so the repository keeps its #{...}# markers.
+         #
+         # This is also why a raw link to module.json in the repository cannot
+         # be installed: a manifest fit for Foundry exists only as a release
+         # asset, and this is what makes it.
+         - name: Fill in the manifest
+           if: steps.check.outputs.exists == 'false'
+           uses: cschleiden/replace-tokens@v1
+           with:
+              files: "module.json"
+           env:
+              VERSION: ${{ steps.version.outputs.value }}
+              URL: ${{ env.project_url }}
+              MANIFEST: ${{ env.latest_manifest_url }}
+              DOWNLOAD: "https://github.com/${{github.repository}}/releases/download/${{ steps.version.outputs.value }}/module.zip"
+
+         # What Foundry will unpack into Data/modules/. `zip` only warns about
+         # files that do not exist, so naming LICENSE and CHANGELOG.md before
+         # they are written is harmless.
+         #
+         # Anything the module needs at runtime has to be listed here. src/ is
+         # deliberately left out: it is the source of packs/, not a runtime
+         # dependency.
+         - name: Build the archive
+           if: steps.check.outputs.exists == 'false'
+           run: |
+              zip --recurse-paths ./module.zip \
+                 module.json \
+                 README.md \
+                 LICENSE \
+                 CHANGELOG.md \
+                 scripts/ \
+                 styles/ \
+                 packs/
+
+         - name: Publish the release
+           if: steps.check.outputs.exists == 'false'
+           env:
+              GH_TOKEN: ${{ github.token }}
+           run: |
+              gh release create "${{ steps.version.outputs.value }}" \
+                 module.json module.zip \
+                 --title "${{ steps.version.outputs.value }}" \
+                 --generate-notes

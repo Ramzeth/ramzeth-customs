@@ -1,0 +1,23 @@
+name: Wood
+type: JournalEntry
+sorting: m
+flags:
+  multi-token-edit:
+    types:
+      - ALL
+_id: tUTmEKToeB5fRlSE
+description: ''
+folder: 4dEeEAp1abogiV89
+sort: 400000
+color: null
+_stats:
+  coreVersion: '14.367'
+  systemId: pf2e
+  systemVersion: 8.4.1
+  createdTime: 1789842934090
+  modifiedTime: 1789842936427
+  lastModifiedBy: wVNliAa4T3oxpls8
+  compendiumSource: null
+  duplicateSource: null
+  exportSource: null
+_key: '!folders!tUTmEKToeB5fRlSE'

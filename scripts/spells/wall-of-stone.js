@@ -41,9 +41,11 @@ const SECTION_IMMUNITIES = [
 export function registerWallOfStone() {
   document.addEventListener("click", onWallButtonClick);
   Hooks.once("ready", patchTemplatePlacement);
+  Hooks.on("deleteToken", onSectionTokenDeleted);
+  Hooks.on("updateActor", onSectionDamaged);
   return {
     collectRegions, collectSections, castRank, sectionHitPoints,
-    build, demolish,
+    build, demolish, destroySegment,
     deleteWalls, deleteTiles, deleteTokens, deleteSections, deleteSectionActor
   };
 }
@@ -165,11 +167,16 @@ async function deleteTiles(messageId) {
   return ids.length;
 }
 
+// The option tells the deleteToken handler to stand down: a wholesale
+// demolition removes the walls and tiles itself, and per-section cascades on
+// top of it would be deleting documents that are already gone.
 async function deleteTokens(messageId) {
   const ids = canvas.scene.tokens
     .filter((t) => t.getFlag(MOD, "castId") === messageId)
     .map((t) => t.id);
-  if (ids.length) await canvas.scene.deleteEmbeddedDocuments("Token", ids);
+  if (ids.length) {
+    await canvas.scene.deleteEmbeddedDocuments("Token", ids, { [`${MOD}Demolish`]: true });
+  }
   return ids.length;
 }
 
@@ -200,6 +207,74 @@ async function demolish(messageId) {
   await deleteSectionActor(messageId);
   const sections = await deleteSections(messageId);
   return { walls, tiles, tokens, sections };
+}
+
+/* -------------------------------------------- */
+/*  Destroying one section                      */
+/* -------------------------------------------- */
+
+// A section is one wall, one tile and one token sharing a segmentId. This
+// removes all three by that id, whichever of them triggered the destruction.
+//
+// Deliberately not a cascade. Relying on "delete the token and let its own
+// hook clean up the rest" makes the outcome depend on hook ordering and on
+// the delete actually going through; doing the whole job in one place means
+// a section cannot end up half destroyed.
+//
+// Everything is looked up rather than passed in, so calling it twice on the
+// same section is harmless — the second call simply finds nothing.
+async function destroySegment(scene, segmentId, { includeToken = true } = {}) {
+  const ids = (collection) => collection
+    .filter((d) => d.getFlag(MOD, "segmentId") === segmentId)
+    .map((d) => d.id);
+
+  const walls = ids(scene.walls);
+  const tiles = ids(scene.tiles);
+  const tokens = includeToken ? ids(scene.tokens) : [];
+
+  if (walls.length) await scene.deleteEmbeddedDocuments("Wall", walls);
+  if (tiles.length) await scene.deleteEmbeddedDocuments("Tile", tiles);
+  if (tokens.length) {
+    await scene.deleteEmbeddedDocuments("Token", tokens, { [`${MOD}Demolish`]: true });
+  }
+}
+
+// Deleting the token by hand is a legitimate way to knock a hole in the wall,
+// so it cascades exactly like being reduced to zero hit points.
+//
+// Guarded to one client: the hook fires everywhere, and every GM present
+// would otherwise try to delete the same documents.
+function onSectionTokenDeleted(token, options) {
+  if (options?.[`${MOD}Demolish`]) return;
+  if (game.user !== game.users.activeGM) return;
+
+  const segmentId = token.getFlag(MOD, "segmentId");
+  if (!segmentId) return;
+
+  // The token is already gone; only its wall and tile are left to clear.
+  destroySegment(token.parent, segmentId, { includeToken: false })
+    .catch((err) => ui.notifications.error(`Wall of Stone: ${err.message}`));
+}
+
+// A section reduced to zero hit points is destroyed: the token goes, and the
+// handler above then takes its wall and tile down with it.
+//
+// Hit points of an unlinked token live in its own delta, so damage arrives
+// here as an update to the synthetic actor rather than to the one in the
+// sidebar — hence the isToken check.
+function onSectionDamaged(actor, changes) {
+  if (game.user !== game.users.activeGM) return;
+  if (!actor.isToken) return;
+
+  const token = actor.token;
+  const segmentId = token?.getFlag(MOD, "segmentId");
+  if (!segmentId) return;
+
+  if (foundry.utils.getProperty(changes, "system.attributes.hp") === undefined) return;
+  if ((actor.system?.attributes?.hp?.value ?? 1) > 0) return;
+
+  destroySegment(token.parent, segmentId)
+    .catch((err) => ui.notifications.error(`Wall of Stone: ${err.message}`));
 }
 
 /* -------------------------------------------- */
@@ -247,28 +322,46 @@ async function ensureSectionActor(messageId) {
   });
 }
 
-// Demolish, then create from scratch — never append. That makes the button
-// safe to press repeatedly: the player nudges a section, the GM presses it
-// again, and everything is rebuilt without duplicates or orphans.
+// Two endpoints in a fixed order, so the same edge yields the same key
+// whichever way round it was drawn.
+function edgeKey(a, b) {
+  return (a.x < b.x || (a.x === b.x && a.y <= b.y))
+    ? `${a.x},${a.y},${b.x},${b.y}`
+    : `${b.x},${b.y},${a.x},${a.y}`;
+}
+
+// Commits the draft: every section standing right now becomes a wall, a tile
+// and a token, and the draft is then cleared.
 //
-// Each surviving section yields one wall and one tile, built in the same pass
-// so that the snapping, the deduplication and the budget are applied to both
-// exactly once.
+// It adds rather than rebuilds. The draft does not survive the commit — the
+// grey lines would sit on top of the finished stone — so there is nothing to
+// rebuild from on a second press. Leaving the standing walls alone is what
+// makes the button safe to press again after the player has added a few more
+// sections: the new ones join the wall instead of replacing it.
+//
+// Walls already up therefore seed both the duplicate check and the budget,
+// or a second pass would stack a second wall on an edge that already has one
+// and walk straight past 120 feet.
+//
+// Wall, tile and token are built in the same pass so that the geometry, the
+// deduplication and the budget are applied to all three exactly once.
 //
 // Walls are created with defaults on purpose: a plain Foundry wall already
 // blocks movement, sight, light and sound in both directions, which is what a
 // wall of stone does.
 async function build(messageId) {
-  const removed = await deleteWalls(messageId);
-  await deleteTiles(messageId);
-  await deleteTokens(messageId);
-
   const sections = collectSections(messageId);
-  if (!sections.length) return { removed, created: 0, overflow: 0 };
+  if (!sections.length) return { created: 0, overflow: 0, standing: 0 };
 
   const actor = await ensureSectionActor(messageId);
 
-  const seen = new Set();
+  const standing = canvas.scene.walls
+    .filter((w) => w.getFlag(MOD, "castId") === messageId);
+  const seen = new Set(standing.map((w) => edgeKey(
+    { x: w.c[0], y: w.c[1] },
+    { x: w.c[2], y: w.c[3] }
+  )));
+
   const walls = [];
   const tiles = [];
   const tokens = [];
@@ -278,39 +371,42 @@ async function build(messageId) {
   for (const shape of sections) {
     const { a, b } = lineEndpoints(shape);
 
-    // Both ends snapped onto the same vertex: nothing to build.
+    // A section with no length: nothing to build.
     if (a.x === b.x && a.y === b.y) continue;
 
-    // Two sections dropped on the same edge would stack two identical walls,
-    // which are then impossible to tell apart by hand. Deduplication happens
-    // before the limit is applied: a section placed on top of another is a
-    // slip of the mouse, not five feet of the spell's budget.
-    const key = `${a.x},${a.y},${b.x},${b.y}`;
-    const rev = `${b.x},${b.y},${a.x},${a.y}`;
-    if (seen.has(key) || seen.has(rev)) continue;
+    // Two sections on the same edge — whether both in this draft or one of
+    // them already built — would stack two identical walls, impossible to
+    // tell apart afterwards. Deduplication happens before the limit is
+    // applied: a section placed on top of another is a slip of the mouse, not
+    // five feet of the spell's budget.
+    const key = edgeKey(a, b);
+    if (seen.has(key)) continue;
     seen.add(key);
 
     // Section length is only knowable from a section, so the limit is worked
     // out from the first real one. The placement run already stops at this
-    // number; this is the backstop for sections added across several runs.
+    // number; this is the backstop for sections committed across several
+    // passes, which is why what is already standing counts towards it.
     if (limit === Infinity) limit = sectionBudget(shape);
 
-    if (walls.length >= limit) {
+    if (standing.length + walls.length >= limit) {
       overflow++;
       continue;
     }
 
-    const flags = { [MOD]: { castId: messageId } };
+    // The wall, the tile and the token of one section share an id, which is
+    // what lets the section be destroyed as a unit later.
+    const flags = { [MOD]: { castId: messageId, segmentId: foundry.utils.randomID() } };
 
     walls.push({ c: [a.x, a.y, b.x, b.y], flags });
 
     // The art is a 1×1 asset and is never stretched: it always covers exactly
     // one grid square, whatever the section length is.
     //
-    // A tile is positioned by its top-left corner but rotates about its
-    // centre, so the centre goes on the wall's midpoint and the corner is
-    // derived from it — setting x/y directly would offset the tile by half a
-    // square.
+    // A tile's x/y is its anchor, and the anchor sits in the middle by
+    // default, so the wall's midpoint goes in directly. Subtracting half a
+    // square — as one would for a top-left corner — puts the stone half a
+    // square up and to the left of its wall.
     const size = canvas.grid.size;
 
     const centre = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
@@ -319,8 +415,8 @@ async function build(messageId) {
       texture: { src: TILE_TEXTURE },
       width: size,
       height: size,
-      x: centre.x - size / 2,
-      y: centre.y - size / 2,
+      x: centre.x,
+      y: centre.y,
       rotation: shape.rotation ?? 0,
       locked: true,
       flags
@@ -357,7 +453,12 @@ async function build(messageId) {
   if (walls.length) await canvas.scene.createEmbeddedDocuments("Wall", walls);
   if (tiles.length) await canvas.scene.createEmbeddedDocuments("Tile", tiles);
   if (tokens.length) await canvas.scene.createEmbeddedDocuments("Token", tokens);
-  return { removed, created: walls.length, overflow };
+
+  // The draft has served its purpose and would otherwise sit as grey lines on
+  // top of the finished stone.
+  await deleteSections(messageId);
+
+  return { created: walls.length, overflow, standing: standing.length };
 }
 
 /* -------------------------------------------- */
@@ -390,10 +491,11 @@ function onWallButtonClick(event) {
   const job = button.dataset.action === "demolish"
     ? demolish(messageId).then(({ walls, tiles, tokens, sections }) =>
         `Снесено: стен ${walls}, тайлов ${tiles}, токенов ${tokens}, секций ${sections}.`)
-    : build(messageId).then(({ removed, created, overflow }) => {
-        const parts = [`Секций построено: ${created}`];
-        if (removed) parts.push(`пересобрано, было ${removed}`);
-        if (overflow) parts.push(`лишних секций отброшено: ${overflow}`);
+    : build(messageId).then(({ created, overflow, standing }) => {
+        if (!created && !overflow) return "Черновик пуст — строить нечего.";
+        const parts = [`Построено секций: ${created}`];
+        if (standing) parts.push(`уже стояло ${standing}`);
+        if (overflow) parts.push(`сверх бюджета отброшено: ${overflow}`);
         return `${parts.join("; ")}.`;
       });
 

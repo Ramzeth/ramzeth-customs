@@ -1,4 +1,7 @@
-# Cuts a release whenever the version in VERSION changes.
+# Publishes two channels from every push to main.
+#
+#   dev      — rebuilt on every push, always at the moving tag "dev".
+#   stable   — cut only when the version in VERSION changes.
 #
 # The version lives in its own file rather than in module.json, because
 # module.json is Foundry's artifact while VERSION is the repository's own
@@ -6,11 +9,18 @@
 #
 # The working cycle is therefore:
 #
-#   edit code → bump VERSION → commit → push → the release builds itself
+#   edit code → commit → push → install/update from the dev manifest → test
+#   happy with it → bump VERSION → push → a real release is cut
 #
-# Ordinary commits that leave VERSION alone pass in silence: the job asks
-# whether a release with that version already exists and stops if it does.
-# Without that check every push would try to create the same release and fail.
+# A push that leaves VERSION alone still produces a dev build; it just does
+# not create a release. The job asks whether a release with that version
+# already exists and skips the stable half if it does. Without that check
+# every push would try to create the same release and fail.
+#
+# GitHub excludes prereleases from releases/latest, and that is the whole
+# mechanism behind the split: the dev release is marked as a prerelease, so
+# the "latest" permalink keeps pointing at the last real release no matter
+# how many dev builds are published after it.
 #
 # Everything happens in ONE job on purpose. The obvious alternative — one
 # workflow creates the release, a second reacts to it and attaches the files —
@@ -30,9 +40,13 @@ permissions:
 
 env:
    project_url: "https://github.com/${{github.repository}}"
-   # Always points at the newest release, which is how Foundry notices that an
-   # update exists. It must not name a specific version.
+   # Always points at the newest stable release, which is how Foundry notices
+   # that an update exists. It must not name a specific version.
    latest_manifest_url: "https://github.com/${{github.repository}}/releases/latest/download/module.json"
+   # The dev tag never moves, so these two are stable addresses for the newest
+   # test build.
+   dev_manifest_url: "https://github.com/${{github.repository}}/releases/download/dev/module.json"
+   dev_download_url: "https://github.com/${{github.repository}}/releases/download/dev/module.zip"
    # Pinned on purpose. The CLI decides how YAML sources become LevelDB, so an
    # unpinned version would silently change what gets shipped.
    fvtt_cli_version: "3.0.4"
@@ -44,6 +58,10 @@ jobs:
          - name: Check out the repository
            uses: actions/checkout@v6
 
+         # The dev version is the stable one with the run number appended.
+         # It has to be purely numeric: Foundry compares versions segment by
+         # segment as numbers, so a commit hash would not order and the update
+         # prompt would appear at random. run_number only ever grows.
          - name: Read the version
            id: version
            run: |
@@ -53,7 +71,9 @@ jobs:
                  exit 1
               fi
               echo "value=$VERSION" >> "$GITHUB_OUTPUT"
+              echo "dev=$VERSION.${{ github.run_number }}" >> "$GITHUB_OUTPUT"
               echo "Version in VERSION: $VERSION"
+              echo "Dev build: $VERSION.${{ github.run_number }}"
 
          - name: Has this version been released already?
            id: check
@@ -62,17 +82,16 @@ jobs:
            run: |
               if gh release view "${{ steps.version.outputs.value }}" >/dev/null 2>&1; then
                  echo "exists=true" >> "$GITHUB_OUTPUT"
-                 echo "Release ${{ steps.version.outputs.value }} already exists — nothing to do."
+                 echo "Release ${{ steps.version.outputs.value }} already exists — dev build only."
               else
                  echo "exists=false" >> "$GITHUB_OUTPUT"
-                 echo "Version ${{ steps.version.outputs.value }} is new — building a release."
+                 echo "Version ${{ steps.version.outputs.value }} is new — a release will be cut."
               fi
 
          # classic-level, which the CLI uses to write LevelDB, is a native
          # module. Pinning Node keeps the runner on the same prebuilt binding
          # every time.
          - name: Set up Node
-           if: steps.check.outputs.exists == 'false'
            uses: actions/setup-node@v4
            with:
               node-version: "22"
@@ -80,7 +99,7 @@ jobs:
          # Compendiums are stored in this repository as YAML under src/packs/
          # and compiled back into the LevelDB databases Foundry actually reads.
          # The resulting packs/ directory is gitignored and exists only here,
-         # on the runner.
+         # on the runner. Built once and reused by both channels.
          #
          # Only `pack` ever runs in CI. `unpack` is the local half of the
          # cycle: it reads databases out of a Foundry installation, which a
@@ -95,7 +114,6 @@ jobs:
          # as a parent directory with the compendium name appended, the YAML
          # side as an exact path.
          - name: Build the compendium packs
-           if: steps.check.outputs.exists == 'false'
            run: |
               npm install -g "@foundryvtt/foundryvtt-cli@${{ env.fvtt_cli_version }}"
               for pack in $(jq -r '.packs[].name' module.json); do
@@ -106,13 +124,74 @@ jobs:
                     --yaml
               done
 
-         # Fills the manifest's placeholders on the runner only. Nothing is
-         # committed back, so the repository keeps its #{...}# markers.
+         # ---------------------------------------------------------------
+         #  dev channel
+         # ---------------------------------------------------------------
+
+         # The manifest baked into a dev build points back at the dev tag, not
+         # at "latest". That is what keeps a test install on the test channel
+         # instead of being pulled onto a stable release at the next check.
+         - name: Fill in the manifest for the dev build
+           uses: cschleiden/replace-tokens@v1
+           with:
+              files: "module.json"
+           env:
+              VERSION: ${{ steps.version.outputs.dev }}
+              URL: ${{ env.project_url }}
+              MANIFEST: ${{ env.dev_manifest_url }}
+              DOWNLOAD: ${{ env.dev_download_url }}
+
+         # `zip` appends to an existing archive rather than replacing it, so
+         # the file is removed first — otherwise the second channel would ship
+         # both manifests.
          #
-         # This is also why a raw link to module.json in the repository cannot
-         # be installed: a manifest fit for Foundry exists only as a release
-         # asset, and this is what makes it.
-         - name: Fill in the manifest
+         # `zip` only warns about files that do not exist, so naming LICENSE
+         # and CHANGELOG.md before they are written is harmless.
+         #
+         # Anything the module needs at runtime has to be listed here. src/ is
+         # deliberately left out: it is the source of packs/, not a runtime
+         # dependency.
+         - name: Build the dev archive
+           run: |
+              rm -f module.zip
+              zip --recurse-paths ./module.zip \
+                 module.json \
+                 README.md \
+                 LICENSE \
+                 CHANGELOG.md \
+                 scripts/ \
+                 styles/ \
+                 packs/
+
+         # Deleted and recreated rather than updated in place, so the release
+         # notes and the target commit stay correct. --cleanup-tag removes the
+         # old tag as well, letting the new release point at this commit.
+         - name: Publish the dev build
+           env:
+              GH_TOKEN: ${{ github.token }}
+           run: |
+              gh release delete dev --yes --cleanup-tag 2>/dev/null || true
+              gh release create dev \
+                 module.json module.zip \
+                 --prerelease \
+                 --target "$GITHUB_SHA" \
+                 --title "dev ${{ steps.version.outputs.dev }}" \
+                 --notes "Test build of ${{ steps.version.outputs.value }} from ${GITHUB_SHA:0:7}. Overwritten by every push to main."
+
+         # ---------------------------------------------------------------
+         #  stable channel
+         # ---------------------------------------------------------------
+
+         # The token replacement above edited the working copy. Restoring it
+         # brings the #{...}# markers back so the stable manifest can be filled
+         # with its own values. Nothing is ever committed back, which is also
+         # why a raw link to module.json in the repository cannot be installed:
+         # a manifest fit for Foundry exists only as a release asset.
+         - name: Restore the manifest template
+           if: steps.check.outputs.exists == 'false'
+           run: git checkout -- module.json
+
+         - name: Fill in the manifest for the release
            if: steps.check.outputs.exists == 'false'
            uses: cschleiden/replace-tokens@v1
            with:
@@ -123,16 +202,10 @@ jobs:
               MANIFEST: ${{ env.latest_manifest_url }}
               DOWNLOAD: "https://github.com/${{github.repository}}/releases/download/${{ steps.version.outputs.value }}/module.zip"
 
-         # What Foundry will unpack into Data/modules/. `zip` only warns about
-         # files that do not exist, so naming LICENSE and CHANGELOG.md before
-         # they are written is harmless.
-         #
-         # Anything the module needs at runtime has to be listed here. src/ is
-         # deliberately left out: it is the source of packs/, not a runtime
-         # dependency.
-         - name: Build the archive
+         - name: Build the release archive
            if: steps.check.outputs.exists == 'false'
            run: |
+              rm -f module.zip
               zip --recurse-paths ./module.zip \
                  module.json \
                  README.md \

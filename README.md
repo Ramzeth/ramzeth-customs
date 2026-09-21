@@ -9,8 +9,23 @@ Requires Foundry v14 and [lib-wrapper](https://foundryvtt.com/packages/lib-wrapp
 Paste the manifest URL into Foundry's *Install Module* dialog:
 
 ```
-https://github.com/<owner>/ramzeth-customs/releases/latest/download/module.json
+https://github.com/Ramzeth/ramzeth-customs/releases/latest/download/module.json
 ```
+
+For a test instance, install from the dev channel instead. It is rebuilt on
+every push to `main`, and *Update Module* will keep pulling from it:
+
+```
+https://github.com/Ramzeth/ramzeth-customs/releases/download/dev/module.json
+```
+
+Dev builds are versioned `<VERSION>.<build>` — `1.1.0.47` is build 47 of the
+upcoming 1.1.0. The numbering is deliberately all digits: Foundry compares
+versions segment by segment as numbers, and a commit hash would not order.
+
+A world installed from the dev channel stays on it, because `1.1.0.47` reads
+as newer than the eventual `1.1.0`. To move it back to stable, uninstall and
+reinstall from the `latest` manifest.
 
 ## Contents
 
@@ -20,8 +35,18 @@ https://github.com/<owner>/ramzeth-customs/releases/latest/download/module.json
 | Ramzeth Sounds | Playlist | Ambience and music |
 | Ramzeth Spells | Item (pf2e) | Forked system spells with added automation |
 
-`scripts/main.js` adjusts the Wall of Stone template so the placed line is a
-thin stone-coloured wall rather than a five-foot band.
+## Code layout
+
+```
+scripts/main.js                 wiring only
+scripts/const.js                the module id
+scripts/lib/                    reusable helpers, spell-agnostic
+scripts/spells/<slug>.js        one file per automated spell
+```
+
+`scripts/spells/wall-of-stone.js` narrows the placed template to a thin stone
+line, and adds GM buttons to the cast's chat card that turn the placed
+sections into real walls — or tear them down again.
 
 ## Working on it
 

@@ -4,3 +4,21 @@
 #actors li a {
   color: var(--color-text-primary) !important;
 }
+
+/* GM controls injected into spell descriptions, e.g. Wall of Stone. Styled to
+   read as buttons rather than links, since they act on the scene. */
+a.rc-wall {
+  display: inline-block;
+  padding: 2px 8px;
+  border: 1px solid var(--color-border-dark, #7a7971);
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.05);
+  font-size: var(--font-size-13, 13px);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+a.rc-wall:hover {
+  background: rgba(0, 0, 0, 0.12);
+  text-shadow: none;
+}

@@ -1,17 +1,19 @@
-const MOD = "ramzeth-customs";
-const WALL_OF_STONE = "origin:item:slug:wall-of-stone";
-const STONE_COLOR = "#6b6b6b";
+// Entry point. Wiring only — every piece of behaviour lives in its own file.
 
-Hooks.once("ready", () => {
-  libWrapper.register(MOD,
-     "canvas.regions.constructor.prototype.placeRegion",
-     function (wrapped, data, options) {
-           const ro = data?.flags?.pf2e?.origin?.rollOptions ?? [];
-           if (ro.includes(WALL_OF_STONE) && data?.shapes?.[0]) {
-               data = foundry.utils.deepClone(data);
-               data.shapes[0].width = Math.max(2, Math.round(canvas.grid.size / 16));
-	       data.color = STONE_COLOR;
-	   }
-	   return wrapped(data, options);
-     }, "WRAPPER");
+import { MOD } from "./const.js";
+import { registerWallOfStone } from "./spells/wall-of-stone.js";
+
+Hooks.once("init", () => {
+  // Spell automation is PF2e-specific. The compendiums are not, so the system
+  // is checked here instead of being declared in module.json, which would tie
+  // the whole module — prefabs and sounds included — to one system.
+  if (game.system.id !== "pf2e") return;
+
+  const api = {
+    wallOfStone: registerWallOfStone()
+  };
+
+  Hooks.once("ready", () => {
+    game.modules.get(MOD).api = api;
+  });
 });

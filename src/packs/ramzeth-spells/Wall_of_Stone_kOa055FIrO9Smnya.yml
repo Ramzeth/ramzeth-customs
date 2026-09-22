@@ -1,0 +1,75 @@
+_id: kOa055FIrO9Smnya
+img: icons/commodities/stone/paver-brick-brown.webp
+name: Wall of Stone
+system:
+  description:
+    gm: ''
+    value: >-
+      <p>You shape a wall of solid stone. You create a 1-inch-thick wall of
+      stone up to 120 feet long, and 20 feet high. You can shape the wall's
+      path, placing each 5 feet of the wall on the border between squares. The
+      wall doesn't need to stand vertically, so you can use it to form a bridge
+      or set of stairs, for example. You must conjure the wall in an unbroken
+      open space so its edges don't pass through any creatures or objects, or
+      the spell is lost.</p><p>Each 10-foot-by-10-foot section of the wall has
+      AC 10, Hardness 14, and 50 Hit Points, and it's immune to critical hits
+      and precision damage. A destroyed section of the wall can be moved
+      through, but the rubble created from it is difficult
+      terrain.</p><p>@Template[line|distance:5]{Wall Section, 5 feet}</p><p
+      data-visibility="gm"><a data-action="build" class="rc-wall">Build
+      Walls</a> <a data-action="demolish" class="rc-wall">Demolish
+      Walls</a></p><hr><p><strong>Heightened (+2)</strong> The Hit Points of
+      each section of the wall increase by 15.</p>
+  rules: []
+  slug: wall-of-stone
+  _migration:
+    version: 0.959
+    lastMigration: null
+    previous: null
+  traits:
+    otherTags: []
+    value:
+      - concentrate
+      - earth
+      - manipulate
+    rarity: common
+    traditions:
+      - arcane
+      - primal
+  publication:
+    title: Pathfinder Player Core
+    authors: ''
+    license: ORC
+    remaster: true
+  level:
+    value: 5
+  requirements: ''
+  target:
+    value: ''
+  range:
+    value: 120 feet
+  area: null
+  time:
+    value: '3'
+  duration:
+    value: ''
+    sustained: false
+  damage: {}
+  defense: null
+  cost:
+    value: ''
+  location:
+    value: null
+  counteraction: false
+type: spell
+_stats:
+  coreVersion: '14.367'
+  systemId: pf2e
+  systemVersion: 8.4.1
+  compendiumSource: Compendium.pf2e.spells-srd.Item.kOa055FIrO9Smnya
+  duplicateSource: null
+effects: []
+flags: {}
+ownership:
+  default: 0
+_key: '!items!kOa055FIrO9Smnya'

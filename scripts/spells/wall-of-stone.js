@@ -21,6 +21,27 @@ const STONE_COLOR = "#6b6b6b";
 const TILE_TEXTURE =
   "fa-nexus-assets/!Core_Settlements/Structures/Building/Walls_and_Curbs/Wall_Stone_B/Wall_Stone_Earthy_B1_Straight_C_1x1.webp";
 
+// Stone tiles are stretched slightly along the wall so that neighbours
+// overlap at the joins. Without it a corner leaves a hairline of background
+// showing where two squares meet.
+const TILE_OVERLAP = 1.1;
+
+// Left behind when a section is destroyed. Covers the two squares either side
+// of where the wall stood, so it is laid across the wall rather than along it.
+const RUBBLE_TEXTURE =
+  "fa-nexus-assets/!Core_Settlements/Structures/Rubble/Rubble_Piles/Stone/Rubble_Pile_Stone_Earthy_A36_4x2.webp";
+
+// Difficult terrain, copied field for field from one built through the region
+// configuration UI. Walking and overland travel cost double; flying, swimming
+// and burrowing are untouched, so elevation needs no guard of its own.
+const RUBBLE_BEHAVIOURS = [{
+  name: "Difficult Terrain",
+  type: "modifyMovementCost",
+  system: {
+    difficulties: { walk: 2, fly: 1, swim: 1, burrow: 1, deploy: 1, travel: 2 }
+  }
+}];
+
 // Wall of Stone is up to 120 feet long. The length of one section is set by
 // the @Template link in the description, so the number of sections is derived
 // from it rather than hardcoded.
@@ -186,6 +207,17 @@ async function deleteSections(messageId) {
   return ids.length;
 }
 
+// Rubble regions are ours, not PF2e's, so they are found by our own flag.
+// Kept apart from deleteSections deliberately: committing a draft clears the
+// draft, and must not sweep away rubble from sections destroyed earlier.
+async function deleteRubbleRegions(messageId) {
+  const ids = canvas.scene.regions
+    .filter((r) => r.getFlag(MOD, "rubble") && r.getFlag(MOD, "castId") === messageId)
+    .map((r) => r.id);
+  if (ids.length) await canvas.scene.deleteEmbeddedDocuments("Region", ids);
+  return ids.length;
+}
+
 async function deleteSectionActor(messageId) {
   const actor = game.actors.find((a) => a.getFlag(MOD, "castId") === messageId);
   if (!actor) return 0;
@@ -205,6 +237,7 @@ async function demolish(messageId) {
   const tiles = await deleteTiles(messageId);
   const tokens = await deleteTokens(messageId);
   await deleteSectionActor(messageId);
+  await deleteRubbleRegions(messageId);
   const sections = await deleteSections(messageId);
   return { walls, tiles, tokens, sections };
 }
@@ -224,19 +257,82 @@ async function demolish(messageId) {
 // Everything is looked up rather than passed in, so calling it twice on the
 // same section is harmless — the second call simply finds nothing.
 async function destroySegment(scene, segmentId, { includeToken = true } = {}) {
-  const ids = (collection) => collection
-    .filter((d) => d.getFlag(MOD, "segmentId") === segmentId)
-    .map((d) => d.id);
+  const match = (d) => d.getFlag(MOD, "segmentId") === segmentId;
 
-  const walls = ids(scene.walls);
-  const tiles = ids(scene.tiles);
-  const tokens = includeToken ? ids(scene.tokens) : [];
+  const walls = scene.walls.filter(match);
+  const tiles = scene.tiles.filter(match);
+  const tokens = includeToken ? scene.tokens.filter(match) : [];
 
-  if (walls.length) await scene.deleteEmbeddedDocuments("Wall", walls);
-  if (tiles.length) await scene.deleteEmbeddedDocuments("Tile", tiles);
+  // Where the wall stood has to be read before it is deleted — that is what
+  // the rubble is laid along. Nothing found means the section is already
+  // gone, and no rubble is added a second time.
+  const wall = walls[0];
+  const castId = wall?.getFlag(MOD, "castId") ?? tiles[0]?.getFlag(MOD, "castId");
+  const line = wall
+    ? { a: { x: wall.c[0], y: wall.c[1] }, b: { x: wall.c[2], y: wall.c[3] } }
+    : null;
+
+  if (walls.length) await scene.deleteEmbeddedDocuments("Wall", walls.map((d) => d.id));
+  if (tiles.length) await scene.deleteEmbeddedDocuments("Tile", tiles.map((d) => d.id));
   if (tokens.length) {
-    await scene.deleteEmbeddedDocuments("Token", tokens, { [`${MOD}Demolish`]: true });
+    await scene.deleteEmbeddedDocuments("Token", tokens.map((d) => d.id),
+      { [`${MOD}Demolish`]: true });
   }
+
+  if (line) await createRubble(scene, line.a, line.b, castId);
+}
+
+// The two squares that shared the wall as an edge, as an explicit polygon.
+// Given as points rather than a rectangle shape so that there is no question
+// of whether x/y means a corner or a centre, and so that a wall at any angle
+// works without a special case.
+function rubbleFootprint(a, b) {
+  const size = canvas.grid.size;
+  const dx = b.x - a.x;
+  const dy = b.y - a.y;
+  const length = Math.hypot(dx, dy) || 1;
+
+  // One square's worth of the wall's normal, pointing into each square.
+  const nx = (-dy / length) * size;
+  const ny = (dx / length) * size;
+
+  return [
+    a.x + nx, a.y + ny,
+    b.x + nx, b.y + ny,
+    b.x - nx, b.y - ny,
+    a.x - nx, a.y - ny
+  ];
+}
+
+// A destroyed section leaves a pile of rubble across both squares and makes
+// them difficult terrain. Two documents, both tagged as rubble so that
+// demolishing the spell can find them and rebuilding the draft cannot.
+async function createRubble(scene, a, b, castId) {
+  const flags = { [MOD]: { castId, rubble: true } };
+  const size = canvas.grid.size;
+  const centre = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+  const along = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
+
+  await scene.createEmbeddedDocuments("Tile", [{
+    texture: { src: RUBBLE_TEXTURE },
+    width: size * 2,
+    height: size,
+    x: centre.x,
+    y: centre.y,
+    // Turned across the wall, so the long side spans both squares.
+    rotation: along + 90,
+    locked: true,
+    flags
+  }]);
+
+  await scene.createEmbeddedDocuments("Region", [{
+    name: "Rubble",
+    shapes: [{ type: "polygon", points: rubbleFootprint(a, b), hole: false }],
+    behaviors: RUBBLE_BEHAVIOURS,
+    color: "#8a7f6a",
+    visibility: 0,
+    flags
+  }]);
 }
 
 // Deleting the token by hand is a legitimate way to knock a hole in the wall,
@@ -413,7 +509,7 @@ async function build(messageId) {
 
     tiles.push({
       texture: { src: TILE_TEXTURE },
-      width: size,
+      width: size * TILE_OVERLAP,
       height: size,
       x: centre.x,
       y: centre.y,

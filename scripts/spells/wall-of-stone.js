@@ -31,6 +31,15 @@ const TILE_OVERLAP = 1.1;
 const RUBBLE_TEXTURE =
   "fa-nexus-assets/!Core_Settlements/Structures/Rubble/Rubble_Piles/Stone/Rubble_Pile_Stone_Earthy_A36_4x2.webp";
 
+// Played once for everyone when a section collapses. An empty value means
+// silence, so the feature can be switched off without touching anything else.
+//
+// This covers destruction only. The spell being cast is an ordinary PF2e
+// action, so its animation and sound belong in an Automated Animations
+// autorec entry, with no code at all.
+const COLLAPSE_SOUND = "ASSETS/Sounds/Oneshots/Stone/Rock-Fall-Colosseum_Collapse.mp3";
+const COLLAPSE_VOLUME = 0.8;
+
 // Difficult terrain, copied field for field from one built through the region
 // configuration UI. Walking and overland travel cost double; flying, swimming
 // and burrowing are untouched, so elevation needs no guard of its own.
@@ -279,7 +288,38 @@ async function destroySegment(scene, segmentId, { includeToken = true } = {}) {
       { [`${MOD}Demolish`]: true });
   }
 
-  if (line) await createRubble(scene, line.a, line.b, castId);
+  if (line) {
+    playCollapse({ x: (line.a.x + line.b.x) / 2, y: (line.a.y + line.b.y) / 2 });
+    await createRubble(scene, line.a, line.b, castId);
+  }
+}
+
+// Destruction is resolved on one GM client, so the sound has to reach the
+// other clients rather than play locally.
+//
+// Sequencer when it is available: it broadcasts, and it can place the sound
+// on the map so the crash is heard from where the wall stood. Automated
+// Animations depends on it, so it is almost certainly present. AudioHelper is
+// the fallback and plays the same file flat across the scene.
+function playCollapse(at) {
+  if (!COLLAPSE_SOUND) return;
+
+  if (globalThis.Sequence) {
+    new Sequence()
+      .sound()
+        .file(COLLAPSE_SOUND)
+        .volume(COLLAPSE_VOLUME)
+        .atLocation(at)
+        .radius(canvas.scene.grid.distance * 12)
+      .play();
+    return;
+  }
+
+  const audio = foundry.audio?.AudioHelper ?? globalThis.AudioHelper;
+  audio?.play(
+    { src: COLLAPSE_SOUND, volume: COLLAPSE_VOLUME, autoplay: true, loop: false },
+    true
+  );
 }
 
 // The two squares that shared the wall as an edge, as an explicit polygon.

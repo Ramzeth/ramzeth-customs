@@ -15,7 +15,7 @@ sounds:
     pausedTime: null
     _key: '!playlists.sounds!IA79tPJjNbtw5OeA.08Jcp2uYaaQycvKf'
   - name: 92 Skirmish
-    path: assets/Music/Combat/92_Skirmish.mp3
+    path: ASSETS/Music/Combat/92_Skirmish.mp3
     channel: ''
     volume: 0.13
     repeat: true

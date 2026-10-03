@@ -196,7 +196,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Seating/Chairs/Broken/Chair_Broken_Wood_Ashen_B1_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Seating/Chairs/Broken/Chair_Broken_Wood_Ashen_B1_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -247,7 +247,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Seating/Chairs/Chair_Wood_Walnut_F_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Seating/Chairs/Chair_Wood_Walnut_F_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -298,7 +298,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Seating/Chairs/Chair_Wood_Walnut_F_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Seating/Chairs/Chair_Wood_Walnut_F_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -349,7 +349,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Seating/Chairs/Chair_Wood_Walnut_F_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Seating/Chairs/Chair_Wood_Walnut_F_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -400,7 +400,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Seating/Chairs/Chair_Wood_Walnut_F_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Seating/Chairs/Chair_Wood_Walnut_F_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -451,7 +451,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -502,7 +502,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -553,7 +553,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -604,7 +604,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -655,7 +655,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -706,7 +706,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -757,7 +757,7 @@ flags:
               scaleY: 1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -808,7 +808,7 @@ flags:
               scaleY: 1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Structures/Statues/Bases/Base_Stone_Earthy_Rectangle_A_2x2.webp
+              src: ASSETS/Images/!Core_Settlements/Structures/Statues/Bases/Base_Stone_Earthy_Rectangle_A_2x2.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -859,7 +859,7 @@ flags:
               scaleY: 1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_D_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_D_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -910,7 +910,7 @@ flags:
               scaleY: 1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_D_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_D_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -961,7 +961,7 @@ flags:
               scaleY: 1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Dark_A5_2x2.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Dark_A5_2x2.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1012,7 +1012,7 @@ flags:
               scaleY: 1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Cooking_Appliances/Stove_Rusty_D_Hot_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Cooking_Appliances/Stove_Rusty_D_Hot_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1063,7 +1063,7 @@ flags:
               scaleY: 1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Ashen_A9_1x2.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Ashen_A9_1x2.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1114,7 +1114,7 @@ flags:
               scaleY: 1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Ashen_A9_1x2.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Ashen_A9_1x2.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1165,7 +1165,7 @@ flags:
               scaleY: 1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Ashen_A9_1x2.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Ashen_A9_1x2.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1216,7 +1216,7 @@ flags:
               scaleY: 1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Ashen_A4_1x2.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Ashen_A4_1x2.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1267,7 +1267,7 @@ flags:
               scaleY: 1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Ashen_A27_2x2.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Ashen_A27_2x2.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1318,7 +1318,7 @@ flags:
               scaleY: 1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Light_A18_2x2.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Light_A18_2x2.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1369,7 +1369,7 @@ flags:
               scaleY: 1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Light_A37_2x2.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Bedding/Arranged_Bedding/Arranged_Bed_Wood_Light_A37_2x2.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1420,7 +1420,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
+              src: ASSETS/Images/!Core_Settlements/Furniture/Tables/Rectangle_Tables/Damaged/Table_Rectangle_Damaged_Wood_Ashen_A1_2x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1471,7 +1471,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/Food/Rotten_Food/Rotten_Dishes/Food_Board_A1_Rotten_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/Food/Rotten_Food/Rotten_Dishes/Food_Board_A1_Rotten_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1522,7 +1522,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/Food/Rotten_Food/Rotten_Dishes/Food_Board_A7_Rotten_2x1.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/Food/Rotten_Food/Rotten_Dishes/Food_Board_A7_Rotten_2x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1573,7 +1573,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/Food/Rotten_Food/Rotten_Dishes/Food_Pan_A1_Rotten_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/Food/Rotten_Food/Rotten_Dishes/Food_Pan_A1_Rotten_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1624,7 +1624,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/Food/Rotten_Food/Rotten_Meats/Rotten_Butchered_Meats/Butchered_Meat_Pork_Face_A1_Rotten_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/Food/Rotten_Food/Rotten_Meats/Rotten_Butchered_Meats/Butchered_Meat_Pork_Face_A1_Rotten_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1675,7 +1675,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/!Arranged_Clutter/Table_Arrangements/Table_Arrangement_A148_2x2.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/!Arranged_Clutter/Table_Arrangements/Table_Arrangement_A148_2x2.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1726,7 +1726,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/Glassware/Milk_Containers/Milk_Bottle_A2_Spilled_Spoiled_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/Glassware/Milk_Containers/Milk_Bottle_A2_Spilled_Spoiled_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1777,7 +1777,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_B7_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_B7_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1828,7 +1828,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_B7_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_B7_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1879,7 +1879,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_B7_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_B7_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1930,7 +1930,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_B7_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_B7_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -1981,7 +1981,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_A5_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_A5_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -2032,7 +2032,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_A5_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_A5_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -2083,7 +2083,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_A7_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_A7_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -2134,7 +2134,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_A7_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/Clothing/Footwear/Boots_Leather_Tan_A7_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -2185,7 +2185,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Combat/Weapons/Weapon_Racks/Weapon_Rack_Wood_Light_B_Empty_1x2.webp
+              src: ASSETS/Images/!Core_Settlements/Combat/Weapons/Weapon_Racks/Weapon_Rack_Wood_Light_B_Empty_1x2.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -2236,7 +2236,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Jackets_and_Cloaks/Cloak_Cloth_Brown_A1_1x2.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/Clothing/Jackets_and_Cloaks/Cloak_Cloth_Brown_A1_1x2.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -2287,7 +2287,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Clutter/Clothing/Jackets_and_Cloaks/Cloak_Cloth_Gray_C1_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Clutter/Clothing/Jackets_and_Cloaks/Cloak_Cloth_Gray_C1_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -2338,7 +2338,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Decor/Clothing_Rails_and_Hangers/Hanging_Clothes/Hanging_Shirt_Cloth_Tan_Wood_Walnut_A1_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Decor/Clothing_Rails_and_Hangers/Hanging_Clothes/Hanging_Shirt_Cloth_Tan_Wood_Walnut_A1_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -2389,7 +2389,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Decor/Clothing_Rails_and_Hangers/Hanging_Clothes/Hanging_Pants_Cloth_Tan_Wood_Red_B1_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Decor/Clothing_Rails_and_Hangers/Hanging_Clothes/Hanging_Pants_Cloth_Tan_Wood_Red_B1_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -2440,7 +2440,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/Horror/!Wilderness/Gore/Corpses/Humanoid/Modular/Humanoid_F10/Outfits/Commoner_Rags/Body_Humanoid_F10_Outfit_Commoner_Rags_10_B1_2x2.webp
+              src: ASSETS/Images/Horror/!Wilderness/Gore/Corpses/Humanoid/Modular/Humanoid_F10/Outfits/Commoner_Rags/Body_Humanoid_F10_Outfit_Commoner_Rags_10_B1_2x2.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -2491,7 +2491,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Lightsources/Candles/Arranged_Candles/Candles_Yellow_Arranged_A2_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Lightsources/Candles/Arranged_Candles/Candles_Yellow_Arranged_A2_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -3006,7 +3006,7 @@ flags:
               attenuation: false
             animation:
               type: swing
-              texture: fa-nexus-assets/Woodlands/Base_Woodlands_Settlement/Structures/Building/Doors/Double_Doors/Shack_Door_Double_Wood_Light_B1_2x1.webp
+              texture: ASSETS/Images/Woodlands/Base_Woodlands_Settlement/Structures/Building/Doors/Double_Doors/Shack_Door_Double_Wood_Light_B1_2x1.webp
               flip: false
               double: true
               direction: 1
@@ -3054,7 +3054,7 @@ flags:
               attenuation: false
             animation:
               type: swing
-              texture: fa-nexus-assets/Woodlands/Base_Woodlands_Settlement/Structures/Building/Doors/Double_Doors/Shack_Door_Double_Wood_Ashen_A1_2x1.webp
+              texture: ASSETS/Images/Woodlands/Base_Woodlands_Settlement/Structures/Building/Doors/Double_Doors/Shack_Door_Double_Wood_Ashen_A1_2x1.webp
               flip: false
               double: true
               direction: 1

@@ -459,7 +459,7 @@ flags:
               attenuation: false
             animation:
               type: swing
-              texture: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_C_1x1.webp
+              texture: ASSETS/Images/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_C_1x1.webp
               flip: false
               double: false
               direction: 1
@@ -508,7 +508,7 @@ flags:
               attenuation: false
             animation:
               type: swing
-              texture: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Dark_A_1x1.webp
+              texture: ASSETS/Images/!Core_Settlements/Structures/Building/Doors/Door_Wood_Dark_A_1x1.webp
               flip: false
               double: false
               direction: 1

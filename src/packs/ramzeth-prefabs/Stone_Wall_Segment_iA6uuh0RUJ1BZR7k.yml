@@ -13,7 +13,7 @@ flags:
             scaleY: -1
             anchorX: 0.5
             anchorY: 0.5
-            src: fa-nexus-assets/!Core_Settlements/Structures/Building/Walls_and_Curbs/Wall_Stone_B/Wall_Stone_Earthy_B1_Straight_C_1x1.webp
+            src: ASSETS/Images/!Core_Settlements/Structures/Building/Walls_and_Curbs/Wall_Stone_B/Wall_Stone_Earthy_B1_Straight_C_1x1.webp
             fit: fill
             tint: '#ffffff'
             alphaThreshold: 0.75
@@ -61,7 +61,7 @@ flags:
       documentName: Tile
       addSubtract: []
       randomize: []
-      img: fa-nexus-assets/!Core_Settlements/Structures/Building/Walls_and_Curbs/Wall_Stone_B/Wall_Stone_Earthy_B1_Straight_C_1x1.webp
+      img: ASSETS/Images/!Core_Settlements/Structures/Building/Walls_and_Curbs/Wall_Stone_B/Wall_Stone_Earthy_B1_Straight_C_1x1.webp
       gridSize: 100
       attached:
         - documentName: Token

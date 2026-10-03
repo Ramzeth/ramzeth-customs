@@ -14,7 +14,7 @@ flags:
             scaleY: 1
             anchorX: 0.5
             anchorY: 0.5
-            src: fa-nexus-assets/Woodlands/!Wilderness/Flora/Trees/Tree_Green_A1_6x6.webp
+            src: ASSETS/Images/Woodlands/!Wilderness/Flora/Trees/Tree_Green_A1_6x6.webp
             fit: fill
             tint: '#ffffff'
             alphaThreshold: 0.75
@@ -51,7 +51,7 @@ flags:
                 - id: 88PdYlm25LCBwfiW
                   type: 0
             multiface-tiles:
-              originalImage: fa-nexus-assets/Woodlands/!Wilderness/Flora/Trees/Tree_Green_A1_6x6.webp
+              originalImage: ASSETS/Images/Woodlands/!Wilderness/Flora/Trees/Tree_Green_A1_6x6.webp
             tile-scroll:
               enableScroll: false
               scrollDirection: 0
@@ -105,7 +105,7 @@ flags:
       documentName: Tile
       addSubtract: []
       randomize: []
-      img: fa-nexus-assets/Woodlands/!Wilderness/Flora/Trees/Tree_Green_A1_6x6.webp
+      img: ASSETS/Images/Woodlands/!Wilderness/Flora/Trees/Tree_Green_A1_6x6.webp
       gridSize: 80
       preSpawnScript: ''
       postSpawnScript: ''
@@ -118,7 +118,7 @@ flags:
               scaleY: 1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/Woodlands/!Wilderness/Flora/Trees/Tree_Shadows/Tree_Shadow_A1_6x6.webp
+              src: ASSETS/Images/Woodlands/!Wilderness/Flora/Trees/Tree_Shadows/Tree_Shadow_A1_6x6.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -208,7 +208,7 @@ flags:
               scaleY: 1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/Woodlands/!Wilderness/Flora/Trees/Stumps/Stump_Light_B1_4x4.webp
+              src: ASSETS/Images/Woodlands/!Wilderness/Flora/Trees/Stumps/Stump_Light_B1_4x4.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75

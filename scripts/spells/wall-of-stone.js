@@ -10,16 +10,16 @@
 // sections, and building walls along the way would break sight on the table
 // halfway through and force a rebuild on every nudge.
 
+import { ASSETS } from "../assets.js";
 import { MOD } from "../const.js";
 import { lineEndpoints } from "../lib/region-geometry.js";
 
 const SLUG = "origin:item:slug:wall-of-stone";
 const STONE_COLOR = "#6b6b6b";
 
-// One grid square of straight stone wall, from FA Nexus. The art runs along
-// the image's long axis, so a tile rotated to match its wall lines up.
-const TILE_TEXTURE =
-  "fa-nexus-assets/!Core_Settlements/Structures/Building/Walls_and_Curbs/Wall_Stone_B/Wall_Stone_Earthy_B1_Straight_C_1x1.webp";
+// One grid square of straight stone wall. The art runs along the image's long
+// axis, so a tile rotated to match its wall lines up.
+const TILE_TEXTURE = ASSETS.wallOfStone.wallTile;
 
 // Stone tiles are stretched slightly along the wall so that neighbours
 // overlap at the joins. Without it a corner leaves a hairline of background
@@ -28,8 +28,7 @@ const TILE_OVERLAP = 1.1;
 
 // Left behind when a section is destroyed. Covers the two squares either side
 // of where the wall stood, so it is laid across the wall rather than along it.
-const RUBBLE_TEXTURE =
-  "fa-nexus-assets/!Core_Settlements/Structures/Rubble/Rubble_Piles/Stone/Rubble_Pile_Stone_Earthy_A36_4x2.webp";
+const RUBBLE_TEXTURE = ASSETS.wallOfStone.rubble;
 
 // Played once for everyone when a section collapses. An empty value means
 // silence, so the feature can be switched off without touching anything else.
@@ -37,7 +36,7 @@ const RUBBLE_TEXTURE =
 // This covers destruction only. The spell being cast is an ordinary PF2e
 // action, so its animation and sound belong in an Automated Animations
 // autorec entry, with no code at all.
-const COLLAPSE_SOUND = "ASSETS/Sounds/Oneshots/Stone/Rock-Fall-Colosseum_Collapse.mp3";
+const COLLAPSE_SOUND = ASSETS.wallOfStone.collapse;
 const COLLAPSE_VOLUME = 0.8;
 
 // Difficult terrain, copied field for field from one built through the region
@@ -559,8 +558,8 @@ async function build(messageId) {
     });
 
     // One square, centred on the wall like its tile. Unlinked, so this token's
-    // hit points are its own; the bar is always on, because the point of the
-    // token is to be a target that visibly wears down.
+    // hit points are its own. The bar is never drawn: how worn a section is
+    // shows on its actor sheet, not as a strip floating over the stone.
     //
     // The picture is the tile's job. A token always references some texture,
     // so rather than leaving the field empty and getting a placeholder, the
@@ -579,7 +578,7 @@ async function build(messageId) {
       y: centre.y - size / 2,
       rotation: shape.rotation ?? 0,
       lockRotation: false,
-      displayBars: CONST.TOKEN_DISPLAY_MODES.ALWAYS,
+      displayBars: CONST.TOKEN_DISPLAY_MODES.NONE,
       displayName: CONST.TOKEN_DISPLAY_MODES.HOVER,
       disposition: CONST.TOKEN_DISPOSITIONS.NEUTRAL,
       flags

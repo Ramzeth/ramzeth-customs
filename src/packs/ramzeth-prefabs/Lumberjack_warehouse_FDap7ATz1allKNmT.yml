@@ -457,7 +457,7 @@ flags:
               attenuation: false
             animation:
               type: swing
-              texture: fa-nexus-assets/Woodlands/Base_Woodlands_Settlement/Structures/Building/Doors/Double_Doors/Shack_Door_Double_Wood_Walnut_B1_2x1.webp
+              texture: ASSETS/Images/Woodlands/Base_Woodlands_Settlement/Structures/Building/Doors/Double_Doors/Shack_Door_Double_Wood_Walnut_B1_2x1.webp
               flip: false
               double: true
               direction: 1

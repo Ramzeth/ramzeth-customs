@@ -13,7 +13,7 @@ flags:
             scaleY: 1
             anchorX: 0.5
             anchorY: 0.5
-            src: fa-nexus-assets/Woodlands/!Wilderness/Flora/Bushes/Bush_Green_E6_2x2.webp
+            src: ASSETS/Images/Woodlands/!Wilderness/Flora/Bushes/Bush_Green_E6_2x2.webp
             fit: fill
             tint: '#ffffff'
             alphaThreshold: 0.75
@@ -61,7 +61,7 @@ flags:
       documentName: Tile
       addSubtract: []
       randomize: []
-      img: fa-nexus-assets/Woodlands/!Wilderness/Flora/Bushes/Bush_Green_E6_2x2.webp
+      img: ASSETS/Images/Woodlands/!Wilderness/Flora/Bushes/Bush_Green_E6_2x2.webp
       gridSize: 100
       attached:
         - documentName: Wall

@@ -4,6 +4,12 @@ Personal Foundry VTT library: prefabs, sounds and custom PF2e content.
 
 Requires Foundry v14 and [lib-wrapper](https://foundryvtt.com/packages/lib-wrapper).
 
+**Media are not included.** Every image and sound the module uses is expected
+under `Data/ASSETS/` on the server, which is backed up separately. The module
+holds only their paths: code paths are collected in `scripts/assets.js`,
+compendium content refers to `ASSETS/` in its own data. A world without that
+folder gets the code and the compendiums, with missing pictures and silence.
+
 ## Install
 
 Paste the manifest URL into Foundry's *Install Module* dialog:

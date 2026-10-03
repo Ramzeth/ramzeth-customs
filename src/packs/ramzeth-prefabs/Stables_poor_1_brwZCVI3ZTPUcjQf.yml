@@ -196,7 +196,7 @@ flags:
               scaleY: -1
               anchorX: 0.5
               anchorY: 0.5
-              src: fa-nexus-assets/!Core_Settlements/Lightsources/Torches_and_Sconces/Lit/Wall_Torch_01_A_Lit_1x1.webp
+              src: ASSETS/Images/!Core_Settlements/Lightsources/Torches_and_Sconces/Lit/Wall_Torch_01_A_Lit_1x1.webp
               fit: fill
               tint: '#ffffff'
               alphaThreshold: 0.75
@@ -697,7 +697,7 @@ flags:
               attenuation: false
             animation:
               type: slide
-              texture: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
+              texture: ASSETS/Images/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
               direction: 1
               double: false
               duration: 750
@@ -736,7 +736,7 @@ flags:
               attenuation: false
             animation:
               type: slide
-              texture: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
+              texture: ASSETS/Images/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
               direction: 1
               double: false
               duration: 750
@@ -775,7 +775,7 @@ flags:
               attenuation: false
             animation:
               type: slide
-              texture: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
+              texture: ASSETS/Images/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
               direction: 1
               double: false
               duration: 750
@@ -814,7 +814,7 @@ flags:
               attenuation: false
             animation:
               type: slide
-              texture: fa-nexus-assets/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
+              texture: ASSETS/Images/!Core_Settlements/Structures/Building/Doors/Door_Wood_Ashen_A_1x1.webp
               direction: 1
               double: false
               duration: 750
@@ -853,7 +853,7 @@ flags:
               attenuation: false
             animation:
               type: swing
-              texture: fa-nexus-assets/Woodlands/Base_Woodlands_Settlement/Structures/Building/Doors/Double_Doors/Shack_Door_Double_Wood_Light_C1_2x1.webp
+              texture: ASSETS/Images/Woodlands/Base_Woodlands_Settlement/Structures/Building/Doors/Double_Doors/Shack_Door_Double_Wood_Light_C1_2x1.webp
               flip: false
               double: true
               direction: 1

@@ -14,7 +14,7 @@ flags:
             scaleY: 1
             anchorX: 0.5
             anchorY: 0.5
-            src: fa-nexus-assets/Woodlands/!Wilderness/Flora/Trees/Bare_Trees/Tree_Branches/Tree_Branch_Ashen_A1_2x2.webp
+            src: ASSETS/Images/Woodlands/!Wilderness/Flora/Trees/Bare_Trees/Tree_Branches/Tree_Branch_Ashen_A1_2x2.webp
             fit: fill
             tint: '#ffffff'
             alphaThreshold: 0.75
@@ -63,7 +63,7 @@ flags:
       documentName: Tile
       addSubtract: []
       randomize: []
-      img: fa-nexus-assets/Woodlands/!Wilderness/Flora/Trees/Bare_Trees/Tree_Branches/Tree_Branch_Ashen_A1_2x2.webp
+      img: ASSETS/Images/Woodlands/!Wilderness/Flora/Trees/Bare_Trees/Tree_Branches/Tree_Branch_Ashen_A1_2x2.webp
       gridSize: 80
       preSpawnScript: ''
       postSpawnScript: ''

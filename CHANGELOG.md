@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Sliding Blocks: a **Place Block** link in the spell's description places up
+  to six one-square blocks, each becoming a block as soon as it is placed. A
+  block is a token carrying the picture and an unlinked hazard with the
+  block's AC, Hardness and Hit Points, owned by whoever owns the caster so the
+  player can drag it. Eight one-way walls attached to it follow wherever it is
+  dragged, keep anything from moving into it, and stop sight, light and sound
+  passing through it.
+- Sliding Blocks: a block at 0 Hit Points, or whose token is deleted, is
+  removed together with its walls.
+- Sliding Blocks: **Remove Blocks** button on the cast's chat card, for the
+  GM, which clears every block of that casting.
+
 ## [1.2.0] - 2026-10-03
 
 ### Added

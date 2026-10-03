@@ -18,5 +18,11 @@ export const ASSETS = {
     rubble: "ASSETS/Images/!Core_Settlements/Structures/Rubble/Rubble_Piles/Stone/Rubble_Pile_Stone_Earthy_A36_4x2.webp",
 
     collapse: "ASSETS/Sounds/Oneshots/Stone/Rock-Fall-Colosseum_Collapse.mp3"
+  },
+
+  slidingBlocks: {
+    // A square stone plinth, standing in for the cube seen from above. Drawn
+    // at two squares and scaled down onto a one-square token.
+    cube: "ASSETS/Images/!Core_Settlements/Structures/Statues/Bases/Base_Stone_Sandstone_Square_B_2x2.webp"
   }
 };

@@ -1,0 +1,83 @@
+_id: avEutOjF2ox947fp
+img: systems/pf2e/icons/spells/hologram-cube.webp
+name: Sliding Blocks
+system:
+  description:
+    gm: ''
+    value: >-
+      <p>You conjure up to six 5-foot stone cubes you can gently move with a
+      gesture. Each cube appears in any space within range, and they're capable
+      of levitating. If you conjure a cube in an occupied space or in a space
+      that can't accommodate it, it fails to appear. Each 5-foot cube can be
+      Climbed with a successful @Check[athletics|dc:10] check and has AC 10,
+      Hardness 10, and 40 Hit Points. If any of the cubes is ever farther away
+      from you than the range of this spell, it immediately crumbles into
+      dust.</p>
+
+      <p>Each time you Sustain this spell, you can move up to two of the
+      conjured cubes up to 10 feet each in any direction, including vertically.
+      You can choose different cubes to move each time you Sustain.</p>
+
+      <p>@Template[line|distance:5]{Place Block}</p>
+
+      <p data-visibility="gm"><a data-action="clear" class="rc-blocks">Remove
+      Blocks</a></p>
+
+      <hr>
+
+      <p><strong>Heightened (+2)</strong> The cubes have 10 additional Hit
+      Points, and you can move the chosen cubes an additional 5 feet each time
+      you Sustain this Spell.</p>
+  rules: []
+  slug: sliding-blocks
+  _migration:
+    version: 0.959
+    lastMigration: null
+    previous: null
+  traits:
+    otherTags: []
+    value:
+      - concentrate
+      - earth
+      - manipulate
+    rarity: common
+    traditions:
+      - arcane
+      - primal
+  publication:
+    title: Pathfinder Rage of Elements
+    authors: ''
+    license: OGL
+    remaster: true
+  level:
+    value: 4
+  requirements: ''
+  target:
+    value: ''
+  range:
+    value: 120 feet
+  area: null
+  time:
+    value: '3'
+  duration:
+    value: 10 minutes
+    sustained: true
+  damage: {}
+  defense: null
+  cost:
+    value: ''
+  location:
+    value: null
+  counteraction: false
+type: spell
+_stats:
+  coreVersion: '14.367'
+  systemId: pf2e
+  systemVersion: 8.4.1
+  compendiumSource: Compendium.pf2e.spells-srd.Item.avEutOjF2ox947fp
+  duplicateSource: null
+effects: []
+flags: {}
+ownership:
+  default: 0
+_key: '!items!avEutOjF2ox947fp'

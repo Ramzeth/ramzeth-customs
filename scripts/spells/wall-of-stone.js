@@ -13,6 +13,7 @@
 import { ASSETS } from "../assets.js";
 import { MOD } from "../const.js";
 import { lineEndpoints } from "../lib/region-geometry.js";
+import { handlePlacement } from "../lib/region-placement.js";
 
 const SLUG = "origin:item:slug:wall-of-stone";
 const STONE_COLOR = "#6b6b6b";
@@ -69,7 +70,13 @@ const SECTION_IMMUNITIES = [
 
 export function registerWallOfStone() {
   document.addEventListener("click", onWallButtonClick);
-  Hooks.once("ready", patchTemplatePlacement);
+  handlePlacement(SLUG, {
+    shape: styleSection,
+    limit: (data) => sectionBudget(data.shapes[0]),
+    done: (placed, limit) => {
+      if (placed) ui.notifications.info(`Wall of Stone: ${placed}/${limit} sections placed.`);
+    }
+  });
   Hooks.on("deleteToken", onSectionTokenDeleted);
   Hooks.on("updateActor", onSectionDamaged);
   return {
@@ -83,52 +90,12 @@ export function registerWallOfStone() {
 /*  Template placement                          */
 /* -------------------------------------------- */
 
-// PF2e loses the enricher's width on the way to the region: shapes[0].width
-// arrives equal to length, which turns every line into a square. placeRegion
-// is the only seam available — it receives the data the placement preview is
-// drawn from, so correcting it here fixes the preview and the document that
-// gets created at once. The method that assembles that data, PF2e's private
-// #onClickInlineTemplate, cannot be wrapped.
+// The placement run itself lives in lib/region-placement.js; this spell only
+// says how one section looks and how many fit in 120 feet.
 //
-// Deferred to "ready" because the target path resolves through canvas.regions,
-// which does not exist before the canvas is up.
-//
-// The wrapper also turns one click on the link into a placement run: a wall is
-// two dozen sections, and clicking back into the chat card between each of
-// them is unusable at the table.
-//
-// The loop is ours rather than the layer's own multi-shape mode on purpose.
-// placeRegion and placeRegions can both take several shapes and walk through
-// them, but they return null when the dismiss key is pressed, and it is not
-// documented whether that discards what was already placed. Here every
-// iteration is a finished call that has already created its region, so
-// stopping early cannot lose anything: right-click or Escape simply ends the
-// run.
-function patchTemplatePlacement() {
-  libWrapper.register(MOD,
-    "canvas.regions.constructor.prototype.placeRegion",
-    async function (wrapped, data, options) {
-      const ro = data?.flags?.pf2e?.origin?.rollOptions ?? [];
-      if (!ro.includes(SLUG) || !data?.shapes?.[0]) return wrapped(data, options);
-
-      const limit = sectionBudget(data.shapes[0]);
-      let last = null;
-      let placed = 0;
-
-      while (placed < limit) {
-        const region = await wrapped(styleSection(data), options);
-        if (!region) break;
-        last = region;
-        placed++;
-      }
-
-      if (placed) ui.notifications.info(`Wall of Stone: ${placed}/${limit} sections placed.`);
-      return last;
-    }, "WRAPPER");
-}
-
-// A section is only as thin as we make it: PF2e sets shapes[0].width equal to
-// length, so every line arrives as a square.
+// A section is only as thin as we make it: PF2e loses the enricher's width on
+// the way to the region and sets shapes[0].width equal to length, so every
+// line arrives as a square.
 function styleSection(data) {
   const styled = foundry.utils.deepClone(data);
   styled.shapes[0].width = Math.max(2, Math.round(canvas.grid.size / 16));

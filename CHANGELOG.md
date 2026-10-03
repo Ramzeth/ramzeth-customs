@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-10-03
+
 ### Added
 
 - Sliding Blocks: a **Place Block** link in the spell's description places up
@@ -24,6 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   recommended; without it a block's walls stand at every elevation.
 - Sliding Blocks: **Remove Blocks** button on the cast's chat card, for the
   GM, which clears every block of that casting.
+- Sliding Blocks in the Ramzeth Spells compendium, with the placement link and
+  the button in its description.
 
 ## [1.2.0] - 2026-10-03
 
@@ -64,6 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Wall of Stone templates are placed as a thin stone-coloured line instead of a
   square.
 
-[unreleased]: https://github.com/Ramzeth/ramzeth-customs/compare/1.2.0...HEAD
+[unreleased]: https://github.com/Ramzeth/ramzeth-customs/compare/1.3.0...HEAD
+[1.3.0]: https://github.com/Ramzeth/ramzeth-customs/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/Ramzeth/ramzeth-customs/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/Ramzeth/ramzeth-customs/releases/tag/1.1.0

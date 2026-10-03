@@ -15,6 +15,16 @@ import { handlePlacement } from "../lib/region-placement.js";
 const SLUG = "origin:item:slug:sliding-blocks";
 const BLOCK_COLOR = "#8a7a5c";
 
+// Levitation needs walls with a height, which core v14 does not have. With
+// the Wall Height module the block's walls span exactly the block's own
+// height and rise with its token; without it they stand at every elevation,
+// and a raised block still stops everything beneath it.
+const WALL_HEIGHT = "wall-height";
+
+function wallHeightActive() {
+  return game.modules.get(WALL_HEIGHT)?.active ?? false;
+}
+
 // Up to six 5-foot cubes per casting. Each has AC 10, Hardness 10 and 40 Hit
 // Points; heightening by two ranks adds 10, so only whole steps of two count.
 const MAX_BLOCKS = 6;
@@ -125,7 +135,11 @@ async function onBlockPlaced(region) {
 //             is seen from outside; nothing is seen or heard through it.
 //
 // The dungeon's own walls are two-way and stop the block like anything else.
-function cubeWalls({ x, y, width: w, height: h }) {
+//
+// range, when given, is the block's vertical extent in scene distance units.
+// lib/attach.js reads it from the walls and keeps it relative to the token's
+// elevation from then on.
+function cubeWalls({ x, y, width: w, height: h }, range = null) {
   const edges = [
     [x, y, x + w, y],
     [x + w, y, x + w, y + h],
@@ -134,19 +148,22 @@ function cubeWalls({ x, y, width: w, height: h }) {
   ];
   const NONE = CONST.WALL_SENSE_TYPES.NONE;
   const NORMAL = CONST.WALL_SENSE_TYPES.NORMAL;
+  const height = () => (range ? { flags: { [WALL_HEIGHT]: { ...range } } } : {});
 
   return edges.flatMap((c) => [
     {
       c,
       move: CONST.WALL_MOVEMENT_TYPES.NORMAL,
       sight: NONE, light: NONE, sound: NONE,
-      dir: CONST.WALL_DIRECTIONS.LEFT
+      dir: CONST.WALL_DIRECTIONS.LEFT,
+      ...height()
     },
     {
       c,
       move: CONST.WALL_MOVEMENT_TYPES.NONE,
       sight: NORMAL, light: NORMAL, sound: NORMAL,
-      dir: CONST.WALL_DIRECTIONS.RIGHT
+      dir: CONST.WALL_DIRECTIONS.RIGHT,
+      ...height()
     }
   ]);
 }
@@ -157,6 +174,14 @@ function cubeWalls({ x, y, width: w, height: h }) {
 async function createBlock(scene, messageId, centre, origin) {
   const actor = await ensureBlockActor(messageId, origin);
   const size = scene.grid.size;
+  const levitates = wallHeightActive();
+
+  // A block is one square tall. Wall Height reads a token's own height from
+  // this flag; without it the block would count as a creature of default
+  // height when lines of sight are traced against it.
+  const heightFlags = levitates
+    ? { [WALL_HEIGHT]: { tokenHeight: scene.grid.distance } }
+    : {};
 
   const [token] = await scene.createEmbeddedDocuments("Token", [{
     name: actor.name,
@@ -170,15 +195,19 @@ async function createBlock(scene, messageId, centre, origin) {
     displayBars: CONST.TOKEN_DISPLAY_MODES.NONE,
     displayName: CONST.TOKEN_DISPLAY_MODES.HOVER,
     disposition: CONST.TOKEN_DISPOSITIONS.NEUTRAL,
-    flags: { [MOD]: { castId: messageId, slidingBlock: true } }
+    flags: { [MOD]: { castId: messageId, slidingBlock: true }, ...heightFlags }
   }]);
 
   // The walls are laid around where the token actually landed, read back
   // from the document, so they hug it even if its x/y were taken to mean
-  // something other than the corner.
+  // something other than the corner. Vertically they run from the token's
+  // elevation to one square above it.
   const c = token.getCenterPoint();
+  const range = levitates
+    ? { bottom: c.elevation, top: c.elevation + scene.grid.distance }
+    : null;
   await attach(token, {
-    walls: cubeWalls({ x: c.x - size / 2, y: c.y - size / 2, width: size, height: size })
+    walls: cubeWalls({ x: c.x - size / 2, y: c.y - size / 2, width: size, height: size }, range)
   });
 }
 

@@ -18,6 +18,13 @@
   "relationships": {
       "requires": [
           { "id": "lib-wrapper", "type": "module" }
+      ],
+      "recommends": [
+          {
+              "id": "wall-height",
+              "type": "module",
+              "reason": "Gives the walls of Sliding Blocks a height, so a levitated block can be passed beneath."
+          }
       ]
   },
   "packs": [

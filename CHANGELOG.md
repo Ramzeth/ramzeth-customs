@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   passing through it.
 - Sliding Blocks: a block at 0 Hit Points, or whose token is deleted, is
   removed together with its walls.
+- Sliding Blocks: blocks levitate. Raising a block's token raises its walls
+  with it, so creatures can pass beneath a lifted block and anything at its
+  height is still stopped. Needs the Wall Height module, now listed as
+  recommended; without it a block's walls stand at every elevation.
 - Sliding Blocks: **Remove Blocks** button on the cast's chat card, for the
   GM, which clears every block of that casting.
 

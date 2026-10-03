@@ -12,9 +12,21 @@
 // saying it is an anchor, so that ordinary tokens moving around the scene
 // never trigger a search.
 //
-// Translation only. Nothing attached so far needs to turn with its token.
+// Movement on the map, plus elevation for walls that have a vertical range.
+// Nothing attached so far needs to turn with its token.
 
 import { MOD } from "../const.js";
+
+// Walls have no height in core v14; the Wall Height module stores one in
+// these flags, in scene distance units, with -Infinity and Infinity meaning
+// unbounded. A wall is lifted with its anchor only if both ends are finite:
+// an unbounded wall stands at every elevation and has nothing to move.
+const WALL_HEIGHT = "wall-height";
+
+function wallRange(data) {
+  const { bottom, top } = data.flags?.[WALL_HEIGHT] ?? {};
+  return Number.isFinite(bottom) && Number.isFinite(top) ? { bottom, top } : null;
+}
 
 // Read from the document rather than the placeable, so it is right even for a
 // token that is not on the current canvas, and does not depend on whether a
@@ -25,18 +37,38 @@ function anchorCentre(token) {
 
 // Each attachable type stores its offset in the shape it is positioned by: a
 // wall by its two endpoints, a tile by its own anchor point (the centre, in
-// v14). Both functions accept a document or plain creation data alike, since
-// all they read is c or x/y.
+// v14). toOffset accepts a document or plain creation data alike and returns
+// the flags to store; fromOffset turns those flags back into update data.
+//
+// A wall's vertical range is kept in a flag of its own, offsetZ, next to the
+// horizontal offset rather than inside it, so walls attached before
+// elevation was tracked keep working unchanged — they simply have none.
 const SHAPES = {
   Wall: {
     collection: "walls",
-    toOffset: (data, o) => [data.c[0] - o.x, data.c[1] - o.y, data.c[2] - o.x, data.c[3] - o.y],
-    fromOffset: (off, o) => ({ c: [o.x + off[0], o.y + off[1], o.x + off[2], o.y + off[3]] })
+    toOffset: (data, o) => {
+      const flags = {
+        offset: [data.c[0] - o.x, data.c[1] - o.y, data.c[2] - o.x, data.c[3] - o.y]
+      };
+      const range = wallRange(data);
+      if (range) flags.offsetZ = [range.bottom - o.elevation, range.top - o.elevation];
+      return flags;
+    },
+    fromOffset: ({ offset, offsetZ }, o) => {
+      const target = {
+        c: [o.x + offset[0], o.y + offset[1], o.x + offset[2], o.y + offset[3]]
+      };
+      if (offsetZ) {
+        target[`flags.${WALL_HEIGHT}.bottom`] = o.elevation + offsetZ[0];
+        target[`flags.${WALL_HEIGHT}.top`] = o.elevation + offsetZ[1];
+      }
+      return target;
+    }
   },
   Tile: {
     collection: "tiles",
-    toOffset: (data, o) => [data.x - o.x, data.y - o.y],
-    fromOffset: (off, o) => ({ x: o.x + off[0], y: o.y + off[1] })
+    toOffset: (data, o) => ({ offset: [data.x - o.x, data.y - o.y] }),
+    fromOffset: ({ offset }, o) => ({ x: o.x + offset[0], y: o.y + offset[1] })
   }
 };
 
@@ -62,7 +94,7 @@ export async function attach(token, { walls = [], tiles = [] } = {}) {
     if (!list.length) continue;
     const { toOffset } = SHAPES[type];
     const data = list.map((d) => foundry.utils.mergeObject(d, {
-      flags: { [MOD]: { attachedTo: token.id, offset: toOffset(d, centre) } }
+      flags: { [MOD]: { attachedTo: token.id, ...toOffset(d, centre) } }
     }, { inplace: false }));
     created[type] = await scene.createEmbeddedDocuments(type, data);
   }
@@ -84,10 +116,14 @@ function serial(key, job) {
   return run;
 }
 
+// Keys may be dotted paths into flags, so they are read with getProperty.
 function isAt(doc, target) {
-  return Object.entries(target).every(([key, value]) => Array.isArray(value)
-    ? value.every((v, i) => doc[key][i] === v)
-    : doc[key] === value);
+  return Object.entries(target).every(([key, value]) => {
+    const current = foundry.utils.getProperty(doc, key);
+    return Array.isArray(value)
+      ? value.every((v, i) => current?.[i] === v)
+      : current === value;
+  });
 }
 
 // Puts everything attached to a token back at "centre + offset": one batched
@@ -107,10 +143,10 @@ export function placeAttached(token) {
       const updates = [];
       for (const doc of scene[collection]) {
         if (doc.getFlag(MOD, "attachedTo") !== token.id) continue;
-        const offset = doc.getFlag(MOD, "offset");
-        if (!offset) continue;
+        const flags = doc.flags?.[MOD];
+        if (!flags?.offset) continue;
 
-        const target = fromOffset(offset, centre);
+        const target = fromOffset(flags, centre);
         if (!isAt(doc, target)) updates.push({ _id: doc.id, ...target });
       }
       if (updates.length) await scene.updateEmbeddedDocuments(type, updates);
@@ -139,9 +175,9 @@ export function detach(token) {
 /*  Hooks                                       */
 /* -------------------------------------------- */
 
-// What moves the centre. Elevation is left out: nothing attached rises with
-// its token yet.
-const POSITION_KEYS = ["x", "y", "width", "height"];
+// What moves the anchor: its place on the map, its size, and its elevation —
+// the last for walls that carry a vertical range.
+const POSITION_KEYS = ["x", "y", "width", "height", "elevation"];
 
 function report(err) {
   console.error(`${MOD} | attach`, err);

@@ -3,6 +3,9 @@
 Personal Foundry VTT library: prefabs, sounds and custom PF2e content.
 
 Requires Foundry v14 and [lib-wrapper](https://foundryvtt.com/packages/lib-wrapper).
+[Wall Height](https://foundryvtt.com/packages/wall-height) is recommended:
+walls have no height in core v14, and without it a levitated Sliding Block
+still stops everything beneath it.
 
 **Media are not included.** Every image and sound the module uses is expected
 under `Data/ASSETS/` on the server, which is backed up separately. The module

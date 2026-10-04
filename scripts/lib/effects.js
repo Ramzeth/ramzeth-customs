@@ -2,12 +2,14 @@
 //
 // The spells resolve their events — a section collapsing, a block being
 // destroyed, a fireball landing — on the active GM's client, so an effect has
-// to reach the other clients rather than play locally.
+// to reach the other clients rather than play locally. Sequencer does the
+// playing and the broadcasting; it is a required dependency of the module.
 //
-// Sequencer does the playing: it broadcasts, and it places the effect on the
-// map so it comes from where things happened. It is a required dependency of
-// the module, so there is no fallback — a flat, unplaced sound was the only
-// alternative, and not one worth keeping.
+// Sounds are not placed on the map. Foundry plays a placed sound only for a
+// user with a token of their own selected near it, so it went silent while a
+// template was being placed — no token is selected then — and never reached
+// a display user with no tokens at all. At a table with one set of speakers,
+// placement added nothing to make up for that.
 //
 // A spell this module animates must have no Automated Animations autorec
 // entry, or both play. Spells the module leaves alone can stay with AA.
@@ -28,11 +30,8 @@ export function shakeUsers() {
     .map((u) => u.id);
 }
 
-// Adds a sound placed on the map to a sequence that is being built, so a
-// spell can time it against its own animations.
-//
-// radiusSquares is passed to Sequencer as it is: its radius is measured in
-// grid squares, not in feet.
+// Adds a sound to a sequence that is being built, so a spell can time it
+// against its own animations.
 //
 // startMs and endMs pick a stretch of the file by position in it, so one file
 // can be played in pieces. durationMs cuts it short instead — never longer
@@ -40,16 +39,13 @@ export function shakeUsers() {
 // cut fade instead of stopping dead. delayMs holds the sound back from the
 // point in the sequence where it was added, to land on a moment inside an
 // animation started alongside it.
-export function addSound(seq, src, at, {
-  volume = 0.8, radiusSquares = 12,
-  startMs = 0, endMs = 0, durationMs = 0, fadeOutMs = 0, delayMs = 0
+export function addSound(seq, src, {
+  volume = 0.8, startMs = 0, endMs = 0, durationMs = 0, fadeOutMs = 0, delayMs = 0
 } = {}) {
   if (!src) return seq;
   const sound = seq.sound()
     .file(src)
-    .volume(volume)
-    .atLocation(at)
-    .radius(radiusSquares);
+    .volume(volume);
   if (delayMs) sound.delay(delayMs);
   if (startMs) sound.startTime(startMs);
   if (endMs) sound.endTime(endMs);
@@ -59,7 +55,7 @@ export function addSound(seq, src, at, {
 }
 
 // A sound on its own, played at once.
-export function playSoundAt(src, at, options) {
+export function playSound(src, options) {
   if (!src) return;
-  addSound(new Sequence(), src, at, options).play();
+  addSound(new Sequence(), src, options).play();
 }

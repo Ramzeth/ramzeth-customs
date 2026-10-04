@@ -10,8 +10,10 @@
 
 const STONE_COLLAPSE = "ASSETS/Sounds/Oneshots/Stone/Rock-Fall-Colosseum_Collapse.mp3";
 
-// JB2A, free edition, copied out of the module's Library folder.
+// JB2A, free edition, copied out of the module's Library folder with its
+// folders kept.
 const FIREBALL = "ASSETS/Animations/3rd_Level/Fireball";
+const GENERIC = "ASSETS/Animations/Generic";
 
 export const ASSETS = {
   wallOfStone: {
@@ -43,8 +45,25 @@ export const ASSETS = {
     // 800 file pixels square — a 20-foot blast at the file's own scale.
     explosion: `${FIREBALL}/FireballExplosion_01_Orange_800x800.webm`,
 
-    // Flames left burning, without flying debris, for the higher ranks.
+    // The fireball still blazing, as a looped ball without flying debris,
+    // for the higher ranks.
     afterglow: `${FIREBALL}/FireballLoopNoDebris_01_Orange_800x800.webm`,
+
+    // A ring of energy bursting outward from a bright point. Blue-white in
+    // the file.
+    shockwave: `${GENERIC}/Template/Circle/OutPulse/OutPulse_02_Regular_BlueWhite_Burst_600x600.webm`,
+
+    // Glowing cracks in the ground, looped: a compact patch, a wide sparse
+    // spread, and a dense one.
+    cracksCompact: `${GENERIC}/Fire/GroundCrackLoop_03_Regular_Orange_600x600.webm`,
+    cracksWide: `${GENERIC}/Fire/GroundCrackLoop_02_Regular_Orange_600x600.webm`,
+    cracksDense: `${GENERIC}/Fire/GroundCrackLoop_01_Regular_Orange_600x600.webm`,
+
+    // A disc of red-hot broken ground, looped.
+    scorched: `${GENERIC}/Fire/ScorchedEarth_01_Black_800x800.webm`,
+
+    // A patch of fire one square across, looped.
+    flame: `${GENERIC}/Fire/Flame/Flames03_01_Regular_Orange_05x05ft_300x300.webm`,
 
     // Eight seconds long.
     sound: "ASSETS/Sounds/Oneshots/Fire/fireball.ogg",

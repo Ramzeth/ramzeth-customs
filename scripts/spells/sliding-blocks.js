@@ -10,7 +10,7 @@
 import { ASSETS } from "../assets.js";
 import { MOD } from "../const.js";
 import { attach } from "../lib/attach.js";
-import { playSoundAt } from "../lib/effects.js";
+import { playSound } from "../lib/effects.js";
 import { handlePlacement } from "../lib/region-placement.js";
 
 // Marks a deletion as the spell ending rather than a block being destroyed,
@@ -290,13 +290,13 @@ function onBlockDamaged(actor, changes) {
 // rather than to the damage. The walls are not this handler's business:
 // lib/attach.js takes them away on the same event.
 //
-// The document keeps its data after deletion, so its centre can still be
+// The document keeps its data after deletion, so its flags can still be
 // read here.
 function onBlockDeleted(token, options) {
   if (options?.[CLEARING]) return;
   if (game.user !== game.users.activeGM) return;
   if (!token.getFlag(MOD, "slidingBlock")) return;
-  playSoundAt(ASSETS.slidingBlocks.destroy, token.getCenterPoint());
+  playSound(ASSETS.slidingBlocks.destroy);
 }
 
 // The spell is over: every block of the casting, its throwaway actor and any

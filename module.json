@@ -21,7 +21,7 @@
           {
               "id": "sequencer",
               "type": "module",
-              "reason": "Plays the spells' sounds and effects for everyone, placed on the map where they happen."
+              "reason": "Plays the spells' sounds and effects for everyone at the table, timed against each other."
           }
       ],
       "recommends": [

@@ -11,23 +11,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fireball animation, played by the module rather than Automated Animations.
   Placing the burst template sends a bead of fire from the caster to the
-  centre of the burst, where it explodes to fill the area. Higher ranks play
-  faster, glow, burst more than once and leave flames burning; the area never
-  grows, since a fireball is a 20-foot burst at every rank. Uses the free JB2A
-  Fireball animations, copied into `Data/ASSETS/Animations/3rd_Level/Fireball/`.
-- Screen shake with the fireball's blast, scaled to its rank. Users flagged
-  `noShake` are left out — meant for a TV used as a play mat.
-- Fireball sound in two parts, each timed to what is on screen: the launch
-  from the caster as the bead forms at their hand, the bang from the centre
-  of the burst the moment the bead strikes, together with the blast and the
-  shake. Louder at higher ranks; lower ranks cut the bang's rumble short with
-  a fade, since their blast is over sooner.
+  centre of the burst, where it explodes. Every rank from 3 to 10 is a step
+  up: the fire goes from red through orange, yellow and white to blinding
+  white edged in blue and then violet; it grows from short of the burst's
+  edge to well past it; a quick pop becomes a long blast with a glow. From
+  rank 4 it leaves fire behind, more of it with every rank: burning patches,
+  from one at the centre to every square of the burst; glowing cracks in the
+  ground from rank 5; a shockwave from rank 6; the fireball blazing on from
+  rank 8; red-hot ground from rank 9. Uses free JB2A animations, copied into
+  `Data/ASSETS/Animations/` with JB2A's own folders.
+- Screen shake with the fireball's blast: none at rank 3, harder and longer
+  with every rank above. Users flagged `noShake` are left out — meant for a
+  TV used as a play mat.
+- Fireball sound, timed to what is on screen: the whoosh as the bead forms
+  at the caster's hand, the bang the moment it strikes, together with the
+  blast and the shake. Quiet at rank 3 and louder with every rank; the lower
+  ranks cut the bang's rumble short with a fade, since their blast is over
+  sooner.
 
-### Fixed
+### Changed
 
-- Placed sounds — Wall of Stone collapsing, a Sliding Block destroyed — were
-  heard five times further away than intended, which all but removed their
-  fall-off with distance.
+- Sounds are no longer placed on the map: everyone hears them at the same
+  volume. A placed sound reached only users with a token selected near it, so
+  it went silent while a template was being placed and never reached a
+  display user with no tokens. Applies to Wall of Stone collapsing and a
+  Sliding Block destroyed as well.
 
 ## [1.3.1] - 2026-10-04
 

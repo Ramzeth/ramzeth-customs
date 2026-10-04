@@ -12,7 +12,7 @@
 
 import { ASSETS } from "../assets.js";
 import { MOD } from "../const.js";
-import { playSoundAt } from "../lib/effects.js";
+import { playSound } from "../lib/effects.js";
 import { lineEndpoints } from "../lib/region-geometry.js";
 import { handlePlacement } from "../lib/region-placement.js";
 
@@ -256,9 +256,7 @@ async function destroySegment(scene, segmentId, { includeToken = true } = {}) {
   }
 
   if (line) {
-    playSoundAt(COLLAPSE_SOUND,
-      { x: (line.a.x + line.b.x) / 2, y: (line.a.y + line.b.y) / 2 },
-      { volume: COLLAPSE_VOLUME });
+    playSound(COLLAPSE_SOUND, { volume: COLLAPSE_VOLUME });
     await createRubble(scene, line.a, line.b, castId);
   }
 }

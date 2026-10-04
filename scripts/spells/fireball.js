@@ -20,11 +20,11 @@
 // sets nothing off.
 //
 // Every rank from 3 to 10 is a step up from the one before: the fire runs
-// from a red pop to a blinding white ball of plasma edged in violet, and grows
-// in size, length, loudness, glow and shake; from rank 4 on it leaves fire
-// behind — burning patches, then glowing cracks and a shockwave, then the
-// fireball blazing on over red-hot ground. Everyone's view shakes, except
-// users marked noShake.
+// from orange to a blinding white ball of plasma edged in violet, and grows
+// in size, length, loudness, glow, shake and the flash of light it throws
+// over the scene; from rank 5 on it leaves its mark — glowing cracks, then a
+// shockwave, then the fireball blazing on, then red-hot ground. Everyone's
+// view shakes, except users marked noShake.
 //
 // The spell itself needs no edit: PF2e already puts a template button on its
 // chat card. Any Automated Animations autorec entry for Fireball has to go,
@@ -32,7 +32,7 @@
 
 import { ASSETS } from "../assets.js";
 import { MOD } from "../const.js";
-import { addSound, shakeUsers } from "../lib/effects.js";
+import { addSound, dazzle, shakeUsers } from "../lib/effects.js";
 
 const SLUG = "origin:item:slug:fireball";
 const BASE_RANK = 3;
@@ -101,8 +101,9 @@ const BLAST_FADE_MS = 400;
 const RING_REACH = 0.95;
 
 // The ground files are loops with no start or end of their own, so they fade
-// in and out. reach is how much of its frame each picture spans, measured on
-// the files. They keep the colours they are drawn in: the ground burns cooler
+// in and out: in as the fire above them starts to cool, out a while after it
+// is gone. reach is how much of its frame each picture spans, measured on the
+// files. They keep the colours they are drawn in: the ground burns cooler
 // than the fireball, whatever colour that is.
 const GROUND = {
   cracksCompact: { src: ASSETS.fireball.cracksCompact, reach: 0.6 },
@@ -113,67 +114,75 @@ const GROUND = {
 const GROUND_FADE_IN_MS = 800;
 const GROUND_FADE_OUT_MS = 1500;
 
-// The flame file is a loop one square of fire across, spanning 48% of its
-// frame. Each patch is drawn a little wider than its square so neighbours
-// meet, nudged off the square's centre so they do not line up, and started
-// and ended a little apart from the others so the fire dies down patch by
-// patch. The flames are the last of the fire: they come up as everything
-// above them goes out, and the ground smoulders under them until the last
-// one is gone.
-const FLAME_REACH = 0.48;
-const FLAME_SQUARES = 1.2;
-const FLAME_JITTER_SQUARES = 0.15;
-const FLAME_LEAD_MS = 500;
-const FLAME_STAGGER_MS = 800;
-const FLAME_SPREAD = 0.2;
-const FLAME_FADE_IN_MS = 500;
-const FLAME_FADE_OUT_MS = 1200;
+// The flash is a real light, placed by the active GM and taken away again, so
+// that the scene itself lights up around the blast — in a dark scene it shows
+// whatever it lights, and what it shows is explored. A new light takes a trip
+// to the server to appear, so it is put up a moment ahead of the strike. It
+// dies away in steps, each a fraction of its radius at a fraction of its
+// time: every step is an update all clients apply, and a few are enough for
+// a flash. Lights left behind by a flash that never finished — the GM gone
+// in the middle of it — are swept away when the GM next loads the scene.
+const FLASH_LEAD_MS = 100;
+const FLASH_FADE = [
+  { at: 0.3, scale: 0.75 },
+  { at: 0.6, scale: 0.5 },
+  { at: 0.85, scale: 0.25 }
+];
 
-// The sound file holds two events, measured on it: the launch, a whoosh that
-// swells from 0.12 s, and the bang, whose attack begins at 1.14 s and peaks
-// within 30 ms. It is played as one piece, started a few milliseconds ahead
-// of the whoosh so its attack is not clipped. Cast from off the map there is
-// nothing to launch, and it starts just ahead of the bang instead.
+// Each sound file holds two events: the launch, a whoosh that swells from
+// launchMs, and the bang, whose attack begins at bangMs and peaks within
+// 30 ms. Measured on the source; the heavy and huge versions are the source
+// slowed to 0.88 and 0.78 of its speed, which moves both events later by the
+// same proportion. A sound is played as one piece, started a few milliseconds
+// ahead of the whoosh so its attack is not clipped. Cast from off the map
+// there is nothing to launch, and it starts just ahead of the bang instead.
 //
-// The audible sound ends near 7.4 s; the file runs on in silence to about
-// 8.7 s. SOUND_LENGTH_MS stays inside the file, so a cut is never asked to
-// run past its end, which would make Sequencer loop it. A rank that cuts the
-// rumble short fades it over at most SOUND_FADE_MS.
-const SOUND_LENGTH_MS = 8000;
-const SOUND_LAUNCH_MS = 120;
-const SOUND_BANG_MS = 1140;
+// lengthMs is where the rumble has died away, inside the file, so a cut is
+// never asked to run past its end, which would make Sequencer loop it. A rank
+// that cuts the rumble short fades it over at most SOUND_FADE_MS.
+//
+// All three are mastered to about the same loudness, as loud as the source
+// goes without distortion, so the ranks' volumes compare across them.
+const SOUNDS = {
+  normal: { src: ASSETS.fireball.sound, launchMs: 120, bangMs: 1140, lengthMs: 8000 },
+  heavy: { src: ASSETS.fireball.soundHeavy, launchMs: 136, bangMs: 1295, lengthMs: 8900 },
+  huge: { src: ASSETS.fireball.soundHuge, launchMs: 154, bangMs: 1462, lengthMs: 10400 }
+};
 const SOUND_PREROLL_MS = 10;
 const SOUND_FADE_MS = 1500;
 
 // The sound sets the pace. Started with the sequence, it reaches the bang
-// STRIKE_MS later, and that is when the bead must strike: the blast, the bang
+// this long after, and that is when the bead must strike: the blast, the bang
 // and the shake all begin there. The beam file is started far enough in for
 // its bead to strike at that moment, which drops the first half of the bead
 // growing at the hand — two seconds of it would leave the table waiting, and
 // the whoosh would be over long before anything flew.
-const STRIKE_MS = SOUND_BANG_MS - (SOUND_LAUNCH_MS - SOUND_PREROLL_MS);
-const BEAM_SKIP_MS = BEAM_IMPACT_MS - STRIKE_MS;
+function strikeAfterLaunch(sound) {
+  return sound.bangMs - (sound.launchMs - SOUND_PREROLL_MS);
+}
 
 // One step per rank, 3 to 10. Chosen at the table from rendered previews of
 // the files.
 //
-// colour: the files are orange; the bead, the blast, the blazing ball and the
-// flames are recoloured to the rank. tint multiplies every pixel, which is
+// colour: the files are orange; the bead, the blast and the blazing ball are
+// recoloured to the rank. tint multiplies every pixel, which is
 // what colours the white-hot core at the lower ranks; hue, saturate and
 // brightness then go to a ColorMatrix filter, with PIXI's meaning — hue in
 // degrees, saturate from -1 (grey) through 0 (unchanged), brightness as a
 // multiplier. The top ranks turn the hue around instead of tinting, which
 // keeps the core blinding white and moves only the edges and the cooling
-// fire, to blue and then violet. glow goes to Sequencer's Glow filter; the
-// flames go without it, there being too many of them to filter twice.
+// fire, to blue and then violet. glow goes to Sequencer's Glow filter.
 //
 // blast: cover is how far across the burst the fire reaches, 1 being exactly
 // to its edge — short of it at rank 3, past it at the top. rate is playback
 // speed: the low ranks rush through the file, the top ones linger. ms cuts
 // the blast short with a fade; 0 plays it out.
 //
-// sound: rumbleMs is how long the bang runs on before it is faded out; 0
-// lets it run to the end of the file.
+// sound: which file, how loud, and how long the bang runs on before it is
+// faded out; rumbleMs 0 lets it run its course. The volumes climb evenly from
+// a fifth at rank 3 to full at rank 10. The files are already as loud as they
+// go without distortion, so rank 10 is made to stand out by keeping the ranks
+// below it quieter rather than by playing it louder.
 //
 // shake: how hard and for how long, or null for none.
 //
@@ -181,100 +190,121 @@ const BEAM_SKIP_MS = BEAM_IMPACT_MS - STRIKE_MS;
 // how strongly it shows. Its file is blue, and a tint would only darken it,
 // so its colour is a hue turn of its own, matched by eye to the rank's fire.
 //
-// ground: which ground file glows under the fire, and how far across the
-// burst it reaches.
+// ground: which ground file glows under the fire, how far across the burst
+// it reaches, and how long it lingers once the fire above it is out.
 //
 // afterglowMs: how long the fireball keeps blazing after the blast cools.
 //
-// flames: how many patches of fire are left burning and for how long. The
-// first is at the centre; the rest fall on squares of the burst at random,
-// and a count beyond the burst's squares means every square.
+// flash: a real light at the strike, in the colour of the rank's glow. feet
+// is how far past the edge of the burst its bright light reaches; its dim
+// light reaches as far again. luminosity and alpha (the light's colour
+// intensity) are Foundry's own; ms is how long it takes to die away.
+//
+// dazzle: every screen overexposed at the strike, rising evenly from none at
+// rank 3 to the whole screen plain white at rank 10. brightness multiplies
+// the whole picture; contrast lifts the darks for it, so that black, which
+// no brightness can lighten, goes too — step by step, until at rank 10
+// nothing is left of the picture at all. saturate washes the colour out,
+// holdMs is how long it stays blinding and fadeMs how long the eyes take to
+// recover.
 const RANKS = [
-  { // 3: a red pop, over in a second.
-    colour: { tint: 0xd8401f, hue: -8, saturate: 0.2, brightness: 0.9 },
-    blast: { cover: 0.6, rate: 1.5, ms: 1000 },
-    sound: { volume: 0.3, rumbleMs: 600 },
+  { // 3: orange, cut short.
+    colour: { tint: 0xff7e34, hue: -3, saturate: 0.1, brightness: 1.0 },
+    blast: { cover: 0.6, rate: 1.3, ms: 1700 },
+    sound: { file: "normal", volume: 0.2, rumbleMs: 1500 },
     shake: null,
     ring: null,
     ground: null,
     afterglowMs: 0,
-    flames: null
+    flash: null,
+    dazzle: null
   },
-  { // 4: red-orange; a patch of fire left at the centre.
-    colour: { tint: 0xec5a24, hue: -6, saturate: 0.15, brightness: 0.95 },
-    blast: { cover: 0.69, rate: 1.4, ms: 1300 },
-    sound: { volume: 0.4, rumbleMs: 1000 },
+  { // 4: light orange; the first shake and the first dazzle.
+    colour: { tint: 0xff9a42, hue: -1, saturate: 0.1, brightness: 1.03 },
+    blast: { cover: 0.69, rate: 1.2, ms: 2100 },
+    sound: { file: "normal", volume: 0.31, rumbleMs: 2200 },
     shake: { strength: 3, duration: 300 },
     ring: null,
     ground: null,
     afterglowMs: 0,
-    flames: { count: 1, ms: 2000 }
+    flash: null,
+    dazzle: { brightness: 1.3, holdMs: 60, fadeMs: 400 }
   },
-  { // 5: orange; a first glow, and the ground cracks.
-    colour: { tint: 0xff7e34, hue: -3, saturate: 0.1, brightness: 1.0, glow: { color: 0xff6a28, distance: 8, outerStrength: 1.5 } },
-    blast: { cover: 0.78, rate: 1.3, ms: 1700 },
-    sound: { volume: 0.5, rumbleMs: 1500 },
+  { // 5: amber; a first glow and flash, and the ground cracks.
+    colour: { tint: 0xffb450, saturate: 0.1, brightness: 1.07, glow: { color: 0xffa040, distance: 8, outerStrength: 1.5 } },
+    blast: { cover: 0.78, rate: 1.1, ms: 2600 },
+    sound: { file: "normal", volume: 0.43, rumbleMs: 3000 },
     shake: { strength: 5, duration: 400 },
     ring: null,
-    ground: { file: "cracksCompact", cover: 0.6 },
+    ground: { file: "cracksCompact", cover: 0.6, lingerMs: 3000 },
     afterglowMs: 0,
-    flames: { count: 2, ms: 2500 }
+    flash: { feet: 10, luminosity: 0.6, alpha: 0.5, ms: 600 },
+    dazzle: { brightness: 1.7, saturate: 0.9, holdMs: 70, fadeMs: 600 }
   },
-  { // 6: amber; a shockwave.
-    colour: { tint: 0xffa448, saturate: 0.1, brightness: 1.05, glow: { color: 0xff8a30, distance: 10, outerStrength: 2 } },
-    blast: { cover: 0.88, rate: 1.2, ms: 2100 },
-    sound: { volume: 0.6, rumbleMs: 2200 },
+  { // 6: gold, played out in full; a shockwave.
+    colour: { tint: 0xffcc62, hue: 2, saturate: 0.05, brightness: 1.12, glow: { color: 0xffc040, distance: 10, outerStrength: 2 } },
+    blast: { cover: 0.88, rate: 1.0, ms: 0 },
+    sound: { file: "normal", volume: 0.54, rumbleMs: 4000 },
     shake: { strength: 7, duration: 500 },
-    ring: { cover: 0.85, opacity: 0.5, colour: { hue: 180, saturate: 0.1, brightness: 1.05 } },
-    ground: { file: "cracksWide", cover: 0.8 },
+    ring: { cover: 0.85, opacity: 0.5, colour: { hue: 183, saturate: 0.2, brightness: 1.12 } },
+    ground: { file: "cracksWide", cover: 0.8, lingerMs: 3500 },
     afterglowMs: 0,
-    flames: { count: 4, ms: 3000 }
+    flash: { feet: 20, luminosity: 0.65, alpha: 0.55, ms: 800 },
+    dazzle: { brightness: 2.2, contrast: 0.95, saturate: 0.85, holdMs: 80, fadeMs: 800 }
   },
-  { // 7: yellow; the fire and the shockwave reach the edge of the burst.
-    colour: { tint: 0xffd670, hue: 4, brightness: 1.2, glow: { color: 0xffc840, distance: 12, outerStrength: 3 } },
-    blast: { cover: 0.97, rate: 1.1, ms: 2600 },
-    sound: { volume: 0.7, rumbleMs: 3000 },
+  { // 7: pale yellow, and a heavier sound; the fire and the shockwave reach
+    // the edge of the burst.
+    colour: { tint: 0xffe48c, hue: 4, saturate: -0.1, brightness: 1.2, glow: { color: 0xffe080, distance: 12, outerStrength: 3 } },
+    blast: { cover: 0.97, rate: 0.95, ms: 0 },
+    sound: { file: "heavy", volume: 0.66, rumbleMs: 5500 },
     shake: { strength: 9, duration: 700 },
-    ring: { cover: 1.0, opacity: 0.7, colour: { hue: 195, saturate: 0.2, brightness: 1.2 } },
-    ground: { file: "cracksDense", cover: 0.9 },
+    ring: { cover: 1.0, opacity: 0.7, colour: { hue: 188, saturate: -0.3, brightness: 1.2 } },
+    ground: { file: "cracksDense", cover: 0.9, lingerMs: 4000 },
     afterglowMs: 0,
-    flames: { count: 8, ms: 3500 }
+    flash: { feet: 30, luminosity: 0.7, alpha: 0.6, ms: 1000 },
+    dazzle: { brightness: 2.8, contrast: 0.9, saturate: 0.8, holdMs: 100, fadeMs: 1000 }
   },
-  { // 8: white-hot, played out in full, and still blazing after.
+  { // 8: white-hot, and still blazing after.
     colour: { saturate: -0.7, brightness: 1.3, glow: { color: 0xffffff, distance: 15, outerStrength: 4 } },
-    blast: { cover: 1.06, rate: 1.0, ms: 0 },
-    sound: { volume: 0.8, rumbleMs: 4000 },
+    blast: { cover: 1.06, rate: 0.9, ms: 0 },
+    sound: { file: "heavy", volume: 0.77, rumbleMs: 0 },
     shake: { strength: 12, duration: 900 },
     ring: { cover: 1.1, opacity: 0.85, colour: { saturate: -0.7, brightness: 1.3 } },
-    ground: { file: "cracksDense", cover: 1.0 },
+    ground: { file: "cracksDense", cover: 1.0, lingerMs: 5000 },
     afterglowMs: 1500,
-    flames: { count: 14, ms: 4000 }
+    flash: { feet: 45, luminosity: 0.8, alpha: 0.6, ms: 1300 },
+    dazzle: { brightness: 3.5, contrast: 0.83, saturate: 0.7, holdMs: 120, fadeMs: 1300 }
   },
-  { // 9: white, edged in blue; the ground under it red-hot.
+  { // 9: white, edged in blue, with the deepest sound; the ground under it
+    // red-hot.
     colour: { tint: 0xffe4c8, hue: 185, saturate: -0.2, brightness: 1.45, glow: { color: 0x9fd8ff, distance: 20, outerStrength: 5 } },
-    blast: { cover: 1.16, rate: 0.95, ms: 0 },
-    sound: { volume: 0.9, rumbleMs: 5000 },
+    blast: { cover: 1.16, rate: 0.85, ms: 0 },
+    sound: { file: "huge", volume: 0.89, rumbleMs: 7000 },
     shake: { strength: 15, duration: 1200 },
     ring: { cover: 1.3, opacity: 1, colour: { hue: 5, saturate: -0.2, brightness: 1.45 } },
-    ground: { file: "scorched", cover: 1.0 },
+    ground: { file: "scorched", cover: 1.0, lingerMs: 6000 },
     afterglowMs: 2500,
-    flames: { count: 26, ms: 5000 }
+    flash: { feet: 70, luminosity: 0.9, alpha: 0.65, ms: 1600 },
+    dazzle: { brightness: 4.5, contrast: 0.73, saturate: 0.6, holdMs: 160, fadeMs: 1700 }
   },
   { // 10: blinding white plasma edged in blue-violet, well past the burst,
-    // and every square of it left burning.
+    // lighting up most of the map. No blazing ball: over the red-hot ground
+    // it reads as a second explosion.
     colour: { hue: 235, saturate: 0.3, brightness: 1.55, glow: { color: 0x8a78ff, distance: 30, outerStrength: 7 } },
-    blast: { cover: 1.25, rate: 0.9, ms: 0 },
-    sound: { volume: 1.0, rumbleMs: 0 },
+    blast: { cover: 1.25, rate: 0.8, ms: 0 },
+    sound: { file: "huge", volume: 1.0, rumbleMs: 0 },
     shake: { strength: 20, duration: 1600 },
     ring: { cover: 1.5, opacity: 1, colour: { hue: 30, saturate: 0.3, brightness: 1.55 } },
-    ground: { file: "scorched", cover: 1.0 },
-    afterglowMs: 4000,
-    flames: { count: Infinity, ms: 6000 }
+    ground: { file: "scorched", cover: 1.0, lingerMs: 7000 },
+    afterglowMs: 0,
+    flash: { feet: 100, luminosity: 1.0, alpha: 0.7, ms: 2000 },
+    dazzle: { brightness: 6, contrast: 0, saturate: 0, holdMs: 300, fadeMs: 2500 }
   }
 ];
 
-// Fireballs placed and not yet rolled for, by chat card. Kept on the active
-// GM's client only, which is where they are played from.
+// Fireballs placed and not yet rolled for, by chat card. Every GM keeps them,
+// so that whichever GM is active when the damage is rolled has them; only
+// that one plays the fireball.
 const placed = new Map();
 
 // The chat card whose damage button this client pressed last, and when.
@@ -295,6 +325,7 @@ export function registerFireball() {
   Hooks.on("createChatMessage", onDamageRolled);
   Hooks.on("diceSoNiceMessageProcessed", onDiceProcessed);
   Hooks.on("diceSoNiceRollComplete", release);
+  Hooks.on("canvasReady", sweepFlashes);
   return { play: playFireball };
 }
 
@@ -342,40 +373,53 @@ function beamFor(feet) {
   return ASSETS.fireball.beams.reduce((best, b) => (off(b) < off(best) ? b : best)).src;
 }
 
-// The centres of the squares whose centres lie inside the burst.
-function squaresIn(grid, centre, radius) {
-  const reach = Math.ceil(radius / grid.size) + 1;
-  const { i, j } = grid.getOffset(centre);
-  const squares = [];
-  for (let di = -reach; di <= reach; di++) {
-    for (let dj = -reach; dj <= reach; dj++) {
-      const point = grid.getCenterPoint({ i: i + di, j: j + dj });
-      if (Math.hypot(point.x - centre.x, point.y - centre.y) <= radius) squares.push(point);
-    }
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// The rank's flash: a light put up at the strike, shrunk step by step and
+// taken away. Gives up quietly if someone deletes it first.
+async function flashLight({ scene, centre, radius }, step, strikeMs) {
+  const { flash } = step;
+  const bright = radius / scene.grid.size * scene.grid.distance + flash.feet;
+  const dim = bright + flash.feet;
+  const colour = step.colour.glow?.color ?? 0xffffff;
+
+  await wait(Math.max(strikeMs - FLASH_LEAD_MS, 0));
+  const [light] = await scene.createEmbeddedDocuments("AmbientLight", [{
+    x: centre.x,
+    y: centre.y,
+    config: {
+      bright,
+      dim,
+      color: `#${colour.toString(16).padStart(6, "0")}`,
+      alpha: flash.alpha,
+      luminosity: flash.luminosity
+    },
+    flags: { [MOD]: { flash: true } }
+  }]);
+
+  let elapsed = 0;
+  for (const { at, scale } of FLASH_FADE) {
+    await wait(flash.ms * at - elapsed);
+    elapsed = flash.ms * at;
+    if (!scene.lights.has(light.id)) return;
+    await light.update({ "config.bright": bright * scale, "config.dim": dim * scale });
   }
-  return squares;
+  await wait(flash.ms - elapsed);
+  if (scene.lights.has(light.id)) await light.delete();
 }
 
-// Where the patches of fire go: the centre first, then squares at random,
-// or every square when there are not enough of them to choose from.
-function flameSpots(grid, centre, radius, count) {
-  const squares = squaresIn(grid, centre, radius);
-  if (count >= squares.length) return squares;
-  for (let k = squares.length - 1; k > 0; k--) {
-    const r = Math.floor(Math.random() * (k + 1));
-    [squares[k], squares[r]] = [squares[r], squares[k]];
-  }
-  return [centre, ...squares.slice(0, count - 1)];
+// Flash lights left on the scene the active GM has just loaded.
+function sweepFlashes() {
+  if (game.user !== game.users.activeGM || !canvas.scene) return;
+  const stray = canvas.scene.lights.filter((l) => l.getFlag(MOD, "flash")).map((l) => l.id);
+  if (stray.length) canvas.scene.deleteEmbeddedDocuments("AmbientLight", stray).catch(report);
 }
 
-// A random number between -1 and 1.
-function wobble() {
-  return Math.random() * 2 - 1;
-}
-
-// Gives an effect a colour. The bead, the blast, the blazing ball and the
-// flames all get the rank's, so they read as one fire. Keys left out are
-// left out of the filter, and change nothing.
+// Gives an effect a colour. The bead, the blast and the blazing ball all get
+// the rank's, so they read as one fire. Keys left out are left out of the
+// filter, and change nothing.
 function paint(effect, { tint, hue, saturate, brightness, glow }) {
   if (tint !== undefined) effect.tint(tint);
   effect.filter("ColorMatrix", { hue, saturate, brightness });
@@ -405,11 +449,11 @@ function markDamageCard(message) {
 }
 
 // Placing the template and rolling the damage are things every client hears
-// about; only the active GM acts on them, and Sequencer shows the fireball to
-// everyone. A template placed again from the same card replaces the one
-// before.
+// about. The GMs keep track of them; only the active GM plays the fireball,
+// and Sequencer shows it to everyone. A template placed again from the same
+// card replaces the one before.
 function onFireballPlaced(region) {
-  if (game.user !== game.users.activeGM) return;
+  if (!game.user.isGM) return;
   const card = region.flags?.pf2e?.messageId;
   if (!(region.flags?.pf2e?.origin?.rollOptions ?? []).includes(SLUG) || !card) return;
   placed.set(card, shotOf(region));
@@ -419,7 +463,7 @@ function onFireballPlaced(region) {
 // when it has already said it will not animate these dice, the fireball goes
 // off at once; otherwise once the dice land.
 function onDamageRolled(message) {
-  if (game.user !== game.users.activeGM) return;
+  if (!game.user.isGM) return;
   if (!isFireballDamage(message)) return;
   const decided = diceDecided.get(message.id);
   diceDecided.delete(message.id);
@@ -428,6 +472,7 @@ function onDamageRolled(message) {
   const shot = card && placed.get(card);
   if (!shot) return;
   placed.delete(card);
+  if (game.user !== game.users.activeGM) return;
 
   const { origin, context } = message.flags.pf2e;
   shot.rank = origin.castRank ?? shot.rank;
@@ -484,9 +529,10 @@ async function playFireball(shot) {
   // beam file plays on past the strike — its own flash and fading trail run
   // under the blast. Cast from off the map there is no flight, and the strike
   // comes as soon as the explosion can reach it.
+  const sound = SOUNDS[step.sound.file];
   const rate = step.blast.rate;
   const popMs = EXPLOSION_POP_MS / rate;
-  const strikeMs = caster ? STRIKE_MS : popMs;
+  const strikeMs = caster ? strikeAfterLaunch(sound) : popMs;
   const blastMs = strikeMs - popMs;
   const coolMs = blastMs + EXPLOSION_COOLING_MS / rate;
   const blastEndMs = blastMs + (step.blast.ms || EXPLOSION_GONE_MS / rate);
@@ -498,7 +544,7 @@ async function playFireball(shot) {
 
     paint(seq.effect(), step.colour)
       .file(beamFor(feet))
-      .startTime(BEAM_SKIP_MS)
+      .startTime(BEAM_IMPACT_MS - strikeMs)
       .atLocation(from)
       .stretchTo(centre)
       .template(BEAM_TEMPLATE);
@@ -506,15 +552,15 @@ async function playFireball(shot) {
 
   // Held back so that the bang in it falls on the strike — no wait at all
   // when it starts with the whoosh.
-  const soundFrom = (caster ? SOUND_LAUNCH_MS : SOUND_BANG_MS) - SOUND_PREROLL_MS;
-  const playable = SOUND_LENGTH_MS - SOUND_BANG_MS;
+  const soundFrom = (caster ? sound.launchMs : sound.bangMs) - SOUND_PREROLL_MS;
+  const playable = sound.lengthMs - sound.bangMs;
   const rumbleMs = step.sound.rumbleMs ? Math.min(step.sound.rumbleMs, playable) : playable;
-  addSound(seq, ASSETS.fireball.sound, {
+  addSound(seq, sound.src, {
     volume: step.sound.volume,
     startMs: soundFrom,
-    durationMs: SOUND_BANG_MS - soundFrom + rumbleMs,
+    durationMs: sound.bangMs - soundFrom + rumbleMs,
     fadeOutMs: rumbleMs < playable ? Math.min(SOUND_FADE_MS, rumbleMs / 2) : 0,
-    delayMs: strikeMs - (SOUND_BANG_MS - soundFrom)
+    delayMs: strikeMs - (sound.bangMs - soundFrom)
   });
 
   const users = shakeUsers();
@@ -558,41 +604,17 @@ async function playFireball(shot) {
       .zIndex(1);
   }
 
-  // The flames come up as the fire above them goes out.
-  let fireOutMs = blastEndMs;
-  if (step.flames) {
-    const flameColour = { ...step.colour, glow: null };
-    const flamesMs = Math.max(blastEndMs, afterglowEndMs) - FLAME_LEAD_MS;
-    const jitter = FLAME_JITTER_SQUARES * grid.size;
-
-    for (const spot of flameSpots(grid, centre, radius, step.flames.count)) {
-      const startMs = flamesMs + Math.random() * FLAME_STAGGER_MS;
-      const lifeMs = step.flames.ms * (1 + wobble() * FLAME_SPREAD);
-      fireOutMs = Math.max(fireOutMs, startMs + lifeMs);
-
-      paint(seq.effect(), flameColour)
-        .file(ASSETS.fireball.flame)
-        .delay(startMs)
-        .atLocation({ x: spot.x + wobble() * jitter, y: spot.y + wobble() * jitter })
-        .size(FLAME_SQUARES / FLAME_REACH, { gridUnits: true })
-        .duration(lifeMs)
-        .fadeIn(FLAME_FADE_IN_MS)
-        .fadeOut(FLAME_FADE_OUT_MS)
-        .belowTokens()
-        .zIndex(2);
-    }
-  }
-
-  // The ground glows from when the fire starts to cool until the last flame
-  // is out.
+  // The ground glows from when the fire above it starts to cool until a while
+  // after it is out.
   if (step.ground) {
     const ground = GROUND[step.ground.file];
+    const fireOutMs = Math.max(blastEndMs, afterglowEndMs);
     seq.effect()
       .file(ground.src)
       .delay(coolMs)
       .atLocation(centre)
       .size(diameterSquares * step.ground.cover / ground.reach, { gridUnits: true })
-      .duration(fireOutMs + GROUND_FADE_OUT_MS / 2 - coolMs)
+      .duration(fireOutMs + step.ground.lingerMs - coolMs)
       .fadeIn(GROUND_FADE_IN_MS)
       .fadeOut(GROUND_FADE_OUT_MS)
       .randomRotation()
@@ -600,6 +622,8 @@ async function playFireball(shot) {
       .zIndex(0);
   }
 
+  if (step.flash) flashLight(shot, step, strikeMs).catch(report);
+  if (step.dazzle) dazzle({ ...step.dazzle, delayMs: strikeMs });
   await seq.play();
 }
 

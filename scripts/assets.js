@@ -62,11 +62,12 @@ export const ASSETS = {
     // A disc of red-hot broken ground, looped.
     scorched: `${GENERIC}/Fire/ScorchedEarth_01_Black_800x800.webm`,
 
-    // A patch of fire one square across, looped.
-    flame: `${GENERIC}/Fire/Flame/Flames03_01_Regular_Orange_05x05ft_300x300.webm`,
-
-    // Eight seconds long.
+    // Eight seconds long. The heavy and huge versions are made from the same
+    // source, slowed — which also lowers the pitch — and given a reverb tail,
+    // for the higher ranks.
     sound: "ASSETS/Sounds/Oneshots/Fire/fireball.ogg",
+    soundHeavy: "ASSETS/Sounds/Oneshots/Fire/fireball_heavy.ogg",
+    soundHuge: "ASSETS/Sounds/Oneshots/Fire/fireball_huge.ogg",
 
     // The bead in flight, drawn at fixed lengths. Each file is its length
     // plus 200 file pixels of run-up at either end. The one nearest the

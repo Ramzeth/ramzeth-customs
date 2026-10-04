@@ -59,3 +59,47 @@ export function playSound(src, options) {
   if (!src) return;
   addSound(new Sequence(), src, options).play();
 }
+
+// Every screen at the table overexposed for a moment, as by a light too
+// bright to look at: the whole canvas is pushed brightness times brighter,
+// held for holdMs, and eased back over fadeMs. Brightness multiplies, so
+// black stays black however far it goes; contrast below 1, applied first,
+// pulls the darks up towards grey for brightness to carry, and at 0 the
+// whole picture is one grey that brightness 2 or more turns plain white.
+// saturate below 1 washes the colour out. Neither Foundry nor Sequencer
+// has this, and a light in the scene can only light what it reaches, so it
+// is done in each browser on the canvas element itself. Nothing is saved;
+// the module's socket carries the call to the other clients, and each counts
+// delayMs from when it hears of it, as Sequencer does with its delays, so the
+// flash lands with the sequence it was sent alongside.
+const SOCKET = `module.${MOD}`;
+
+export function registerEffects() {
+  game.socket.on(SOCKET, (message) => {
+    if (message?.action === "dazzle") dazzleHere(message);
+  });
+}
+
+export function dazzle({ brightness, contrast = 1, saturate = 1, holdMs, fadeMs, delayMs = 0 }) {
+  const flash = { brightness, contrast, saturate, holdMs, fadeMs, delayMs };
+  game.socket.emit(SOCKET, { action: "dazzle", ...flash });
+  dazzleHere(flash);
+}
+
+// A new flash takes over from one still fading.
+let dazzleTimer = null;
+
+function dazzleHere({ brightness, contrast = 1, saturate = 1, holdMs, fadeMs, delayMs }) {
+  clearTimeout(dazzleTimer);
+  dazzleTimer = setTimeout(() => {
+    const board = document.getElementById("board");
+    if (!board) return;
+    board.style.transition = "none";
+    board.style.filter = `contrast(${contrast}) brightness(${brightness}) saturate(${saturate})`;
+    dazzleTimer = setTimeout(() => {
+      board.style.transition = `filter ${fadeMs}ms ease-out`;
+      board.style.filter = "";
+      dazzleTimer = setTimeout(() => { board.style.transition = ""; }, fadeMs);
+    }, holdMs);
+  }, delayMs);
+}

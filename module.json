@@ -15,6 +15,7 @@
   },
   "esmodules": ["scripts/main.js"],
   "styles": ["styles/main.css"],
+  "socket": true,
   "relationships": {
       "requires": [
           { "id": "lib-wrapper", "type": "module" },

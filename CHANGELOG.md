@@ -14,16 +14,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   explodes there. It goes off when the damage is rolled from the spell's chat
   card, once Dice So Nice's dice have landed, at the template placed from
   that same card; placing the template only marks where. Each card's fireball
-  goes off once, so a reroll does not explode again. Every rank
-  from 3 to 10 is a step
-  up: the fire goes from red through orange, yellow and white to blinding
-  white edged in blue and then violet; it grows from short of the burst's
-  edge to well past it; a quick pop becomes a long blast with a glow. From
-  rank 4 it leaves fire behind, more of it with every rank: burning patches,
-  from one at the centre to every square of the burst; glowing cracks in the
-  ground from rank 5; a shockwave from rank 6; the fireball blazing on from
-  rank 8; red-hot ground from rank 9. Uses free JB2A animations, copied into
-  `Data/ASSETS/Animations/` with JB2A's own folders.
+  goes off once, so a reroll does not explode again. Every rank from 3 to 10
+  is a step up: the fire goes from orange through amber, gold and white to
+  blinding white edged in blue and then violet; it grows from short of the
+  burst's edge to well past it; a short blast becomes a long one with a glow.
+  From rank 4 every screen at the table is dazzled for a moment, harder with
+  every rank, until at rank 10 the whole screen goes white. From rank 5 it
+  leaves its mark, more of it with every rank: a flash of real light over the
+  scene and glowing cracks in the ground; a shockwave from rank 6; the
+  fireball blazing on at ranks 8 and 9; red-hot ground from rank 9. Uses
+  free JB2A animations, copied into `Data/ASSETS/Animations/` with JB2A's own
+  folders.
 - Screen shake with the fireball's blast: none at rank 3, harder and longer
   with every rank above. Users flagged `noShake` are left out — meant for a
   TV used as a play mat.
@@ -31,7 +32,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   at the caster's hand, the bang the moment it strikes, together with the
   blast and the shake. Quiet at rank 3 and louder with every rank; the lower
   ranks cut the bang's rumble short with a fade, since their blast is over
-  sooner.
+  sooner. Ranks 7 and 8 use a slower, deeper version of the sound with a
+  longer tail, and ranks 9 and 10 a deeper and longer one still, both made
+  from the same source and kept as `fireball_heavy.ogg` and
+  `fireball_huge.ogg` beside it in `Data/ASSETS/Sounds/Oneshots/Fire/`.
 
 ### Changed
 

@@ -2,6 +2,7 @@
 
 import { MOD } from "./const.js";
 import { registerAttach } from "./lib/attach.js";
+import { registerEffects } from "./lib/effects.js";
 import { registerRegionPlacement } from "./lib/region-placement.js";
 import { registerFireball } from "./spells/fireball.js";
 import { registerSlidingBlocks } from "./spells/sliding-blocks.js";
@@ -9,6 +10,7 @@ import { registerWallOfStone } from "./spells/wall-of-stone.js";
 
 Hooks.once("init", () => {
   // Infrastructure knows nothing about any game system, so it is always on.
+  registerEffects();
   const api = {
     attach: registerAttach()
   };

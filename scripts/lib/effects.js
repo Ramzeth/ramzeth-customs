@@ -3,7 +3,10 @@
 // The spells resolve their events — a section collapsing, a block being
 // destroyed, a fireball landing — on the active GM's client, so an effect has
 // to reach the other clients rather than play locally. Sequencer does the
-// playing and the broadcasting; it is a required dependency of the module.
+// playing and the broadcasting of animations, sounds and the view's shake;
+// it is a required dependency of the module. What it cannot do — the dazzle,
+// a light fading smoothly — goes over the module's own socket, each client
+// doing it for itself.
 //
 // Sounds are not placed on the map. Foundry plays a placed sound only for a
 // user with a token of their own selected near it, so it went silent while a
@@ -33,24 +36,23 @@ export function shakeUsers() {
 // Adds a sound to a sequence that is being built, so a spell can time it
 // against its own animations.
 //
-// startMs and endMs pick a stretch of the file by position in it, so one file
-// can be played in pieces. durationMs cuts it short instead — never longer
-// than what is left of the file, or Sequencer loops it. fadeOutMs lets either
-// cut fade instead of stopping dead. delayMs holds the sound back from the
-// point in the sequence where it was added, to land on a moment inside an
-// animation started alongside it.
-export function addSound(seq, src, {
-  volume = 0.8, startMs = 0, endMs = 0, durationMs = 0, fadeOutMs = 0, delayMs = 0
-} = {}) {
+// startMs is where in the file to begin, so a sound can start from a chosen
+// moment of it. delayMs holds the sound back from the point in the sequence
+// where it was added, to land on a moment inside an animation started
+// alongside it.
+//
+// A sound always plays out to the end of its file, which carries its own
+// fade: it is never cut short and never faded by Sequencer. Sequencer fades
+// an unplaced sound from full volume whatever volume it was playing at
+// (checked on 4.2.3), so a quiet sound faded out leapt to full just before
+// it ended.
+export function addSound(seq, src, { volume = 0.8, startMs = 0, delayMs = 0 } = {}) {
   if (!src) return seq;
   const sound = seq.sound()
     .file(src)
     .volume(volume);
   if (delayMs) sound.delay(delayMs);
   if (startMs) sound.startTime(startMs);
-  if (endMs) sound.endTime(endMs);
-  if (durationMs) sound.duration(durationMs);
-  if (fadeOutMs) sound.fadeOutAudio(fadeOutMs);
   return seq;
 }
 
@@ -77,6 +79,7 @@ const SOCKET = `module.${MOD}`;
 export function registerEffects() {
   game.socket.on(SOCKET, (message) => {
     if (message?.action === "dazzle") dazzleHere(message);
+    if (message?.action === "fadeLight") fadeLightHere(message);
   });
 }
 
@@ -102,4 +105,57 @@ function dazzleHere({ brightness, contrast = 1, saturate = 1, holdMs, fadeMs, de
       dazzleTimer = setTimeout(() => { board.style.transition = ""; }, fadeMs);
     }, holdMs);
   }, delayMs);
+}
+
+// A light in the scene changed smoothly over time on every client, without a
+// save to the server at each step. keyframes are moments counted from now,
+// each with the light's bright and dim radius, colour (a number) and
+// luminosity; between them every value moves in a straight line. The light
+// as saved stays as it was: only each client's own copy changes, redrawn
+// about fifteen times a second. Whoever made the light still owns its end
+// and deletes it.
+//
+// This leans on Foundry's own way of redrawing a light from its data, which
+// is not part of its public API. Should that ever be gone, the light simply
+// stays as it was until it is deleted.
+const LIGHT_FRAME_MS = 66;
+
+export function fadeLight(light, keyframes) {
+  const fade = { sceneId: light.parent.id, lightId: light.id, keyframes };
+  game.socket.emit(SOCKET, { action: "fadeLight", ...fade });
+  fadeLightHere(fade);
+}
+
+function fadeLightHere({ sceneId, lightId, keyframes }) {
+  const start = Date.now();
+  const endMs = keyframes.at(-1).atMs;
+  const frame = () => {
+    const now = Date.now() - start;
+    const light = game.scenes.get(sceneId)?.lights.get(lightId);
+    if (light?.object && !redraw(light, lightAt(keyframes, Math.min(now, endMs)))) return;
+    if (now < endMs) setTimeout(frame, LIGHT_FRAME_MS);
+  };
+  frame();
+}
+
+function lightAt(keyframes, ms) {
+  const next = keyframes.findIndex((k) => k.atMs >= ms);
+  if (next === -1) return keyframes.at(-1);
+  if (next === 0) return keyframes[0];
+  const a = keyframes[next - 1], b = keyframes[next];
+  const f = (ms - a.atMs) / Math.max(b.atMs - a.atMs, 1);
+  const mix = (x, y) => x + (y - x) * f;
+  const channel = (c, shift) => (c >> shift) & 255;
+  const color = [16, 8, 0].reduce(
+    (sum, shift) => sum + (Math.round(mix(channel(a.color, shift), channel(b.color, shift))) << shift), 0);
+  return { bright: mix(a.bright, b.bright), dim: mix(a.dim, b.dim), luminosity: mix(a.luminosity, b.luminosity), color };
+}
+
+// False when the light cannot be redrawn this way, which ends the fade.
+function redraw(light, { bright, dim, color, luminosity }) {
+  if (typeof light.object.initializeLightSource !== "function") return false;
+  light.updateSource({ config: { bright, dim, luminosity, color: `#${color.toString(16).padStart(6, "0")}` } });
+  light.object.initializeLightSource();
+  canvas.perception.update({ refreshLighting: true, refreshVision: true });
+  return true;
 }

@@ -19,8 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   blinding white edged in blue and then violet; it grows from short of the
   burst's edge to well past it; a short blast becomes a long one with a glow.
   At every rank a real light flares over the scene with the strike, reaching
-  further with every rank, and dies down with the fire — ember-orange while
-  the ground still smoulders. From rank 4 every screen at the table is
+  further with every rank, and dies down smoothly with the fire —
+  ember-orange while the ground still smoulders. From rank 4 every screen at the table is
   dazzled for a moment, harder with every rank, until at rank 10 the whole
   screen goes white. From rank 5 it leaves its mark, more of it with every
   rank: glowing cracks in the ground; a shockwave from rank 6; the fireball
@@ -32,8 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   TV used as a play mat.
 - Fireball sound, timed to what is on screen: the whoosh as the bead forms
   at the caster's hand, the bang the moment it strikes, together with the
-  blast and the shake. Quiet at rank 3 and louder with every rank; the lower
-  ranks cut the bang's rumble short with a fade, since their blast is over
+  blast and the shake. Quiet at rank 3 and louder with every rank; the
+  rumble always plays out, and at the quieter ranks drops out of hearing
   sooner. Ranks 7 and 8 use a slower, deeper version of the sound with a
   longer tail, and ranks 9 and 10 a deeper and longer one still, both made
   from the same source and kept as `fireball_heavy.ogg` and

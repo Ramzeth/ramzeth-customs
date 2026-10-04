@@ -32,7 +32,7 @@
 
 import { ASSETS } from "../assets.js";
 import { MOD } from "../const.js";
-import { addSound, dazzle, shakeUsers } from "../lib/effects.js";
+import { addSound, dazzle, fadeLight, shakeUsers } from "../lib/effects.js";
 
 const SLUG = "origin:item:slug:fireball";
 const BASE_RANK = 3;
@@ -119,17 +119,18 @@ const GROUND_FADE_OUT_MS = 1500;
 // whatever it lights, and what it shows is explored. A new light takes a trip
 // to the server to appear, so it is put up a moment ahead of the strike.
 //
-// It lasts as long as the fire does, and follows it down in steps — each an
-// update every client applies, so only a few: at full size with the strike,
+// It lasts as long as the fire does and follows it down smoothly, each client
+// easing its own copy of the light (see fadeLight): full size at the strike,
 // smaller as the blast cools, and once only the ground is left burning,
-// smaller again and the orange of embers, until the last of the ground is
-// out. Lights left behind by a flash that never finished — the GM gone in
-// the middle of it — are swept away when the GM next loads the scene.
+// smaller again and the orange of embers, down to nothing as the last of
+// the ground goes out. Its attenuation is at the top of Foundry's range, so
+// bright light melts into dim instead of ending in a visible ring. Lights
+// left behind by a flash that never finished — the GM gone in the middle of
+// it — are swept away when the GM next loads the scene.
 const FLASH_LEAD_MS = 100;
+const FLASH_ATTENUATION = 1;
 const FLASH_COOLING_SCALE = 0.7;
-const FLASH_FADING_SCALE = 0.4;
 const FLASH_EMBERS_SCALE = 0.45;
-const FLASH_EMBERS_LAST_SCALE = 0.25;
 const EMBER_COLOUR = 0xff7a30;
 
 // Each sound file holds two events: the launch, a whoosh that swells from
@@ -137,22 +138,18 @@ const EMBER_COLOUR = 0xff7a30;
 // 30 ms. Measured on the source; the heavy and huge versions are the source
 // slowed to 0.88 and 0.78 of its speed, which moves both events later by the
 // same proportion. A sound is played as one piece, started a few milliseconds
-// ahead of the whoosh so its attack is not clipped. Cast from off the map
-// there is nothing to launch, and it starts just ahead of the bang instead.
-//
-// lengthMs is where the rumble has died away, inside the file, so a cut is
-// never asked to run past its end, which would make Sequencer loop it. A rank
-// that cuts the rumble short fades it over at most SOUND_FADE_MS.
+// ahead of the whoosh so its attack is not clipped, and runs out to the end
+// of its file, whose rumble dies away of itself. Cast from off the map there
+// is nothing to launch, and it starts just ahead of the bang instead.
 //
 // All three are mastered to about the same loudness, as loud as the source
 // goes without distortion, so the ranks' volumes compare across them.
 const SOUNDS = {
-  normal: { src: ASSETS.fireball.sound, launchMs: 120, bangMs: 1140, lengthMs: 8000 },
-  heavy: { src: ASSETS.fireball.soundHeavy, launchMs: 136, bangMs: 1295, lengthMs: 8900 },
-  huge: { src: ASSETS.fireball.soundHuge, launchMs: 154, bangMs: 1462, lengthMs: 10400 }
+  normal: { src: ASSETS.fireball.sound, launchMs: 120, bangMs: 1140 },
+  heavy: { src: ASSETS.fireball.soundHeavy, launchMs: 136, bangMs: 1295 },
+  huge: { src: ASSETS.fireball.soundHuge, launchMs: 154, bangMs: 1462 }
 };
 const SOUND_PREROLL_MS = 10;
-const SOUND_FADE_MS = 1500;
 
 // The sound sets the pace. Started with the sequence, it reaches the bang
 // this long after, and that is when the bead must strike: the blast, the bang
@@ -181,11 +178,12 @@ function strikeAfterLaunch(sound) {
 // speed: the low ranks rush through the file, the top ones linger. ms cuts
 // the blast short with a fade; 0 plays it out.
 //
-// sound: which file, how loud, and how long the bang runs on before it is
-// faded out; rumbleMs 0 lets it run its course. The volumes climb evenly from
-// a fifth at rank 3 to full at rank 10. The files are already as loud as they
-// go without distortion, so rank 10 is made to stand out by keeping the ranks
-// below it quieter rather than by playing it louder.
+// sound: which file, and how loud. The rumble is never cut: a quieter one
+// drops out of hearing sooner, which is what makes the low ranks short. The
+// volumes climb evenly from a fifth at rank 3 to full at rank 10. The files
+// are already as loud as they go without distortion, so rank 10 is made to
+// stand out by keeping the ranks below it quieter rather than by playing it
+// louder.
 //
 // shake: how hard and for how long, or null for none.
 //
@@ -215,7 +213,7 @@ const RANKS = [
   { // 3: orange, cut short.
     colour: { tint: 0xff7e34, hue: -3, saturate: 0.1, brightness: 1.0 },
     blast: { cover: 0.6, rate: 1.3, ms: 1700 },
-    sound: { file: "normal", volume: 0.2, rumbleMs: 1500 },
+    sound: { file: "normal", volume: 0.2 },
     shake: null,
     ring: null,
     ground: null,
@@ -226,7 +224,7 @@ const RANKS = [
   { // 4: light orange; the first shake and the first dazzle.
     colour: { tint: 0xff9a42, hue: -1, saturate: 0.1, brightness: 1.03 },
     blast: { cover: 0.69, rate: 1.2, ms: 2100 },
-    sound: { file: "normal", volume: 0.31, rumbleMs: 2200 },
+    sound: { file: "normal", volume: 0.31 },
     shake: { strength: 3, duration: 300 },
     ring: null,
     ground: null,
@@ -237,7 +235,7 @@ const RANKS = [
   { // 5: amber; a first glow, and the ground cracks.
     colour: { tint: 0xffb450, saturate: 0.1, brightness: 1.07, glow: { color: 0xffa040, distance: 8, outerStrength: 1.5 } },
     blast: { cover: 0.78, rate: 1.1, ms: 2600 },
-    sound: { file: "normal", volume: 0.43, rumbleMs: 3000 },
+    sound: { file: "normal", volume: 0.43 },
     shake: { strength: 5, duration: 400 },
     ring: null,
     ground: { file: "cracksCompact", cover: 0.6, lingerMs: 3000 },
@@ -248,7 +246,7 @@ const RANKS = [
   { // 6: gold, played out in full; a shockwave.
     colour: { tint: 0xffcc62, hue: 2, saturate: 0.05, brightness: 1.12, glow: { color: 0xffc040, distance: 10, outerStrength: 2 } },
     blast: { cover: 0.88, rate: 1.0, ms: 0 },
-    sound: { file: "normal", volume: 0.54, rumbleMs: 4000 },
+    sound: { file: "normal", volume: 0.54 },
     shake: { strength: 7, duration: 500 },
     ring: { cover: 0.85, opacity: 0.5, colour: { hue: 183, saturate: 0.2, brightness: 1.12 } },
     ground: { file: "cracksWide", cover: 0.8, lingerMs: 3500 },
@@ -260,7 +258,7 @@ const RANKS = [
     // the edge of the burst.
     colour: { tint: 0xffe48c, hue: 4, saturate: -0.1, brightness: 1.2, glow: { color: 0xffe080, distance: 12, outerStrength: 3 } },
     blast: { cover: 0.97, rate: 0.95, ms: 0 },
-    sound: { file: "heavy", volume: 0.66, rumbleMs: 5500 },
+    sound: { file: "heavy", volume: 0.66 },
     shake: { strength: 9, duration: 700 },
     ring: { cover: 1.0, opacity: 0.7, colour: { hue: 188, saturate: -0.3, brightness: 1.2 } },
     ground: { file: "cracksDense", cover: 0.9, lingerMs: 4000 },
@@ -271,7 +269,7 @@ const RANKS = [
   { // 8: white-hot, and still blazing after.
     colour: { saturate: -0.7, brightness: 1.3, glow: { color: 0xffffff, distance: 15, outerStrength: 4 } },
     blast: { cover: 1.06, rate: 0.9, ms: 0 },
-    sound: { file: "heavy", volume: 0.77, rumbleMs: 0 },
+    sound: { file: "heavy", volume: 0.77 },
     shake: { strength: 12, duration: 900 },
     ring: { cover: 1.1, opacity: 0.85, colour: { saturate: -0.7, brightness: 1.3 } },
     ground: { file: "cracksDense", cover: 1.0, lingerMs: 5000 },
@@ -283,7 +281,7 @@ const RANKS = [
     // red-hot.
     colour: { tint: 0xffe4c8, hue: 185, saturate: -0.2, brightness: 1.45, glow: { color: 0x9fd8ff, distance: 20, outerStrength: 5 } },
     blast: { cover: 1.16, rate: 0.85, ms: 0 },
-    sound: { file: "huge", volume: 0.89, rumbleMs: 7000 },
+    sound: { file: "huge", volume: 0.89 },
     shake: { strength: 15, duration: 1200 },
     ring: { cover: 1.3, opacity: 1, colour: { hue: 5, saturate: -0.2, brightness: 1.45 } },
     ground: { file: "scorched", cover: 1.0, lingerMs: 6000 },
@@ -296,7 +294,7 @@ const RANKS = [
     // it reads as a second explosion.
     colour: { hue: 235, saturate: 0.3, brightness: 1.55, glow: { color: 0x8a78ff, distance: 30, outerStrength: 7 } },
     blast: { cover: 1.25, rate: 0.8, ms: 0 },
-    sound: { file: "huge", volume: 1.0, rumbleMs: 0 },
+    sound: { file: "huge", volume: 1.0 },
     shake: { strength: 20, duration: 1600 },
     ring: { cover: 1.5, opacity: 1, colour: { hue: 30, saturate: 0.3, brightness: 1.55 } },
     ground: { file: "scorched", cover: 1.0, lingerMs: 7000 },
@@ -385,30 +383,19 @@ function cssColour(colour) {
   return `#${colour.toString(16).padStart(6, "0")}`;
 }
 
-// The rank's flash, put up at the strike and stepped down with the fire.
-// The times are from the start of the sequence: strikeMs, coolMs when the
-// blast starts to cool, fireOutMs when the fire above the ground is out, and
-// endMs when the ground is out too — the same as fireOutMs where there is no
+// The rank's flash, put up at the strike and eased down with the fire. The
+// times are from the start of the sequence: strikeMs, coolMs when the blast
+// starts to cool, fireOutMs when the fire above the ground is out, and endMs
+// when the ground is out too — the same as fireOutMs where there is no
 // ground. Gives up quietly if someone deletes the light first.
 async function flashLight({ scene, centre, radius }, step, { strikeMs, coolMs, fireOutMs, endMs }) {
   const { flash } = step;
   const bright = radius / scene.grid.size * scene.grid.distance + flash.feet;
   const dim = bright + flash.feet;
-  const ember = { "config.color": cssColour(EMBER_COLOUR), "config.luminosity": 0.5 };
-  const sized = (scale) => ({ "config.bright": bright * scale, "config.dim": dim * scale });
-
-  const steps = [{ atMs: coolMs, change: sized(FLASH_COOLING_SCALE) }];
-  if (endMs > fireOutMs) {
-    steps.push(
-      { atMs: fireOutMs, change: { ...sized(FLASH_EMBERS_SCALE), ...ember } },
-      { atMs: (fireOutMs + endMs) / 2, change: sized(FLASH_EMBERS_LAST_SCALE) }
-    );
-  } else {
-    steps.push({ atMs: (coolMs + endMs) / 2, change: sized(FLASH_FADING_SCALE) });
-  }
+  const colour = flash.color ?? step.colour.glow?.color ?? 0xffffff;
 
   const start = Date.now();
-  const until = (atMs) => wait(Math.max(start + atMs - Date.now(), 0));
+  const until = (atMs) => wait(start + atMs - Date.now());
 
   await until(strikeMs - FLASH_LEAD_MS);
   const [light] = await scene.createEmbeddedDocuments("AmbientLight", [{
@@ -417,18 +404,29 @@ async function flashLight({ scene, centre, radius }, step, { strikeMs, coolMs, f
     config: {
       bright,
       dim,
-      color: cssColour(flash.color ?? step.colour.glow?.color ?? 0xffffff),
+      color: cssColour(colour),
       alpha: flash.alpha,
-      luminosity: flash.luminosity
+      luminosity: flash.luminosity,
+      attenuation: FLASH_ATTENUATION
     },
     flags: { [MOD]: { flash: true } }
   }]);
 
-  for (const { atMs, change } of steps) {
-    await until(atMs);
-    if (!scene.lights.has(light.id)) return;
-    await light.update(change);
+  // The fade's moments, counted from now that the light is up.
+  const now = Date.now() - start;
+  const at = (ms, scale, color, luminosity) =>
+    ({ atMs: ms - now, bright: bright * scale, dim: dim * scale, color, luminosity });
+  const keyframes = [
+    at(now, 1, colour, flash.luminosity),
+    at(coolMs, FLASH_COOLING_SCALE, colour, flash.luminosity)
+  ];
+  if (endMs > fireOutMs) {
+    keyframes.push(at(fireOutMs, FLASH_EMBERS_SCALE, EMBER_COLOUR, 0.5), at(endMs, 0, EMBER_COLOUR, 0.5));
+  } else {
+    keyframes.push(at(endMs, 0, colour, flash.luminosity));
   }
+  fadeLight(light, keyframes);
+
   await until(endMs);
   if (scene.lights.has(light.id)) await light.delete();
 }
@@ -578,13 +576,9 @@ async function playFireball(shot) {
   // Held back so that the bang in it falls on the strike — no wait at all
   // when it starts with the whoosh.
   const soundFrom = (caster ? sound.launchMs : sound.bangMs) - SOUND_PREROLL_MS;
-  const playable = sound.lengthMs - sound.bangMs;
-  const rumbleMs = step.sound.rumbleMs ? Math.min(step.sound.rumbleMs, playable) : playable;
   addSound(seq, sound.src, {
     volume: step.sound.volume,
     startMs: soundFrom,
-    durationMs: sound.bangMs - soundFrom + rumbleMs,
-    fadeOutMs: rumbleMs < playable ? Math.min(SOUND_FADE_MS, rumbleMs / 2) : 0,
     delayMs: strikeMs - (sound.bangMs - soundFrom)
   });
 

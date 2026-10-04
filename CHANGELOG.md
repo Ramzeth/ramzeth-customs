@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-10-04
+
+### Added
+
+- Sliding Blocks: a destroyed block plays a sound where it stood. Removing the
+  blocks when the spell ends stays silent.
+
+### Changed
+
+- Sequencer is now a required dependency. Sounds are always placed on the map
+  where things happened; the flat, unplaced fallback is gone.
+
 ## [1.3.0] - 2026-10-03
 
 ### Added
@@ -68,7 +80,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Wall of Stone templates are placed as a thin stone-coloured line instead of a
   square.
 
-[unreleased]: https://github.com/Ramzeth/ramzeth-customs/compare/1.3.0...HEAD
+[unreleased]: https://github.com/Ramzeth/ramzeth-customs/compare/1.3.1...HEAD
+[1.3.1]: https://github.com/Ramzeth/ramzeth-customs/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/Ramzeth/ramzeth-customs/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/Ramzeth/ramzeth-customs/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/Ramzeth/ramzeth-customs/releases/tag/1.1.0

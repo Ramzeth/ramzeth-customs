@@ -12,6 +12,7 @@
 
 import { ASSETS } from "../assets.js";
 import { MOD } from "../const.js";
+import { playSoundAt } from "../lib/effects.js";
 import { lineEndpoints } from "../lib/region-geometry.js";
 import { handlePlacement } from "../lib/region-placement.js";
 
@@ -255,37 +256,11 @@ async function destroySegment(scene, segmentId, { includeToken = true } = {}) {
   }
 
   if (line) {
-    playCollapse({ x: (line.a.x + line.b.x) / 2, y: (line.a.y + line.b.y) / 2 });
+    playSoundAt(COLLAPSE_SOUND,
+      { x: (line.a.x + line.b.x) / 2, y: (line.a.y + line.b.y) / 2 },
+      { volume: COLLAPSE_VOLUME });
     await createRubble(scene, line.a, line.b, castId);
   }
-}
-
-// Destruction is resolved on one GM client, so the sound has to reach the
-// other clients rather than play locally.
-//
-// Sequencer when it is available: it broadcasts, and it can place the sound
-// on the map so the crash is heard from where the wall stood. Automated
-// Animations depends on it, so it is almost certainly present. AudioHelper is
-// the fallback and plays the same file flat across the scene.
-function playCollapse(at) {
-  if (!COLLAPSE_SOUND) return;
-
-  if (globalThis.Sequence) {
-    new Sequence()
-      .sound()
-        .file(COLLAPSE_SOUND)
-        .volume(COLLAPSE_VOLUME)
-        .atLocation(at)
-        .radius(canvas.scene.grid.distance * 12)
-      .play();
-    return;
-  }
-
-  const audio = foundry.audio?.AudioHelper ?? globalThis.AudioHelper;
-  audio?.play(
-    { src: COLLAPSE_SOUND, volume: COLLAPSE_VOLUME, autoplay: true, loop: false },
-    true
-  );
 }
 
 // The two squares that shared the wall as an edge, as an explicit polygon.

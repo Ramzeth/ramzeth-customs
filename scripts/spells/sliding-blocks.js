@@ -10,7 +10,12 @@
 import { ASSETS } from "../assets.js";
 import { MOD } from "../const.js";
 import { attach } from "../lib/attach.js";
+import { playSoundAt } from "../lib/effects.js";
 import { handlePlacement } from "../lib/region-placement.js";
+
+// Marks a deletion as the spell ending rather than a block being destroyed,
+// so the clean-up is silent.
+const CLEARING = `${MOD}Clear`;
 
 const SLUG = "origin:item:slug:sliding-blocks";
 const BLOCK_COLOR = "#8a7a5c";
@@ -45,6 +50,7 @@ export function registerSlidingBlocks() {
   });
   Hooks.on("createRegion", onBlockPlaced);
   Hooks.on("updateActor", onBlockDamaged);
+  Hooks.on("deleteToken", onBlockDeleted);
   return { collectBlocks, clear };
 }
 
@@ -279,12 +285,28 @@ function onBlockDamaged(actor, changes) {
   token.parent.deleteEmbeddedDocuments("Token", [token.id]).catch(report);
 }
 
+// A block whose token goes is a block destroyed, whether it was worn down to
+// 0 Hit Points or deleted by hand, so the sound is tied to the deletion
+// rather than to the damage. The walls are not this handler's business:
+// lib/attach.js takes them away on the same event.
+//
+// The document keeps its data after deletion, so its centre can still be
+// read here.
+function onBlockDeleted(token, options) {
+  if (options?.[CLEARING]) return;
+  if (game.user !== game.users.activeGM) return;
+  if (!token.getFlag(MOD, "slidingBlock")) return;
+  playSoundAt(ASSETS.slidingBlocks.destroy, token.getCenterPoint());
+}
+
 // The spell is over: every block of the casting, its throwaway actor and any
 // template still lying about. Walls go with their tokens through
 // lib/attach.js; the actor goes last so no token is left pointing at nothing.
 async function clear(scene, messageId) {
   const blocks = collectBlocks(scene, messageId).map((t) => t.id);
-  if (blocks.length) await scene.deleteEmbeddedDocuments("Token", blocks);
+  if (blocks.length) {
+    await scene.deleteEmbeddedDocuments("Token", blocks, { [CLEARING]: true });
+  }
 
   const drafts = scene.regions
     .filter((r) => r.flags?.pf2e?.messageId === messageId &&

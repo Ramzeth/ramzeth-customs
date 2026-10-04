@@ -8,6 +8,8 @@
 // Compendium content (prefabs, playlists) refers to ASSETS directly in its
 // own data and is not covered here.
 
+const STONE_COLLAPSE = "ASSETS/Sounds/Oneshots/Stone/Rock-Fall-Colosseum_Collapse.mp3";
+
 export const ASSETS = {
   wallOfStone: {
     // One grid square of straight stone wall. The art runs along the image's
@@ -17,12 +19,17 @@ export const ASSETS = {
     // A pile two squares long and one deep.
     rubble: "ASSETS/Images/!Core_Settlements/Structures/Rubble/Rubble_Piles/Stone/Rubble_Pile_Stone_Earthy_A36_4x2.webp",
 
-    collapse: "ASSETS/Sounds/Oneshots/Stone/Rock-Fall-Colosseum_Collapse.mp3"
+    collapse: STONE_COLLAPSE
   },
 
   slidingBlocks: {
     // A square stone plinth, standing in for the cube seen from above. Drawn
     // at two squares and scaled down onto a one-square token.
-    cube: "ASSETS/Images/!Core_Settlements/Structures/Statues/Bases/Base_Stone_Sandstone_Square_B_2x2.webp"
+    cube: "ASSETS/Images/!Core_Settlements/Structures/Statues/Bases/Base_Stone_Sandstone_Square_B_2x2.webp",
+
+    // TODO: placeholder. This is the Wall of Stone collapse, a whole wall
+    // section coming down; a single 5-foot block crumbling wants a sound of
+    // its own.
+    destroy: STONE_COLLAPSE
   }
 };

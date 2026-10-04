@@ -17,7 +17,12 @@
   "styles": ["styles/main.css"],
   "relationships": {
       "requires": [
-          { "id": "lib-wrapper", "type": "module" }
+          { "id": "lib-wrapper", "type": "module" },
+          {
+              "id": "sequencer",
+              "type": "module",
+              "reason": "Plays the spells' sounds and effects for everyone, placed on the map where they happen."
+          }
       ],
       "recommends": [
           {

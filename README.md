@@ -2,7 +2,9 @@
 
 Personal Foundry VTT library: prefabs, sounds and custom PF2e content.
 
-Requires Foundry v14 and [lib-wrapper](https://foundryvtt.com/packages/lib-wrapper).
+Requires Foundry v14, [lib-wrapper](https://foundryvtt.com/packages/lib-wrapper)
+and [Sequencer](https://foundryvtt.com/packages/sequencer), which plays the
+spells' sounds and effects for everyone.
 [Wall Height](https://foundryvtt.com/packages/wall-height) is recommended:
 walls have no height in core v14, and without it a levitated Sliding Block
 still stops everything beneath it.

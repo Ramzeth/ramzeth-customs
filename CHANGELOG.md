@@ -10,8 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Fireball animation, played by the module rather than Automated Animations.
-  Placing the burst template sends a bead of fire from the caster to the
-  centre of the burst, where it explodes. Every rank from 3 to 10 is a step
+  A bead of fire flies from the caster to the centre of the burst and
+  explodes there. It goes off when the damage is rolled from the spell's chat
+  card, once Dice So Nice's dice have landed, at the template placed from
+  that same card; placing the template only marks where. Each card's fireball
+  goes off once, so a reroll does not explode again. Every rank
+  from 3 to 10 is a step
   up: the fire goes from red through orange, yellow and white to blinding
   white edged in blue and then violet; it grows from short of the burst's
   edge to well past it; a quick pop becomes a long blast with a glow. From

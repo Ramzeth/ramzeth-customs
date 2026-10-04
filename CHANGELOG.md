@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Fireball animation, played by the module rather than Automated Animations.
+  Placing the burst template sends a bead of fire from the caster to the
+  centre of the burst, where it explodes to fill the area. Higher ranks play
+  faster, glow, burst more than once and leave flames burning; the area never
+  grows, since a fireball is a 20-foot burst at every rank. Uses the free JB2A
+  Fireball animations, copied into `Data/ASSETS/Animations/3rd_Level/Fireball/`.
+- Screen shake with the fireball's blast, scaled to its rank. Users flagged
+  `noShake` are left out — meant for a TV used as a play mat.
+- Fireball sound in two parts, each timed to what is on screen: the launch
+  from the caster as the bead forms at their hand, the bang from the centre
+  of the burst the moment the bead strikes, together with the blast and the
+  shake. Louder at higher ranks; lower ranks cut the bang's rumble short with
+  a fade, since their blast is over sooner.
+
+### Fixed
+
+- Placed sounds — Wall of Stone collapsing, a Sliding Block destroyed — were
+  heard five times further away than intended, which all but removed their
+  fall-off with distance.
+
 ## [1.3.1] - 2026-10-04
 
 ### Added

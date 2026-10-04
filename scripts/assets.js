@@ -10,6 +10,9 @@
 
 const STONE_COLLAPSE = "ASSETS/Sounds/Oneshots/Stone/Rock-Fall-Colosseum_Collapse.mp3";
 
+// JB2A, free edition, copied out of the module's Library folder.
+const FIREBALL = "ASSETS/Animations/3rd_Level/Fireball";
+
 export const ASSETS = {
   wallOfStone: {
     // One grid square of straight stone wall. The art runs along the image's
@@ -31,5 +34,30 @@ export const ASSETS = {
     // section coming down; a single 5-foot block crumbling wants a sound of
     // its own.
     destroy: STONE_COLLAPSE
+  },
+
+  // JB2A draws its art at 200 pixels per 5-foot square. That is the scale of
+  // the files themselves and has nothing to do with the grid of any scene:
+  // Sequencer maps each file onto whatever grid the scene uses.
+  fireball: {
+    // 800 file pixels square — a 20-foot blast at the file's own scale.
+    explosion: `${FIREBALL}/FireballExplosion_01_Orange_800x800.webm`,
+
+    // Flames left burning, without flying debris, for the higher ranks.
+    afterglow: `${FIREBALL}/FireballLoopNoDebris_01_Orange_800x800.webm`,
+
+    // Eight seconds long.
+    sound: "ASSETS/Sounds/Oneshots/Fire/fireball.ogg",
+
+    // The bead in flight, drawn at fixed lengths. Each file is its length
+    // plus 200 file pixels of run-up at either end. The one nearest the
+    // actual distance is stretched to fit it.
+    beams: [
+      { feet: 5,  src: `${FIREBALL}/FireballBeam_01_Orange_05ft_600x400.webm` },
+      { feet: 15, src: `${FIREBALL}/FireballBeam_01_Orange_15ft_1000x400.webm` },
+      { feet: 30, src: `${FIREBALL}/FireballBeam_01_Orange_30ft_1600x400.webm` },
+      { feet: 60, src: `${FIREBALL}/FireballBeam_01_Orange_60ft_2800x400.webm` },
+      { feet: 90, src: `${FIREBALL}/FireballBeam_01_Orange_90ft_4000x400.webm` }
+    ]
   }
 };

@@ -3,6 +3,7 @@
 import { MOD } from "./const.js";
 import { registerAttach } from "./lib/attach.js";
 import { registerRegionPlacement } from "./lib/region-placement.js";
+import { registerFireball } from "./spells/fireball.js";
 import { registerSlidingBlocks } from "./spells/sliding-blocks.js";
 import { registerWallOfStone } from "./spells/wall-of-stone.js";
 
@@ -19,6 +20,7 @@ Hooks.once("init", () => {
     registerRegionPlacement();
     api.wallOfStone = registerWallOfStone();
     api.slidingBlocks = registerSlidingBlocks();
+    api.fireball = registerFireball();
   }
 
   Hooks.once("ready", () => {

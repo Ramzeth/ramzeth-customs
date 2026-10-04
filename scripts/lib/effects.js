@@ -3,10 +3,12 @@
 // The spells resolve their events — a section collapsing, a block being
 // destroyed, a fireball landing — on the active GM's client, so an effect has
 // to reach the other clients rather than play locally. Sequencer does the
-// playing and the broadcasting of animations, sounds and the view's shake;
-// it is a required dependency of the module. What it cannot do — the dazzle,
-// a light fading smoothly — goes over the module's own socket, each client
-// doing it for itself.
+// playing and the broadcasting of animations and the view's shake; it is a
+// required dependency of the module. Sounds, the dazzle and a light fading
+// smoothly go over the module's own socket instead, each client playing them
+// for itself. A call carries delayMs, which each client counts from when it
+// hears of it, as Sequencer does with its delays, so what is sent alongside
+// a sequence lands with it.
 //
 // Sounds are not placed on the map. Foundry plays a placed sound only for a
 // user with a token of their own selected near it, so it went silent while a
@@ -18,6 +20,16 @@
 // entry, or both play. Spells the module leaves alone can stay with AA.
 
 import { MOD } from "../const.js";
+
+const SOCKET = `module.${MOD}`;
+
+export function registerEffects() {
+  game.socket.on(SOCKET, (message) => {
+    if (message?.action === "sound") soundHere(message).catch(report);
+    if (message?.action === "dazzle") dazzleHere(message);
+    if (message?.action === "fadeLight") fadeLightHere(message);
+  });
+}
 
 // Users whose view is never shaken. Meant for a TV laid flat as a play mat:
 // the map moving under physical miniatures leaves them off their squares, and
@@ -33,33 +45,52 @@ export function shakeUsers() {
     .map((u) => u.id);
 }
 
-// Adds a sound to a sequence that is being built, so a spell can time it
-// against its own animations.
+// A sound for everyone, played by Foundry's own audio on the interface
+// channel, so the interface volume applies to it as it does to the dice.
 //
-// startMs is where in the file to begin, so a sound can start from a chosen
-// moment of it. delayMs holds the sound back from the point in the sequence
-// where it was added, to land on a moment inside an animation started
-// alongside it.
+// startMs is where in the file to begin. durationMs cuts it short — the file
+// may also simply end first — and fadeOutMs lets the cut fade, from the
+// volume it is playing at, instead of stopping dead. delayMs holds it back to
+// land on a moment inside an animation started alongside it; the file is
+// loaded while it waits.
 //
-// A sound always plays out to the end of its file, which carries its own
-// fade: it is never cut short and never faded by Sequencer. Sequencer fades
-// an unplaced sound from full volume whatever volume it was playing at
-// (checked on 4.2.3), so a quiet sound faded out leapt to full just before
-// it ended.
-export function addSound(seq, src, { volume = 0.8, startMs = 0, delayMs = 0 } = {}) {
-  if (!src) return seq;
-  const sound = seq.sound()
-    .file(src)
-    .volume(volume);
-  if (delayMs) sound.delay(delayMs);
-  if (startMs) sound.startTime(startMs);
-  return seq;
+// Not through Sequencer: Sequencer fades an unplaced sound out from full
+// volume whatever volume it was playing at (seen on 4.2.3), so a quiet sound
+// cut short leapt to full just before it ended.
+export function playSound(src, {
+  volume = 0.8, startMs = 0, durationMs = 0, fadeOutMs = 0, delayMs = 0
+} = {}) {
+  if (!src) return;
+  const sound = { src, volume, startMs, durationMs, fadeOutMs, delayMs };
+  game.socket.emit(SOCKET, { action: "sound", ...sound });
+  soundHere(sound).catch(report);
 }
 
-// A sound on its own, played at once.
-export function playSound(src, options) {
-  if (!src) return;
-  addSound(new Sequence(), src, options).play();
+async function soundHere({ src, volume, startMs, durationMs, fadeOutMs, delayMs }) {
+  const due = Date.now() + delayMs;
+  const sound = game.audio.create({ src, context: game.audio.interface, singleton: false });
+  await sound.load();
+  await wait(due - Date.now());
+  await sound.play({ volume, offset: startMs / 1000 });
+  if (!durationMs) return;
+  await wait(durationMs - fadeOutMs);
+  await sound.stop({ fade: fadeOutMs });
+}
+
+// Loads sounds on this client ahead of time, so the first play of each starts
+// on cue rather than after its download.
+export function preloadSounds(srcs) {
+  for (const src of srcs) {
+    foundry.audio.AudioHelper.preloadSound(src).catch(report);
+  }
+}
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, Math.max(ms, 0)));
+}
+
+function report(err) {
+  console.error(`${MOD} | effects`, err);
 }
 
 // Every screen at the table overexposed for a moment, as by a light too
@@ -70,19 +101,7 @@ export function playSound(src, options) {
 // whole picture is one grey that brightness 2 or more turns plain white.
 // saturate below 1 washes the colour out. Neither Foundry nor Sequencer
 // has this, and a light in the scene can only light what it reaches, so it
-// is done in each browser on the canvas element itself. Nothing is saved;
-// the module's socket carries the call to the other clients, and each counts
-// delayMs from when it hears of it, as Sequencer does with its delays, so the
-// flash lands with the sequence it was sent alongside.
-const SOCKET = `module.${MOD}`;
-
-export function registerEffects() {
-  game.socket.on(SOCKET, (message) => {
-    if (message?.action === "dazzle") dazzleHere(message);
-    if (message?.action === "fadeLight") fadeLightHere(message);
-  });
-}
-
+// is done in each browser on the canvas element itself. Nothing is saved.
 export function dazzle({ brightness, contrast = 1, saturate = 1, holdMs, fadeMs, delayMs = 0 }) {
   const flash = { brightness, contrast, saturate, holdMs, fadeMs, delayMs };
   game.socket.emit(SOCKET, { action: "dazzle", ...flash });

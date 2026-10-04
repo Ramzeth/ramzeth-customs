@@ -20,20 +20,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   burst's edge to well past it; a short blast becomes a long one with a glow.
   At every rank a real light flares over the scene with the strike, reaching
   further with every rank, and dies down smoothly with the fire —
-  ember-orange while the ground still smoulders. From rank 4 every screen at the table is
-  dazzled for a moment, harder with every rank, until at rank 10 the whole
-  screen goes white. From rank 5 it leaves its mark, more of it with every
-  rank: glowing cracks in the ground; a shockwave from rank 6; the fireball
-  blazing on at ranks 8 and 9; red-hot ground from rank 9. Uses
-  free JB2A animations, copied into `Data/ASSETS/Animations/` with JB2A's own
-  folders.
+  ember-orange while the ground still smoulders. From rank 4 every screen at
+  the table is dazzled for a moment, harder with every rank, until at rank 10
+  the whole screen goes white; the fireball bursts out of the flash as it
+  starts to clear. From rank 5 it leaves its mark, more of it
+  with every rank: glowing cracks in the ground; a shockwave from rank 6; the
+  fireball blazing on from rank 8, spreading wider and thinner as it burns
+  out; red-hot ground from rank 9. Uses free JB2A
+  animations, copied into `Data/ASSETS/Animations/` with JB2A's own folders.
 - Screen shake with the fireball's blast: none at rank 3, harder and longer
   with every rank above. Users flagged `noShake` are left out — meant for a
   TV used as a play mat.
 - Fireball sound, timed to what is on screen: the whoosh as the bead forms
   at the caster's hand, the bang the moment it strikes, together with the
-  blast and the shake. Quiet at rank 3 and louder with every rank; the
-  rumble always plays out, and at the quieter ranks drops out of hearing
+  blast and the shake. Quiet at rank 3 and louder with every rank; the lower
+  ranks cut the bang's rumble short with a fade, since their blast is over
   sooner. Ranks 7 and 8 use a slower, deeper version of the sound with a
   longer tail, and ranks 9 and 10 a deeper and longer one still, both made
   from the same source and kept as `fireball_heavy.ogg` and
@@ -46,6 +47,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   it went silent while a template was being placed and never reached a
   display user with no tokens. Applies to Wall of Stone collapsing and a
   Sliding Block destroyed as well.
+- Sounds are played by each client through Foundry's own audio, on the
+  interface channel, instead of through Sequencer: Sequencer fades an
+  unplaced sound out from full volume whatever volume it was playing at, so
+  a quiet sound leapt to full just before it ended. They reach the other
+  clients over the module's own socket, which needs the world to be
+  relaunched once after updating.
 
 ## [1.3.1] - 2026-10-04
 

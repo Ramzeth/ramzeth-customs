@@ -32,7 +32,7 @@
 
 import { ASSETS } from "../assets.js";
 import { MOD } from "../const.js";
-import { addSound, dazzle, fadeLight, shakeUsers } from "../lib/effects.js";
+import { dazzle, fadeLight, playSound, preloadSounds, shakeUsers } from "../lib/effects.js";
 
 const SLUG = "origin:item:slug:fireball";
 const BASE_RANK = 3;
@@ -95,6 +95,19 @@ const EXPLOSION_DISC = 0.75;
 // A blast cut short fades out over this long instead of vanishing.
 const BLAST_FADE_MS = 400;
 
+// Where a rank dazzles, the blast waits for it: the strike is a white flash,
+// and the fireball comes out of it as the flash starts to clear — after its
+// hold and this much of its fade, by when there is a picture to see it in.
+// Under a full white-out it would be spent before anyone saw it.
+const DAZZLE_REVEAL = 0.15;
+
+// The fireball left blazing at the top ranks comes in over AFTERGLOW_IN_MS,
+// then for the rest of its time spreads out to AFTERGLOW_SPREAD times its
+// size while it thins away to nothing, as fire burning itself out over a
+// widening patch rather than a ball switched off.
+const AFTERGLOW_IN_MS = 600;
+const AFTERGLOW_SPREAD = 1.6;
+
 // The shockwave file (30 fps, 2.4 s): a bright point at the centre whose ring
 // sweeps out to 95% of the frame by 0.75 s and is gone by 1.1 s. It starts
 // with the bang.
@@ -138,18 +151,21 @@ const EMBER_COLOUR = 0xff7a30;
 // 30 ms. Measured on the source; the heavy and huge versions are the source
 // slowed to 0.88 and 0.78 of its speed, which moves both events later by the
 // same proportion. A sound is played as one piece, started a few milliseconds
-// ahead of the whoosh so its attack is not clipped, and runs out to the end
-// of its file, whose rumble dies away of itself. Cast from off the map there
-// is nothing to launch, and it starts just ahead of the bang instead.
+// ahead of the whoosh so its attack is not clipped. Cast from off the map
+// there is nothing to launch, and it starts just ahead of the bang instead.
+//
+// lengthMs is where the rumble has died away, inside the file. A rank that
+// cuts the rumble short fades it over at most SOUND_FADE_MS.
 //
 // All three are mastered to about the same loudness, as loud as the source
 // goes without distortion, so the ranks' volumes compare across them.
 const SOUNDS = {
-  normal: { src: ASSETS.fireball.sound, launchMs: 120, bangMs: 1140 },
-  heavy: { src: ASSETS.fireball.soundHeavy, launchMs: 136, bangMs: 1295 },
-  huge: { src: ASSETS.fireball.soundHuge, launchMs: 154, bangMs: 1462 }
+  normal: { src: ASSETS.fireball.sound, launchMs: 120, bangMs: 1140, lengthMs: 8000 },
+  heavy: { src: ASSETS.fireball.soundHeavy, launchMs: 136, bangMs: 1295, lengthMs: 8900 },
+  huge: { src: ASSETS.fireball.soundHuge, launchMs: 154, bangMs: 1462, lengthMs: 10400 }
 };
 const SOUND_PREROLL_MS = 10;
+const SOUND_FADE_MS = 1500;
 
 // The sound sets the pace. Started with the sequence, it reaches the bang
 // this long after, and that is when the bead must strike: the blast, the bang
@@ -178,12 +194,11 @@ function strikeAfterLaunch(sound) {
 // speed: the low ranks rush through the file, the top ones linger. ms cuts
 // the blast short with a fade; 0 plays it out.
 //
-// sound: which file, and how loud. The rumble is never cut: a quieter one
-// drops out of hearing sooner, which is what makes the low ranks short. The
-// volumes climb evenly from a fifth at rank 3 to full at rank 10. The files
-// are already as loud as they go without distortion, so rank 10 is made to
-// stand out by keeping the ranks below it quieter rather than by playing it
-// louder.
+// sound: which file, how loud, and how long the bang runs on before it is
+// faded out; rumbleMs 0 lets it run its course. The volumes climb evenly from
+// a fifth at rank 3 to full at rank 10. The files are already as loud as they
+// go without distortion, so rank 10 is made to stand out by keeping the ranks
+// below it quieter rather than by playing it louder.
 //
 // shake: how hard and for how long, or null for none.
 //
@@ -213,7 +228,7 @@ const RANKS = [
   { // 3: orange, cut short.
     colour: { tint: 0xff7e34, hue: -3, saturate: 0.1, brightness: 1.0 },
     blast: { cover: 0.6, rate: 1.3, ms: 1700 },
-    sound: { file: "normal", volume: 0.2 },
+    sound: { file: "normal", volume: 0.2, rumbleMs: 1500 },
     shake: null,
     ring: null,
     ground: null,
@@ -224,7 +239,7 @@ const RANKS = [
   { // 4: light orange; the first shake and the first dazzle.
     colour: { tint: 0xff9a42, hue: -1, saturate: 0.1, brightness: 1.03 },
     blast: { cover: 0.69, rate: 1.2, ms: 2100 },
-    sound: { file: "normal", volume: 0.31 },
+    sound: { file: "normal", volume: 0.31, rumbleMs: 2200 },
     shake: { strength: 3, duration: 300 },
     ring: null,
     ground: null,
@@ -235,7 +250,7 @@ const RANKS = [
   { // 5: amber; a first glow, and the ground cracks.
     colour: { tint: 0xffb450, saturate: 0.1, brightness: 1.07, glow: { color: 0xffa040, distance: 8, outerStrength: 1.5 } },
     blast: { cover: 0.78, rate: 1.1, ms: 2600 },
-    sound: { file: "normal", volume: 0.43 },
+    sound: { file: "normal", volume: 0.43, rumbleMs: 3000 },
     shake: { strength: 5, duration: 400 },
     ring: null,
     ground: { file: "cracksCompact", cover: 0.6, lingerMs: 3000 },
@@ -246,7 +261,7 @@ const RANKS = [
   { // 6: gold, played out in full; a shockwave.
     colour: { tint: 0xffcc62, hue: 2, saturate: 0.05, brightness: 1.12, glow: { color: 0xffc040, distance: 10, outerStrength: 2 } },
     blast: { cover: 0.88, rate: 1.0, ms: 0 },
-    sound: { file: "normal", volume: 0.54 },
+    sound: { file: "normal", volume: 0.54, rumbleMs: 4000 },
     shake: { strength: 7, duration: 500 },
     ring: { cover: 0.85, opacity: 0.5, colour: { hue: 183, saturate: 0.2, brightness: 1.12 } },
     ground: { file: "cracksWide", cover: 0.8, lingerMs: 3500 },
@@ -258,7 +273,7 @@ const RANKS = [
     // the edge of the burst.
     colour: { tint: 0xffe48c, hue: 4, saturate: -0.1, brightness: 1.2, glow: { color: 0xffe080, distance: 12, outerStrength: 3 } },
     blast: { cover: 0.97, rate: 0.95, ms: 0 },
-    sound: { file: "heavy", volume: 0.66 },
+    sound: { file: "heavy", volume: 0.66, rumbleMs: 5500 },
     shake: { strength: 9, duration: 700 },
     ring: { cover: 1.0, opacity: 0.7, colour: { hue: 188, saturate: -0.3, brightness: 1.2 } },
     ground: { file: "cracksDense", cover: 0.9, lingerMs: 4000 },
@@ -269,7 +284,7 @@ const RANKS = [
   { // 8: white-hot, and still blazing after.
     colour: { saturate: -0.7, brightness: 1.3, glow: { color: 0xffffff, distance: 15, outerStrength: 4 } },
     blast: { cover: 1.06, rate: 0.9, ms: 0 },
-    sound: { file: "heavy", volume: 0.77 },
+    sound: { file: "heavy", volume: 0.77, rumbleMs: 0 },
     shake: { strength: 12, duration: 900 },
     ring: { cover: 1.1, opacity: 0.85, colour: { saturate: -0.7, brightness: 1.3 } },
     ground: { file: "cracksDense", cover: 1.0, lingerMs: 5000 },
@@ -278,10 +293,10 @@ const RANKS = [
     dazzle: { brightness: 3.5, contrast: 0.83, saturate: 0.7, holdMs: 120, fadeMs: 1300 }
   },
   { // 9: white, edged in blue, with the deepest sound; the ground under it
-    // red-hot.
+    // red-hot, and the fireball blazing on over it once the dazzle clears.
     colour: { tint: 0xffe4c8, hue: 185, saturate: -0.2, brightness: 1.45, glow: { color: 0x9fd8ff, distance: 20, outerStrength: 5 } },
     blast: { cover: 1.16, rate: 0.85, ms: 0 },
-    sound: { file: "huge", volume: 0.89 },
+    sound: { file: "huge", volume: 0.89, rumbleMs: 7000 },
     shake: { strength: 15, duration: 1200 },
     ring: { cover: 1.3, opacity: 1, colour: { hue: 5, saturate: -0.2, brightness: 1.45 } },
     ground: { file: "scorched", cover: 1.0, lingerMs: 6000 },
@@ -290,15 +305,14 @@ const RANKS = [
     dazzle: { brightness: 4.5, contrast: 0.73, saturate: 0.6, holdMs: 160, fadeMs: 1700 }
   },
   { // 10: blinding white plasma edged in blue-violet, well past the burst,
-    // lighting up most of the map. No blazing ball: over the red-hot ground
-    // it reads as a second explosion.
+    // whiting out the screen and lighting up most of the map.
     colour: { hue: 235, saturate: 0.3, brightness: 1.55, glow: { color: 0x8a78ff, distance: 30, outerStrength: 7 } },
     blast: { cover: 1.25, rate: 0.8, ms: 0 },
-    sound: { file: "huge", volume: 1.0 },
+    sound: { file: "huge", volume: 1.0, rumbleMs: 0 },
     shake: { strength: 20, duration: 1600 },
     ring: { cover: 1.5, opacity: 1, colour: { hue: 30, saturate: 0.3, brightness: 1.55 } },
     ground: { file: "scorched", cover: 1.0, lingerMs: 7000 },
-    afterglowMs: 0,
+    afterglowMs: 4000,
     flash: { feet: 100, luminosity: 1.0, alpha: 0.7 },
     dazzle: { brightness: 6, contrast: 0, saturate: 0, holdMs: 300, fadeMs: 2500 }
   }
@@ -328,6 +342,7 @@ export function registerFireball() {
   Hooks.on("diceSoNiceMessageProcessed", onDiceProcessed);
   Hooks.on("diceSoNiceRollComplete", release);
   Hooks.on("canvasReady", sweepFlashes);
+  Hooks.once("ready", () => preloadSounds(Object.values(SOUNDS).map((s) => s.src)));
   return { play: playFireball };
 }
 
@@ -545,16 +560,20 @@ async function playFireball(shot) {
 
   // Everything is added without waiting, so it all starts together, and each
   // part is held back to its own moment. strikeMs is the bang: the bead
-  // reaches the centre, the fireball bursts out and the view shakes. The
-  // explosion's speed changes with the rank, and its burst-out with it. The
-  // beam file plays on past the strike — its own flash and fading trail run
-  // under the blast. Cast from off the map there is no flight, and the strike
-  // comes as soon as the explosion can reach it.
+  // reaches the centre, the screen flashes, the light flares and the view
+  // shakes. revealMs is when the fireball bursts out of the flash, with its
+  // shockwave — at the strike itself where the rank does not dazzle — and
+  // everything the fire leaves follows from there. The explosion's speed
+  // changes with the rank, and its burst-out with it. The beam file plays on
+  // past the strike — its own flash and fading trail run under the blast.
+  // Cast from off the map there is no flight, and the strike comes as soon as
+  // the explosion can reach it.
   const sound = SOUNDS[step.sound.file];
   const rate = step.blast.rate;
   const popMs = EXPLOSION_POP_MS / rate;
   const strikeMs = caster ? strikeAfterLaunch(sound) : popMs;
-  const blastMs = strikeMs - popMs;
+  const revealMs = strikeMs + (step.dazzle ? step.dazzle.holdMs + step.dazzle.fadeMs * DAZZLE_REVEAL : 0);
+  const blastMs = revealMs - popMs;
   const coolMs = blastMs + EXPLOSION_COOLING_MS / rate;
   const blastEndMs = blastMs + (step.blast.ms || EXPLOSION_GONE_MS / rate);
   const afterglowEndMs = step.afterglowMs ? coolMs + step.afterglowMs : 0;
@@ -573,15 +592,6 @@ async function playFireball(shot) {
       .template(BEAM_TEMPLATE);
   }
 
-  // Held back so that the bang in it falls on the strike — no wait at all
-  // when it starts with the whoosh.
-  const soundFrom = (caster ? sound.launchMs : sound.bangMs) - SOUND_PREROLL_MS;
-  addSound(seq, sound.src, {
-    volume: step.sound.volume,
-    startMs: soundFrom,
-    delayMs: strikeMs - (sound.bangMs - soundFrom)
-  });
-
   const users = shakeUsers();
   if (step.shake && users.length) {
     seq.canvasPan()
@@ -593,7 +603,7 @@ async function playFireball(shot) {
   if (step.ring) {
     paint(seq.effect(), step.ring.colour)
       .file(ASSETS.fireball.shockwave)
-      .delay(strikeMs)
+      .delay(revealMs)
       .atLocation(centre)
       .size(diameterSquares * step.ring.cover / RING_REACH, { gridUnits: true })
       .opacity(step.ring.opacity)
@@ -617,8 +627,9 @@ async function playFireball(shot) {
       .atLocation(centre)
       .size(size, { gridUnits: true })
       .duration(step.afterglowMs)
-      .fadeIn(600)
-      .fadeOut(800)
+      .fadeIn(AFTERGLOW_IN_MS)
+      .fadeOut(step.afterglowMs - AFTERGLOW_IN_MS)
+      .scaleOut(AFTERGLOW_SPREAD, step.afterglowMs - AFTERGLOW_IN_MS, { ease: "easeOutCubic" })
       .belowTokens()
       .zIndex(1);
   }
@@ -639,6 +650,19 @@ async function playFireball(shot) {
       .belowTokens()
       .zIndex(0);
   }
+
+  // The sound, held back so that the bang in it falls on the strike — no
+  // wait at all when it starts with the whoosh.
+  const soundFrom = (caster ? sound.launchMs : sound.bangMs) - SOUND_PREROLL_MS;
+  const playable = sound.lengthMs - sound.bangMs;
+  const rumbleMs = step.sound.rumbleMs ? Math.min(step.sound.rumbleMs, playable) : playable;
+  playSound(sound.src, {
+    volume: step.sound.volume,
+    startMs: soundFrom,
+    durationMs: sound.bangMs - soundFrom + rumbleMs,
+    fadeOutMs: rumbleMs < playable ? Math.min(SOUND_FADE_MS, rumbleMs / 2) : 0,
+    delayMs: strikeMs - (sound.bangMs - soundFrom)
+  });
 
   flashLight(shot, step, { strikeMs, coolMs, fireOutMs, endMs }).catch(report);
   if (step.dazzle) dazzle({ ...step.dazzle, delayMs: strikeMs });

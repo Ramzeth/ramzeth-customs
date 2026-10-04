@@ -18,11 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   is a step up: the fire goes from orange through amber, gold and white to
   blinding white edged in blue and then violet; it grows from short of the
   burst's edge to well past it; a short blast becomes a long one with a glow.
-  From rank 4 every screen at the table is dazzled for a moment, harder with
-  every rank, until at rank 10 the whole screen goes white. From rank 5 it
-  leaves its mark, more of it with every rank: a flash of real light over the
-  scene and glowing cracks in the ground; a shockwave from rank 6; the
-  fireball blazing on at ranks 8 and 9; red-hot ground from rank 9. Uses
+  At every rank a real light flares over the scene with the strike, reaching
+  further with every rank, and dies down with the fire — ember-orange while
+  the ground still smoulders. From rank 4 every screen at the table is
+  dazzled for a moment, harder with every rank, until at rank 10 the whole
+  screen goes white. From rank 5 it leaves its mark, more of it with every
+  rank: glowing cracks in the ground; a shockwave from rank 6; the fireball
+  blazing on at ranks 8 and 9; red-hot ground from rank 9. Uses
   free JB2A animations, copied into `Data/ASSETS/Animations/` with JB2A's own
   folders.
 - Screen shake with the fireball's blast: none at rank 3, harder and longer

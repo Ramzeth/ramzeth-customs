@@ -117,17 +117,20 @@ const GROUND_FADE_OUT_MS = 1500;
 // The flash is a real light, placed by the active GM and taken away again, so
 // that the scene itself lights up around the blast — in a dark scene it shows
 // whatever it lights, and what it shows is explored. A new light takes a trip
-// to the server to appear, so it is put up a moment ahead of the strike. It
-// dies away in steps, each a fraction of its radius at a fraction of its
-// time: every step is an update all clients apply, and a few are enough for
-// a flash. Lights left behind by a flash that never finished — the GM gone
-// in the middle of it — are swept away when the GM next loads the scene.
+// to the server to appear, so it is put up a moment ahead of the strike.
+//
+// It lasts as long as the fire does, and follows it down in steps — each an
+// update every client applies, so only a few: at full size with the strike,
+// smaller as the blast cools, and once only the ground is left burning,
+// smaller again and the orange of embers, until the last of the ground is
+// out. Lights left behind by a flash that never finished — the GM gone in
+// the middle of it — are swept away when the GM next loads the scene.
 const FLASH_LEAD_MS = 100;
-const FLASH_FADE = [
-  { at: 0.3, scale: 0.75 },
-  { at: 0.6, scale: 0.5 },
-  { at: 0.85, scale: 0.25 }
-];
+const FLASH_COOLING_SCALE = 0.7;
+const FLASH_FADING_SCALE = 0.4;
+const FLASH_EMBERS_SCALE = 0.45;
+const FLASH_EMBERS_LAST_SCALE = 0.25;
+const EMBER_COLOUR = 0xff7a30;
 
 // Each sound file holds two events: the launch, a whoosh that swells from
 // launchMs, and the bang, whose attack begins at bangMs and peaks within
@@ -195,10 +198,11 @@ function strikeAfterLaunch(sound) {
 //
 // afterglowMs: how long the fireball keeps blazing after the blast cools.
 //
-// flash: a real light at the strike, in the colour of the rank's glow. feet
-// is how far past the edge of the burst its bright light reaches; its dim
-// light reaches as far again. luminosity and alpha (the light's colour
-// intensity) are Foundry's own; ms is how long it takes to die away.
+// flash: a real light at the strike, in the colour of the rank's glow, or
+// its own color where the rank has no glow. feet is how far past the edge of
+// the burst its bright light reaches; its dim light reaches as far again.
+// luminosity and alpha (the light's colour intensity) are Foundry's own. It
+// lasts as long as the fire.
 //
 // dazzle: every screen overexposed at the strike, rising evenly from none at
 // rank 3 to the whole screen plain white at rank 10. brightness multiplies
@@ -216,7 +220,7 @@ const RANKS = [
     ring: null,
     ground: null,
     afterglowMs: 0,
-    flash: null,
+    flash: { feet: 5, color: 0xff8a3a, luminosity: 0.55, alpha: 0.45 },
     dazzle: null
   },
   { // 4: light orange; the first shake and the first dazzle.
@@ -227,10 +231,10 @@ const RANKS = [
     ring: null,
     ground: null,
     afterglowMs: 0,
-    flash: null,
+    flash: { feet: 8, color: 0xff9c48, luminosity: 0.58, alpha: 0.48 },
     dazzle: { brightness: 1.3, holdMs: 60, fadeMs: 400 }
   },
-  { // 5: amber; a first glow and flash, and the ground cracks.
+  { // 5: amber; a first glow, and the ground cracks.
     colour: { tint: 0xffb450, saturate: 0.1, brightness: 1.07, glow: { color: 0xffa040, distance: 8, outerStrength: 1.5 } },
     blast: { cover: 0.78, rate: 1.1, ms: 2600 },
     sound: { file: "normal", volume: 0.43, rumbleMs: 3000 },
@@ -238,7 +242,7 @@ const RANKS = [
     ring: null,
     ground: { file: "cracksCompact", cover: 0.6, lingerMs: 3000 },
     afterglowMs: 0,
-    flash: { feet: 10, luminosity: 0.6, alpha: 0.5, ms: 600 },
+    flash: { feet: 10, luminosity: 0.6, alpha: 0.5 },
     dazzle: { brightness: 1.7, saturate: 0.9, holdMs: 70, fadeMs: 600 }
   },
   { // 6: gold, played out in full; a shockwave.
@@ -249,7 +253,7 @@ const RANKS = [
     ring: { cover: 0.85, opacity: 0.5, colour: { hue: 183, saturate: 0.2, brightness: 1.12 } },
     ground: { file: "cracksWide", cover: 0.8, lingerMs: 3500 },
     afterglowMs: 0,
-    flash: { feet: 20, luminosity: 0.65, alpha: 0.55, ms: 800 },
+    flash: { feet: 20, luminosity: 0.65, alpha: 0.55 },
     dazzle: { brightness: 2.2, contrast: 0.95, saturate: 0.85, holdMs: 80, fadeMs: 800 }
   },
   { // 7: pale yellow, and a heavier sound; the fire and the shockwave reach
@@ -261,7 +265,7 @@ const RANKS = [
     ring: { cover: 1.0, opacity: 0.7, colour: { hue: 188, saturate: -0.3, brightness: 1.2 } },
     ground: { file: "cracksDense", cover: 0.9, lingerMs: 4000 },
     afterglowMs: 0,
-    flash: { feet: 30, luminosity: 0.7, alpha: 0.6, ms: 1000 },
+    flash: { feet: 30, luminosity: 0.7, alpha: 0.6 },
     dazzle: { brightness: 2.8, contrast: 0.9, saturate: 0.8, holdMs: 100, fadeMs: 1000 }
   },
   { // 8: white-hot, and still blazing after.
@@ -272,7 +276,7 @@ const RANKS = [
     ring: { cover: 1.1, opacity: 0.85, colour: { saturate: -0.7, brightness: 1.3 } },
     ground: { file: "cracksDense", cover: 1.0, lingerMs: 5000 },
     afterglowMs: 1500,
-    flash: { feet: 45, luminosity: 0.8, alpha: 0.6, ms: 1300 },
+    flash: { feet: 45, luminosity: 0.8, alpha: 0.6 },
     dazzle: { brightness: 3.5, contrast: 0.83, saturate: 0.7, holdMs: 120, fadeMs: 1300 }
   },
   { // 9: white, edged in blue, with the deepest sound; the ground under it
@@ -284,7 +288,7 @@ const RANKS = [
     ring: { cover: 1.3, opacity: 1, colour: { hue: 5, saturate: -0.2, brightness: 1.45 } },
     ground: { file: "scorched", cover: 1.0, lingerMs: 6000 },
     afterglowMs: 2500,
-    flash: { feet: 70, luminosity: 0.9, alpha: 0.65, ms: 1600 },
+    flash: { feet: 70, luminosity: 0.9, alpha: 0.65 },
     dazzle: { brightness: 4.5, contrast: 0.73, saturate: 0.6, holdMs: 160, fadeMs: 1700 }
   },
   { // 10: blinding white plasma edged in blue-violet, well past the burst,
@@ -297,7 +301,7 @@ const RANKS = [
     ring: { cover: 1.5, opacity: 1, colour: { hue: 30, saturate: 0.3, brightness: 1.55 } },
     ground: { file: "scorched", cover: 1.0, lingerMs: 7000 },
     afterglowMs: 0,
-    flash: { feet: 100, luminosity: 1.0, alpha: 0.7, ms: 2000 },
+    flash: { feet: 100, luminosity: 1.0, alpha: 0.7 },
     dazzle: { brightness: 6, contrast: 0, saturate: 0, holdMs: 300, fadeMs: 2500 }
   }
 ];
@@ -377,36 +381,55 @@ function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// The rank's flash: a light put up at the strike, shrunk step by step and
-// taken away. Gives up quietly if someone deletes it first.
-async function flashLight({ scene, centre, radius }, step, strikeMs) {
+function cssColour(colour) {
+  return `#${colour.toString(16).padStart(6, "0")}`;
+}
+
+// The rank's flash, put up at the strike and stepped down with the fire.
+// The times are from the start of the sequence: strikeMs, coolMs when the
+// blast starts to cool, fireOutMs when the fire above the ground is out, and
+// endMs when the ground is out too — the same as fireOutMs where there is no
+// ground. Gives up quietly if someone deletes the light first.
+async function flashLight({ scene, centre, radius }, step, { strikeMs, coolMs, fireOutMs, endMs }) {
   const { flash } = step;
   const bright = radius / scene.grid.size * scene.grid.distance + flash.feet;
   const dim = bright + flash.feet;
-  const colour = step.colour.glow?.color ?? 0xffffff;
+  const ember = { "config.color": cssColour(EMBER_COLOUR), "config.luminosity": 0.5 };
+  const sized = (scale) => ({ "config.bright": bright * scale, "config.dim": dim * scale });
 
-  await wait(Math.max(strikeMs - FLASH_LEAD_MS, 0));
+  const steps = [{ atMs: coolMs, change: sized(FLASH_COOLING_SCALE) }];
+  if (endMs > fireOutMs) {
+    steps.push(
+      { atMs: fireOutMs, change: { ...sized(FLASH_EMBERS_SCALE), ...ember } },
+      { atMs: (fireOutMs + endMs) / 2, change: sized(FLASH_EMBERS_LAST_SCALE) }
+    );
+  } else {
+    steps.push({ atMs: (coolMs + endMs) / 2, change: sized(FLASH_FADING_SCALE) });
+  }
+
+  const start = Date.now();
+  const until = (atMs) => wait(Math.max(start + atMs - Date.now(), 0));
+
+  await until(strikeMs - FLASH_LEAD_MS);
   const [light] = await scene.createEmbeddedDocuments("AmbientLight", [{
     x: centre.x,
     y: centre.y,
     config: {
       bright,
       dim,
-      color: `#${colour.toString(16).padStart(6, "0")}`,
+      color: cssColour(flash.color ?? step.colour.glow?.color ?? 0xffffff),
       alpha: flash.alpha,
       luminosity: flash.luminosity
     },
     flags: { [MOD]: { flash: true } }
   }]);
 
-  let elapsed = 0;
-  for (const { at, scale } of FLASH_FADE) {
-    await wait(flash.ms * at - elapsed);
-    elapsed = flash.ms * at;
+  for (const { atMs, change } of steps) {
+    await until(atMs);
     if (!scene.lights.has(light.id)) return;
-    await light.update({ "config.bright": bright * scale, "config.dim": dim * scale });
+    await light.update(change);
   }
-  await wait(flash.ms - elapsed);
+  await until(endMs);
   if (scene.lights.has(light.id)) await light.delete();
 }
 
@@ -537,6 +560,8 @@ async function playFireball(shot) {
   const coolMs = blastMs + EXPLOSION_COOLING_MS / rate;
   const blastEndMs = blastMs + (step.blast.ms || EXPLOSION_GONE_MS / rate);
   const afterglowEndMs = step.afterglowMs ? coolMs + step.afterglowMs : 0;
+  const fireOutMs = Math.max(blastEndMs, afterglowEndMs);
+  const endMs = fireOutMs + (step.ground?.lingerMs ?? 0);
 
   if (caster) {
     const from = caster.getCenterPoint();
@@ -608,13 +633,12 @@ async function playFireball(shot) {
   // after it is out.
   if (step.ground) {
     const ground = GROUND[step.ground.file];
-    const fireOutMs = Math.max(blastEndMs, afterglowEndMs);
     seq.effect()
       .file(ground.src)
       .delay(coolMs)
       .atLocation(centre)
       .size(diameterSquares * step.ground.cover / ground.reach, { gridUnits: true })
-      .duration(fireOutMs + step.ground.lingerMs - coolMs)
+      .duration(endMs - coolMs)
       .fadeIn(GROUND_FADE_IN_MS)
       .fadeOut(GROUND_FADE_OUT_MS)
       .randomRotation()
@@ -622,7 +646,7 @@ async function playFireball(shot) {
       .zIndex(0);
   }
 
-  if (step.flash) flashLight(shot, step, strikeMs).catch(report);
+  flashLight(shot, step, { strikeMs, coolMs, fireOutMs, endMs }).catch(report);
   if (step.dazzle) dazzle({ ...step.dazzle, delayMs: strikeMs });
   await seq.play();
 }

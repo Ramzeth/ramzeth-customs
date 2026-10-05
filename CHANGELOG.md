@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Wall of Stone: each section is shut in a rectangle of terrain walls around
+  the stone drawn on its tile, its axis on the grid edge, instead of a single
+  wall on the edge. The inside of the stone is now in view from either side,
+  so a section's token can be seen and targeted, while nothing beyond the
+  wall can be seen through it and nothing passes. Sections built before keep
+  their single wall until the wall is demolished and built again.
+
 ## [1.4.0] - 2026-10-05
 
 ### Added

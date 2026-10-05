@@ -28,6 +28,16 @@ const TILE_TEXTURE = ASSETS.wallOfStone.wallTile;
 // showing where two squares meet.
 const TILE_OVERLAP = 1.1;
 
+// How thick the stone is drawn in the tile's picture, as a share of one
+// square — the tile itself is a whole square deep, the wall in it is not.
+// Each section is shut in a rectangle of walls this thick, its axis on the
+// grid edge, so the walls follow the stone the table sees rather than the
+// edge. It falls well short of a square, so the rectangle stays clear of the
+// centres of the squares either side and tokens can still step up to the
+// wall. Measured on the image: the stone is a solid band 64 pixels deep,
+// centred, in the 200-pixel picture.
+const STONE_THICKNESS = 0.32;
+
 // Left behind when a section is destroyed. Covers the two squares either side
 // of where the wall stood, so it is laid across the wall rather than along it.
 const RUBBLE_TEXTURE = ASSETS.wallOfStone.rubble;
@@ -244,8 +254,9 @@ async function destroySegment(scene, segmentId, { includeToken = true } = {}) {
   // gone, and no rubble is added a second time.
   const wall = walls[0];
   const castId = wall?.getFlag(MOD, "castId") ?? tiles[0]?.getFlag(MOD, "castId");
-  const line = wall
-    ? { a: { x: wall.c[0], y: wall.c[1] }, b: { x: wall.c[2], y: wall.c[3] } }
+  const axis = wall ? axisOf(wall) : null;
+  const line = axis
+    ? { a: { x: axis[0], y: axis[1] }, b: { x: axis[2], y: axis[3] } }
     : null;
 
   if (walls.length) await scene.deleteEmbeddedDocuments("Wall", walls.map((d) => d.id));
@@ -405,8 +416,41 @@ function edgeKey(a, b) {
     : `${b.x},${b.y},${a.x},${a.y}`;
 }
 
-// Commits the draft: every section standing right now becomes a wall, a tile
-// and a token, and the draft is then cleared.
+// The grid edge a section's walls stand on, as [ax, ay, bx, by]. Kept in the
+// walls' flags, since none of the four walls lies on the edge itself. A wall
+// built before the rectangles came in is a single wall on the edge, and its
+// own coordinates are the axis.
+function axisOf(wall) {
+  return wall.getFlag(MOD, "axis") ?? wall.c;
+}
+
+// The four walls shutting a section in: a rectangle STONE_THICKNESS of a
+// square thick, centred on the edge from a to b. Worked from the edge's own
+// direction, so a wall at any angle is boxed the same way.
+function stoneOutline(a, b) {
+  const length = Math.hypot(b.x - a.x, b.y - a.y) || 1;
+  const half = canvas.grid.size * STONE_THICKNESS / 2;
+  const nx = -(b.y - a.y) / length * half;
+  const ny = (b.x - a.x) / length * half;
+  const corners = [
+    [a.x + nx, a.y + ny], [b.x + nx, b.y + ny],
+    [b.x - nx, b.y - ny], [a.x - nx, a.y - ny]
+  ].map(([x, y]) => [Math.round(x), Math.round(y)]);
+  return corners.map((p, i) => [...p, ...corners[(i + 1) % 4]]);
+}
+
+// Terrain walls: limited for sight, light and sound, normal for movement. A
+// limited wall stops only what has already passed through another one. From
+// outside, a line of sight into the stone crosses one wall, so the inside is
+// in view — the section's token can be seen and targeted — while one to the
+// far side crosses two and is stopped. Nothing walks through any of them.
+function stoneWall(c, flags) {
+  const { LIMITED } = CONST.WALL_SENSE_TYPES;
+  return { c, sight: LIMITED, light: LIMITED, sound: LIMITED, move: CONST.WALL_MOVEMENT_TYPES.NORMAL, flags };
+}
+
+// Commits the draft: every section standing right now becomes a rectangle of
+// walls, a tile and a token, and the draft is then cleared.
 //
 // It adds rather than rebuilds. The draft does not survive the commit — the
 // grey lines would sit on top of the finished stone — so there is nothing to
@@ -414,32 +458,30 @@ function edgeKey(a, b) {
 // makes the button safe to press again after the player has added a few more
 // sections: the new ones join the wall instead of replacing it.
 //
-// Walls already up therefore seed both the duplicate check and the budget,
-// or a second pass would stack a second wall on an edge that already has one
-// and walk straight past 120 feet.
+// Sections already up therefore seed both the duplicate check and the
+// budget, or a second pass would stack a second wall on an edge that already
+// has one and walk straight past 120 feet. A section is four walls, so they
+// are counted by section, not by wall.
 //
-// Wall, tile and token are built in the same pass so that the geometry, the
-// deduplication and the budget are applied to all three exactly once.
-//
-// Walls are created with defaults on purpose: a plain Foundry wall already
-// blocks movement, sight, light and sound in both directions, which is what a
-// wall of stone does.
+// Walls, tile and token are built in the same pass so that the geometry, the
+// deduplication and the budget are applied to all of them exactly once.
 async function build(messageId) {
   const sections = collectSections(messageId);
   if (!sections.length) return { created: 0, overflow: 0, standing: 0 };
 
   const actor = await ensureSectionActor(messageId);
 
-  const standing = canvas.scene.walls
-    .filter((w) => w.getFlag(MOD, "castId") === messageId);
-  const seen = new Set(standing.map((w) => edgeKey(
-    { x: w.c[0], y: w.c[1] },
-    { x: w.c[2], y: w.c[3] }
-  )));
+  const standing = new Map();
+  for (const w of canvas.scene.walls) {
+    if (w.getFlag(MOD, "castId") === messageId) standing.set(w.getFlag(MOD, "segmentId"), axisOf(w));
+  }
+  const seen = new Set([...standing.values()].map(([ax, ay, bx, by]) =>
+    edgeKey({ x: ax, y: ay }, { x: bx, y: by })));
 
   const walls = [];
   const tiles = [];
   const tokens = [];
+  let added = 0;
   let overflow = 0;
   let limit = Infinity;
 
@@ -464,16 +506,20 @@ async function build(messageId) {
     // passes, which is why what is already standing counts towards it.
     if (limit === Infinity) limit = sectionBudget(shape);
 
-    if (standing.length + walls.length >= limit) {
+    if (standing.size + added >= limit) {
       overflow++;
       continue;
     }
+    added++;
 
-    // The wall, the tile and the token of one section share an id, which is
-    // what lets the section be destroyed as a unit later.
-    const flags = { [MOD]: { castId: messageId, segmentId: foundry.utils.randomID() } };
+    // The walls, the tile and the token of one section share an id, which is
+    // what lets the section be destroyed as a unit later; the edge it stands
+    // on goes with them.
+    const flags = {
+      [MOD]: { castId: messageId, segmentId: foundry.utils.randomID(), axis: [a.x, a.y, b.x, b.y] }
+    };
 
-    walls.push({ c: [a.x, a.y, b.x, b.y], flags });
+    walls.push(...stoneOutline(a, b).map((c) => stoneWall(c, flags)));
 
     // The art is a 1×1 asset and is never stretched: it always covers exactly
     // one grid square, whatever the section length is.
@@ -533,7 +579,7 @@ async function build(messageId) {
   // top of the finished stone.
   await deleteSections(messageId);
 
-  return { created: walls.length, overflow, standing: standing.length };
+  return { created: added, overflow, standing: standing.size };
 }
 
 /* -------------------------------------------- */

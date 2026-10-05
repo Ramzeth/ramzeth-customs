@@ -102,9 +102,16 @@ const BOLT_FADE_MS = 80;
 // gathers speed; BOLT_PATH is where its head is — as a share of the path —
 // at a quarter, a half and three quarters of its flight, measured on the
 // files, so the light keeps pace with it. BEAD_LIGHT is the small glow's
-// bright and dim radius, in feet.
+// bright and dim radius, in feet — wide enough that the light it throws
+// still reaches the bolt between one redraw of it and the next.
 const BOLT_PATH = [[0.25, 0.13], [0.5, 0.37], [0.75, 0.67]];
-const BEAD_LIGHT = { bright: 5, dim: 10 };
+const BEAD_LIGHT = { bright: 10, dim: 20 };
+
+// Fire gives its own light, so the bead, the bolt, the blast and the
+// shockwave are drawn above the scene's lighting: on a dark map they show
+// whether or not a light falls on them. What lies on the ground — cracks,
+// red-hot earth, the blazing ball left behind under the tokens — stays in
+// the scene's light, which the flash supplies.
 
 // The explosion file, measured frame by frame (24 fps, 4 s): a spark at the
 // centre for two frames, then the fireball bursts out at 0.08 s and fills its
@@ -363,6 +370,7 @@ export function registerFireball() {
   // Capturing, so the press is seen before PF2e acts on it.
   document.addEventListener("click", onButtonPressed, true);
   Hooks.on("preCreateChatMessage", markDamageCard);
+  Hooks.on("createRegion", preloadAnimations);
   Hooks.on("createRegion", onFireballPlaced);
   Hooks.on("createChatMessage", onDamageRolled);
   Hooks.on("diceSoNiceMessageProcessed", onDiceProcessed);
@@ -531,6 +539,27 @@ function markDamageCard(message) {
   pressed = null;
 }
 
+function isFireballTemplate(region) {
+  return (region.flags?.pf2e?.origin?.rollOptions ?? []).includes(SLUG);
+}
+
+// Every client begins loading the fireball's animations the moment its
+// template is placed, in the seconds before the damage is rolled and the
+// dice land. Sequencer otherwise fetches a file only when it is first played,
+// and a bolt that flies for a second was over before its file arrived the
+// first time a client saw one. Files already loaded are not fetched again.
+function preloadAnimations(region) {
+  if (!isFireballTemplate(region)) return;
+  const fb = ASSETS.fireball;
+  const files = [
+    fb.explosion, fb.afterglow, fb.shockwave,
+    fb.cracksCompact, fb.cracksWide, fb.cracksDense, fb.scorched,
+    ...fb.beams.map((b) => b.src), ...fb.bolts.map((b) => b.src)
+  ];
+  Promise.resolve(Sequencer.Preloader.preload(files))
+    .catch((err) => console.warn(`${MOD} | fireball preload`, err));
+}
+
 // Placing the template and rolling the damage are things every client hears
 // about. The GMs keep track of them; only the active GM plays the fireball,
 // and Sequencer shows it to everyone. A template placed again from the same
@@ -538,7 +567,7 @@ function markDamageCard(message) {
 function onFireballPlaced(region) {
   if (!game.user.isGM) return;
   const card = region.flags?.pf2e?.messageId;
-  if (!(region.flags?.pf2e?.origin?.rollOptions ?? []).includes(SLUG) || !card) return;
+  if (!isFireballTemplate(region) || !card) return;
   placed.set(card, shotOf(region));
 }
 
@@ -642,7 +671,8 @@ async function playFireball(shot) {
       .fadeOut(BOLT_FADE_MS)
       .atLocation(from)
       .stretchTo(centre)
-      .template(BEAM_TEMPLATE);
+      .template(BEAM_TEMPLATE)
+      .aboveLighting();
 
     // The bolt, flying the whole whoosh and landing on the bang.
     const bolt = boltFor(feet);
@@ -654,7 +684,8 @@ async function playFireball(shot) {
       .fadeOut(BOLT_FADE_MS)
       .atLocation(from)
       .stretchTo(centre)
-      .template(BEAM_TEMPLATE);
+      .template(BEAM_TEMPLATE)
+      .aboveLighting();
   }
 
   const users = shakeUsers();
@@ -672,7 +703,8 @@ async function playFireball(shot) {
       .atLocation(centre)
       .size(diameterSquares * step.ring.cover / RING_REACH, { gridUnits: true })
       .opacity(step.ring.opacity)
-      .zIndex(0);
+      .zIndex(0)
+      .aboveLighting();
   }
 
   const blast = paint(seq.effect(), step.colour)
@@ -682,7 +714,8 @@ async function playFireball(shot) {
     .size(size, { gridUnits: true })
     .playbackRate(rate)
     .randomRotation()
-    .zIndex(1);
+    .zIndex(1)
+    .aboveLighting();
   if (step.blast.ms) blast.duration(step.blast.ms).fadeOut(BLAST_FADE_MS);
 
   if (step.afterglowMs) {

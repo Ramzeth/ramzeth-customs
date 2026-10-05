@@ -28,8 +28,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   starts to clear. From rank 5 it leaves its mark, more of it
   with every rank: glowing cracks in the ground; a shockwave from rank 6; the
   fireball blazing on from rank 8, spreading wider and thinner as it burns
-  out; red-hot ground from rank 9. The bolt is JB2A's Fire Bolt, copied into
-  `Data/ASSETS/Animations/Cantrip/Fire_Bolt/`. Uses free JB2A
+  out; red-hot ground from rank 9. The fire is drawn above the scene's
+  lighting, so it shows on a dark map whether or not a light falls on it.
+  Every client starts loading the animations as soon as the template is
+  placed, so even the first fireball of a session plays in full. The bolt is
+  JB2A's Fire Bolt, copied into `Data/ASSETS/Animations/Cantrip/Fire_Bolt/`.
+  Uses free JB2A
   animations, copied into `Data/ASSETS/Animations/` with JB2A's own folders.
 - Screen shake with the fireball's blast: none at rank 3, harder and longer
   with every rank above. Users flagged `noShake` are left out — meant for a

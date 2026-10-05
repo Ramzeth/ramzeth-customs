@@ -128,8 +128,9 @@ function dazzleHere({ brightness, contrast = 1, saturate = 1, holdMs, fadeMs, de
 
 // A light in the scene changed smoothly over time on every client, without a
 // save to the server at each step. keyframes are moments counted from now,
-// each with the light's bright and dim radius, colour (a number) and
-// luminosity; between them every value moves in a straight line. The light
+// each with the light's position (x, y), bright and dim radius, colour (a
+// number) and luminosity; between them every value moves in a straight line,
+// so a light can be carried across the map as well as dimmed. The light
 // as saved stays as it was: only each client's own copy changes, redrawn
 // about fifteen times a second. Whoever made the light still owns its end
 // and deletes it.
@@ -167,13 +168,24 @@ function lightAt(keyframes, ms) {
   const channel = (c, shift) => (c >> shift) & 255;
   const color = [16, 8, 0].reduce(
     (sum, shift) => sum + (Math.round(mix(channel(a.color, shift), channel(b.color, shift))) << shift), 0);
-  return { bright: mix(a.bright, b.bright), dim: mix(a.dim, b.dim), luminosity: mix(a.luminosity, b.luminosity), color };
+  return {
+    x: mix(a.x, b.x),
+    y: mix(a.y, b.y),
+    bright: mix(a.bright, b.bright),
+    dim: mix(a.dim, b.dim),
+    luminosity: mix(a.luminosity, b.luminosity),
+    color
+  };
 }
 
 // False when the light cannot be redrawn this way, which ends the fade.
-function redraw(light, { bright, dim, color, luminosity }) {
+function redraw(light, { x, y, bright, dim, color, luminosity }) {
   if (typeof light.object.initializeLightSource !== "function") return false;
-  light.updateSource({ config: { bright, dim, luminosity, color: `#${color.toString(16).padStart(6, "0")}` } });
+  light.updateSource({
+    x,
+    y,
+    config: { bright, dim, luminosity, color: `#${color.toString(16).padStart(6, "0")}` }
+  });
   light.object.initializeLightSource();
   canvas.perception.update({ refreshLighting: true, refreshVision: true });
   return true;

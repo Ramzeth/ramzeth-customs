@@ -54,13 +54,39 @@ const PRESS_HELD_MS = 120000;
 const BURST_RADIUS_FEET = 20;
 
 // How a JB2A beam file is laid out, in the file's own pixels — nothing here
-// refers to the scene's grid. gridSize is how many file pixels make one
-// square: Sequencer divides the scene's square by it to scale the file, so
-// the beam is two squares thick on any scene. startPoint and endPoint are the
-// run-up before the path begins and after it ends; without them the whole
-// file, padding included, would be stretched between the two points and the
-// bead would start short of the caster and land short of the centre.
-const BEAM_TEMPLATE = { gridSize: 200, startPoint: 200, endPoint: 200 };
+// refers to the scene's grid. The files are drawn at 200 pixels a square.
+// gridSize is how many file pixels make one square: Sequencer divides the
+// scene's square by it to scale the file across, while stretchTo fits it
+// lengthwise between caster and target — so telling it fewer pixels than the
+// file's own makes the streak thicker without making it any longer. As
+// drawn it is a thin line, hard to see; BEAM_THICKNESS widens it — at 2 the
+// file is drawn at 100 pixels a square, twice as thick as drawn.
+// startPoint and endPoint are the run-up before the path begins and after it
+// ends; without them the whole file, padding included, would be stretched
+// between the two points and the bead would start short of the caster and
+// land short of the centre.
+const BEAM_THICKNESS = 2;
+const BEAM_TEMPLATE = { gridSize: 200 / BEAM_THICKNESS, startPoint: 200, endPoint: 200 };
+
+// The streak glows at every rank, so it reads even where the rank's fire has
+// no glow of its own; a rank with one lends it.
+const BEAM_GLOW = { distance: 10, outerStrength: 3 };
+
+// How long the bead is seen growing, silently, at the caster's hand before it
+// streaks off. The whoosh in the sound starts with the streak and carries it
+// to the point; the blast blossoms with the bang: a streak to the point, then
+// the explosion, as the spell itself has it.
+const BEAD_SHOWN_MS = 400;
+
+// The streak itself does not travel: it flashes across the whole path in a
+// frame and then draws in to the point it struck. The flight is told by the
+// light instead — a small glow at the caster's hand while the bead grows,
+// carried along the streak to the point over STREAK_MS as the streak draws
+// in and the whoosh swells, glowing there through the pause, and flaring to
+// the full flash at the bang. BEAD_LIGHT is that small glow's bright and dim
+// radius, in feet.
+const STREAK_MS = 250;
+const BEAD_LIGHT = { bright: 5, dim: 10 };
 
 // When, from the start of a beam file, the bead strikes. A beam file runs
 // 4 s, but the flight is only a moment of it: the bead grows at the caster's
@@ -141,6 +167,7 @@ const GROUND_FADE_OUT_MS = 1500;
 // left behind by a flash that never finished — the GM gone in the middle of
 // it — are swept away when the GM next loads the scene.
 const FLASH_LEAD_MS = 100;
+const FLASH_RISE_MS = 120;
 const FLASH_ATTENUATION = 1;
 const FLASH_COOLING_SCALE = 0.7;
 const FLASH_EMBERS_SCALE = 0.45;
@@ -150,9 +177,10 @@ const EMBER_COLOUR = 0xff7a30;
 // launchMs, and the bang, whose attack begins at bangMs and peaks within
 // 30 ms. Measured on the source; the heavy and huge versions are the source
 // slowed to 0.88 and 0.78 of its speed, which moves both events later by the
-// same proportion. A sound is played as one piece, started a few milliseconds
-// ahead of the whoosh so its attack is not clipped. Cast from off the map
-// there is nothing to launch, and it starts just ahead of the bang instead.
+// same proportion. A sound is played as one piece,
+// started a few milliseconds ahead of the whoosh so its attack is not
+// clipped. Cast from off the map there is nothing to launch, and it starts
+// just ahead of the bang instead.
 //
 // lengthMs is where the rumble has died away, inside the file. A rank that
 // cuts the rumble short fades it over at most SOUND_FADE_MS.
@@ -166,16 +194,6 @@ const SOUNDS = {
 };
 const SOUND_PREROLL_MS = 10;
 const SOUND_FADE_MS = 1500;
-
-// The sound sets the pace. Started with the sequence, it reaches the bang
-// this long after, and that is when the bead must strike: the blast, the bang
-// and the shake all begin there. The beam file is started far enough in for
-// its bead to strike at that moment, which drops the first half of the bead
-// growing at the hand — two seconds of it would leave the table waiting, and
-// the whoosh would be over long before anything flew.
-function strikeAfterLaunch(sound) {
-  return sound.bangMs - (sound.launchMs - SOUND_PREROLL_MS);
-}
 
 // One step per rank, 3 to 10. Chosen at the table from rendered previews of
 // the files.
@@ -398,49 +416,58 @@ function cssColour(colour) {
   return `#${colour.toString(16).padStart(6, "0")}`;
 }
 
-// The rank's flash, put up at the strike and eased down with the fire. The
-// times are from the start of the sequence: strikeMs, coolMs when the blast
-// starts to cool, fireOutMs when the fire above the ground is out, and endMs
-// when the ground is out too — the same as fireOutMs where there is no
-// ground. Gives up quietly if someone deletes the light first.
-async function flashLight({ scene, centre, radius }, step, { strikeMs, coolMs, fireOutMs, endMs }) {
+// The rank's light, from the bead to the last of the fire. The times are from
+// the start of the sequence: streakMs when the bead streaks off, strikeMs the
+// bang, coolMs when the blast starts to cool, fireOutMs when the fire above
+// the ground is out, and endMs when the ground is out too — the same as
+// fireOutMs where there is no ground. from is the caster's hand, or null
+// when cast from off the map: then there is no bead, and the light goes up
+// at the strike already at full. Gives up quietly if someone deletes the
+// light first.
+async function flashLight({ scene, centre, radius }, step, from, { streakMs, strikeMs, coolMs, fireOutMs, endMs }) {
   const { flash } = step;
   const bright = radius / scene.grid.size * scene.grid.distance + flash.feet;
   const dim = bright + flash.feet;
   const colour = flash.color ?? step.colour.glow?.color ?? 0xffffff;
 
+  // Every moment of the light, in sequence time.
+  const bead = (ms, at) =>
+    ({ atMs: ms, x: at.x, y: at.y, ...BEAD_LIGHT, color: colour, luminosity: 0.5 });
+  const fire = (ms, scale, color = colour, luminosity = flash.luminosity) =>
+    ({ atMs: ms, x: centre.x, y: centre.y, bright: bright * scale, dim: dim * scale, color, luminosity });
+  const moments = from
+    ? [bead(0, from), bead(streakMs, from), bead(streakMs + STREAK_MS, centre), bead(strikeMs, centre),
+      fire(strikeMs + FLASH_RISE_MS, 1)]
+    : [fire(strikeMs, 1)];
+  moments.push(fire(coolMs, FLASH_COOLING_SCALE));
+  if (endMs > fireOutMs) {
+    moments.push(fire(fireOutMs, FLASH_EMBERS_SCALE, EMBER_COLOUR, 0.5), fire(endMs, 0, EMBER_COLOUR, 0.5));
+  } else {
+    moments.push(fire(endMs, 0));
+  }
+
   const start = Date.now();
   const until = (atMs) => wait(start + atMs - Date.now());
 
-  await until(strikeMs - FLASH_LEAD_MS);
+  const first = moments[0];
+  await until(first.atMs - FLASH_LEAD_MS);
   const [light] = await scene.createEmbeddedDocuments("AmbientLight", [{
-    x: centre.x,
-    y: centre.y,
+    x: first.x,
+    y: first.y,
     config: {
-      bright,
-      dim,
-      color: cssColour(colour),
+      bright: first.bright,
+      dim: first.dim,
+      color: cssColour(first.color),
       alpha: flash.alpha,
-      luminosity: flash.luminosity,
+      luminosity: first.luminosity,
       attenuation: FLASH_ATTENUATION
     },
     flags: { [MOD]: { flash: true } }
   }]);
 
-  // The fade's moments, counted from now that the light is up.
+  // Counted from now that the light is up.
   const now = Date.now() - start;
-  const at = (ms, scale, color, luminosity) =>
-    ({ atMs: ms - now, bright: bright * scale, dim: dim * scale, color, luminosity });
-  const keyframes = [
-    at(now, 1, colour, flash.luminosity),
-    at(coolMs, FLASH_COOLING_SCALE, colour, flash.luminosity)
-  ];
-  if (endMs > fireOutMs) {
-    keyframes.push(at(fireOutMs, FLASH_EMBERS_SCALE, EMBER_COLOUR, 0.5), at(endMs, 0, EMBER_COLOUR, 0.5));
-  } else {
-    keyframes.push(at(endMs, 0, colour, flash.luminosity));
-  }
-  fadeLight(light, keyframes);
+  fadeLight(light, moments.map((m) => ({ ...m, atMs: Math.max(m.atMs - now, 0) })));
 
   await until(endMs);
   if (scene.lights.has(light.id)) await light.delete();
@@ -559,19 +586,23 @@ async function playFireball(shot) {
   const seq = new Sequence();
 
   // Everything is added without waiting, so it all starts together, and each
-  // part is held back to its own moment. strikeMs is the bang: the bead
-  // reaches the centre, the screen flashes, the light flares and the view
-  // shakes. revealMs is when the fireball bursts out of the flash, with its
-  // shockwave — at the strike itself where the rank does not dazzle — and
-  // everything the fire leaves follows from there. The explosion's speed
-  // changes with the rank, and its burst-out with it. The beam file plays on
-  // past the strike — its own flash and fading trail run under the blast.
-  // Cast from off the map there is no flight, and the strike comes as soon as
-  // the explosion can reach it.
+  // part is held back to its own moment. The bead shows at the caster's hand
+  // first, in silence; at streakMs it streaks to the centre, and the sound
+  // starts on it with the whoosh. strikeMs is the bang, as long after the
+  // whoosh as the sound has it: the screen flashes, the light flares and the
+  // view shakes. revealMs is when
+  // the fireball bursts out of the flash, with its shockwave — at the strike
+  // itself where the rank does not dazzle — and everything the fire leaves
+  // follows from there. The explosion's speed changes with the rank, and its
+  // burst-out with it. The beam file plays on past its streak — the flash
+  // where it lands and its fading trail fill the pause before the bang. Cast
+  // from off the map there is no flight, and the strike comes as soon as the
+  // explosion can reach it.
   const sound = SOUNDS[step.sound.file];
   const rate = step.blast.rate;
   const popMs = EXPLOSION_POP_MS / rate;
-  const strikeMs = caster ? strikeAfterLaunch(sound) : popMs;
+  const streakMs = BEAD_SHOWN_MS;
+  const strikeMs = caster ? streakMs + (sound.bangMs - sound.launchMs) : popMs;
   const revealMs = strikeMs + (step.dazzle ? step.dazzle.holdMs + step.dazzle.fadeMs * DAZZLE_REVEAL : 0);
   const blastMs = revealMs - popMs;
   const coolMs = blastMs + EXPLOSION_COOLING_MS / rate;
@@ -580,13 +611,14 @@ async function playFireball(shot) {
   const fireOutMs = Math.max(blastEndMs, afterglowEndMs);
   const endMs = fireOutMs + (step.ground?.lingerMs ?? 0);
 
-  if (caster) {
-    const from = caster.getCenterPoint();
+  const from = caster?.getCenterPoint() ?? null;
+  if (from) {
     const feet = Math.hypot(centre.x - from.x, centre.y - from.y) / grid.size * grid.distance;
 
-    paint(seq.effect(), step.colour)
+    const glow = { ...BEAM_GLOW, ...step.colour.glow, color: step.colour.glow?.color ?? step.flash.color };
+    paint(seq.effect(), { ...step.colour, glow })
       .file(beamFor(feet))
-      .startTime(BEAM_IMPACT_MS - strikeMs)
+      .startTime(BEAM_IMPACT_MS - streakMs)
       .atLocation(from)
       .stretchTo(centre)
       .template(BEAM_TEMPLATE);
@@ -664,7 +696,7 @@ async function playFireball(shot) {
     delayMs: strikeMs - (sound.bangMs - soundFrom)
   });
 
-  flashLight(shot, step, { strikeMs, coolMs, fireOutMs, endMs }).catch(report);
+  flashLight(shot, step, from, { streakMs, strikeMs, coolMs, fireOutMs, endMs }).catch(report);
   if (step.dazzle) dazzle({ ...step.dazzle, delayMs: strikeMs });
   await seq.play();
 }

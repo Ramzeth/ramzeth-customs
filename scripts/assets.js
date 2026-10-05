@@ -13,6 +13,7 @@ const STONE_COLLAPSE = "ASSETS/Sounds/Oneshots/Stone/Rock-Fall-Colosseum_Collaps
 // JB2A, free edition, copied out of the module's Library folder with its
 // folders kept.
 const FIREBALL = "ASSETS/Animations/3rd_Level/Fireball";
+const FIRE_BOLT = "ASSETS/Animations/Cantrip/Fire_Bolt";
 const GENERIC = "ASSETS/Animations/Generic";
 
 export const ASSETS = {
@@ -69,15 +70,24 @@ export const ASSETS = {
     soundHeavy: "ASSETS/Sounds/Oneshots/Fire/fireball_heavy.ogg",
     soundHuge: "ASSETS/Sounds/Oneshots/Fire/fireball_huge.ogg",
 
-    // The bead in flight, drawn at fixed lengths. Each file is its length
-    // plus 200 file pixels of run-up at either end. The one nearest the
-    // actual distance is stretched to fit it.
+    // The bead at the caster's hand and its streak, drawn at fixed lengths.
+    // Each file is its length plus 200 file pixels of run-up at either end.
+    // The one nearest the actual distance is stretched to fit it.
     beams: [
       { feet: 5,  src: `${FIREBALL}/FireballBeam_01_Orange_05ft_600x400.webm` },
       { feet: 15, src: `${FIREBALL}/FireballBeam_01_Orange_15ft_1000x400.webm` },
       { feet: 30, src: `${FIREBALL}/FireballBeam_01_Orange_30ft_1600x400.webm` },
       { feet: 60, src: `${FIREBALL}/FireballBeam_01_Orange_60ft_2800x400.webm` },
       { feet: 90, src: `${FIREBALL}/FireballBeam_01_Orange_90ft_4000x400.webm` }
+    ],
+
+    // A bolt of fire flying the path, laid out the same way.
+    bolts: [
+      { feet: 5,  src: `${FIRE_BOLT}/FireBolt_01_Regular_Orange_05ft_600x400.webm` },
+      { feet: 15, src: `${FIRE_BOLT}/FireBolt_01_Regular_Orange_15ft_1000x400.webm` },
+      { feet: 30, src: `${FIRE_BOLT}/FireBolt_01_Regular_Orange_30ft_1600x400.webm` },
+      { feet: 60, src: `${FIRE_BOLT}/FireBolt_01_Regular_Orange_60ft_2800x400.webm` },
+      { feet: 90, src: `${FIRE_BOLT}/FireBolt_01_Regular_Orange_90ft_4000x400.webm` }
     ]
   }
 };

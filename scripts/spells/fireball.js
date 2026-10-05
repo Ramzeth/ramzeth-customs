@@ -53,50 +53,58 @@ const PRESS_HELD_MS = 120000;
 // Used only if the template's own radius cannot be read.
 const BURST_RADIUS_FEET = 20;
 
-// How a JB2A beam file is laid out, in the file's own pixels — nothing here
-// refers to the scene's grid. The files are drawn at 200 pixels a square.
-// gridSize is how many file pixels make one square: Sequencer divides the
-// scene's square by it to scale the file across, while stretchTo fits it
-// lengthwise between caster and target — so telling it fewer pixels than the
-// file's own makes the streak thicker without making it any longer. As
-// drawn it is a thin line, hard to see; BEAM_THICKNESS widens it — at 2 the
-// file is drawn at 100 pixels a square, twice as thick as drawn.
-// startPoint and endPoint are the run-up before the path begins and after it
-// ends; without them the whole file, padding included, would be stretched
-// between the two points and the bead would start short of the caster and
-// land short of the centre.
+// How JB2A's beam-style files — the Fireball beam and the Fire Bolt alike —
+// are laid out, in the file's own pixels; nothing here refers to the scene's
+// grid. The files are drawn at 200 pixels a square. gridSize is how many
+// file pixels make one square: Sequencer divides the scene's square by it to
+// scale the file across, while stretchTo fits it lengthwise between caster
+// and target — so telling it fewer pixels than the file's own makes the bolt
+// thicker without making it any longer. As drawn it is thin and hard to see;
+// BEAM_THICKNESS widens it — at 2 the file is drawn at 100 pixels a square,
+// twice as thick as drawn. startPoint and endPoint are the run-up before the
+// path begins and after it ends; without them the whole file, padding
+// included, would be stretched between the two points and the bolt would
+// start short of the caster and land short of the centre.
 const BEAM_THICKNESS = 2;
 const BEAM_TEMPLATE = { gridSize: 200 / BEAM_THICKNESS, startPoint: 200, endPoint: 200 };
 
-// The streak glows at every rank, so it reads even where the rank's fire has
-// no glow of its own; a rank with one lends it.
+// The bead and the bolt glow at every rank, so they read even where the
+// rank's fire has no glow of its own; a rank with one lends it.
 const BEAM_GLOW = { distance: 10, outerStrength: 3 };
 
-// How long the bead is seen growing, silently, at the caster's hand before it
-// streaks off. The whoosh in the sound starts with the streak and carries it
-// to the point; the blast blossoms with the bang: a streak to the point, then
-// the explosion, as the spell itself has it.
+// The bead is the start of the Fireball beam file: a ball of fire growing at
+// the caster's hand for two seconds before the file's own streak, which
+// crosses the whole path in a frame and is no flight to watch. The bead is
+// shown, silently, for the last BEAD_SHOWN_MS before that streak — the file
+// is cut at BEAD_END_MS, just ahead of it, measured frame by frame on the
+// 5-foot and 90-foot files, whose first two seconds match frame for frame.
 const BEAD_SHOWN_MS = 400;
+const BEAD_END_MS = 2030;
 
-// The streak itself does not travel: it flashes across the whole path in a
-// frame and then draws in to the point it struck. The flight is told by the
-// light instead — a small glow at the caster's hand while the bead grows,
-// carried along the streak to the point over STREAK_MS as the streak draws
-// in and the whoosh swells, glowing there through the pause, and flaring to
-// the full flash at the bang. BEAD_LIGHT is that small glow's bright and dim
-// radius, in feet.
-const STREAK_MS = 250;
+// Then the bolt: JB2A's Fire Bolt, which flies the path. It is launched with
+// the whoosh in the sound and played slowed so that it lands on the bang —
+// the whole whoosh is its flight, and the blast blossoms where it lands. Its
+// arrival in each file, measured frame by frame (30 fps): the head reaches
+// the end of the path at arriveMs. The file goes on with a small blast of
+// its own there, which the fireball's replaces, so it is cut on landing.
+const BOLTS = [
+  { feet: 5, arriveMs: 170 },
+  { feet: 15, arriveMs: 320 },
+  { feet: 30, arriveMs: 570 },
+  { feet: 60, arriveMs: 700 },
+  { feet: 90, arriveMs: 830 }
+];
+const BOLT_FADE_MS = 80;
+
+// The light rides on the bolt: a small glow at the caster's hand while the
+// bead grows, carried along the path with the bolt's head, glowing where it
+// lands, and flaring to the full flash at the bang. The bolt starts slow and
+// gathers speed; BOLT_PATH is where its head is — as a share of the path —
+// at a quarter, a half and three quarters of its flight, measured on the
+// files, so the light keeps pace with it. BEAD_LIGHT is the small glow's
+// bright and dim radius, in feet.
+const BOLT_PATH = [[0.25, 0.13], [0.5, 0.37], [0.75, 0.67]];
 const BEAD_LIGHT = { bright: 5, dim: 10 };
-
-// When, from the start of a beam file, the bead strikes. A beam file runs
-// 4 s, but the flight is only a moment of it: the bead grows at the caster's
-// hand for two seconds, crosses as a streak within a frame or two, flashes at
-// the target and fades. Measured frame by frame on the 5-foot and 90-foot
-// files: their first two seconds match frame for frame, and the streak
-// reaches the target at 2.08 s and 2.125 s. The lengths between are taken to
-// fall inside that one frame. Stretching a file to another distance changes
-// its size, not its timing.
-const BEAM_IMPACT_MS = 2100;
 
 // The explosion file, measured frame by frame (24 fps, 4 s): a spark at the
 // centre for two frames, then the fireball bursts out at 0.08 s and fills its
@@ -400,12 +408,20 @@ async function casterToken({ scene, actor: uuid, tokenId }) {
   return scene.tokens.find((t) => t.actorId === actor.id) ?? null;
 }
 
-// The beam file whose length is nearest the distance by ratio rather than by
-// difference: stretching 30 feet to 40 and squeezing 60 to 40 are judged by
-// how far each is pulled out of shape, not by the raw number of feet.
-function beamFor(feet) {
-  const off = (b) => Math.abs(Math.log(b.feet / Math.max(feet, 1)));
-  return ASSETS.fireball.beams.reduce((best, b) => (off(b) < off(best) ? b : best)).src;
+// Of files drawn at fixed lengths, the one whose length is nearest the
+// distance by ratio rather than by difference: stretching 30 feet to 40 and
+// squeezing 60 to 40 are judged by how far each is pulled out of shape, not
+// by the raw number of feet.
+function nearest(files, feet) {
+  const off = (f) => Math.abs(Math.log(f.feet / Math.max(feet, 1)));
+  return files.reduce((best, f) => (off(f) < off(best) ? f : best));
+}
+
+// The Fire Bolt file for the distance, with when its bolt lands.
+function boltFor(feet) {
+  const { src } = nearest(ASSETS.fireball.bolts, feet);
+  const { arriveMs } = nearest(BOLTS, feet);
+  return { src, arriveMs };
 }
 
 function wait(ms) {
@@ -435,9 +451,13 @@ async function flashLight({ scene, centre, radius }, step, from, { streakMs, str
     ({ atMs: ms, x: at.x, y: at.y, ...BEAD_LIGHT, color: colour, luminosity: 0.5 });
   const fire = (ms, scale, color = colour, luminosity = flash.luminosity) =>
     ({ atMs: ms, x: centre.x, y: centre.y, bright: bright * scale, dim: dim * scale, color, luminosity });
+  const along = (share) =>
+    ({ x: from.x + (centre.x - from.x) * share, y: from.y + (centre.y - from.y) * share });
+  const flight = (part) => streakMs + (strikeMs - streakMs) * part;
   const moments = from
-    ? [bead(0, from), bead(streakMs, from), bead(streakMs + STREAK_MS, centre), bead(strikeMs, centre),
-      fire(strikeMs + FLASH_RISE_MS, 1)]
+    ? [bead(0, from), bead(streakMs, from),
+      ...BOLT_PATH.map(([part, share]) => bead(flight(part), along(share))),
+      bead(strikeMs, centre), fire(strikeMs + FLASH_RISE_MS, 1)]
     : [fire(strikeMs, 1)];
   moments.push(fire(coolMs, FLASH_COOLING_SCALE));
   if (endMs > fireOutMs) {
@@ -587,17 +607,15 @@ async function playFireball(shot) {
 
   // Everything is added without waiting, so it all starts together, and each
   // part is held back to its own moment. The bead shows at the caster's hand
-  // first, in silence; at streakMs it streaks to the centre, and the sound
-  // starts on it with the whoosh. strikeMs is the bang, as long after the
-  // whoosh as the sound has it: the screen flashes, the light flares and the
-  // view shakes. revealMs is when
+  // first, in silence; at streakMs the bolt is launched, and the sound starts
+  // on it with the whoosh. strikeMs is the bang, as long after the whoosh as
+  // the sound has it, and the bolt lands on it: the screen flashes, the light
+  // flares and the view shakes. revealMs is when
   // the fireball bursts out of the flash, with its shockwave — at the strike
   // itself where the rank does not dazzle — and everything the fire leaves
   // follows from there. The explosion's speed changes with the rank, and its
-  // burst-out with it. The beam file plays on past its streak — the flash
-  // where it lands and its fading trail fill the pause before the bang. Cast
-  // from off the map there is no flight, and the strike comes as soon as the
-  // explosion can reach it.
+  // burst-out with it. Cast from off the map there is no flight, and the
+  // strike comes as soon as the explosion can reach it.
   const sound = SOUNDS[step.sound.file];
   const rate = step.blast.rate;
   const popMs = EXPLOSION_POP_MS / rate;
@@ -614,11 +632,26 @@ async function playFireball(shot) {
   const from = caster?.getCenterPoint() ?? null;
   if (from) {
     const feet = Math.hypot(centre.x - from.x, centre.y - from.y) / grid.size * grid.distance;
+    const colour = { ...step.colour, glow: { ...BEAM_GLOW, ...step.colour.glow, color: step.colour.glow?.color ?? step.flash.color } };
 
-    const glow = { ...BEAM_GLOW, ...step.colour.glow, color: step.colour.glow?.color ?? step.flash.color };
-    paint(seq.effect(), { ...step.colour, glow })
-      .file(beamFor(feet))
-      .startTime(BEAM_IMPACT_MS - streakMs)
+    // The bead, growing at the hand until it is launched.
+    paint(seq.effect(), colour)
+      .file(nearest(ASSETS.fireball.beams, feet).src)
+      .startTime(BEAD_END_MS - streakMs)
+      .endTime(BEAD_END_MS)
+      .fadeOut(BOLT_FADE_MS)
+      .atLocation(from)
+      .stretchTo(centre)
+      .template(BEAM_TEMPLATE);
+
+    // The bolt, flying the whole whoosh and landing on the bang.
+    const bolt = boltFor(feet);
+    paint(seq.effect(), colour)
+      .file(bolt.src)
+      .delay(streakMs)
+      .playbackRate(bolt.arriveMs / (strikeMs - streakMs))
+      .endTime(bolt.arriveMs)
+      .fadeOut(BOLT_FADE_MS)
       .atLocation(from)
       .stretchTo(centre)
       .template(BEAM_TEMPLATE);

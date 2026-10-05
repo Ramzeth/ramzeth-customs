@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-10-05
+
 ### Added
 
 - Fireball animation, played by the module rather than Automated Animations.
@@ -25,22 +27,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ember-orange while the ground still smoulders. From rank 4 every screen at
   the table is dazzled for a moment, harder with every rank, until at rank 10
   the whole screen goes white; the fireball bursts out of the flash as it
-  starts to clear. From rank 5 it leaves its mark, more of it
-  with every rank: glowing cracks in the ground; a shockwave from rank 6; the
-  fireball blazing on from rank 8, spreading wider and thinner as it burns
-  out; red-hot ground from rank 9. The fire is drawn above the scene's
-  lighting, so it shows on a dark map whether or not a light falls on it.
-  Every client starts loading the animations as soon as the template is
-  placed, so even the first fireball of a session plays in full. The bolt is
-  JB2A's Fire Bolt, copied into `Data/ASSETS/Animations/Cantrip/Fire_Bolt/`.
-  Uses free JB2A
-  animations, copied into `Data/ASSETS/Animations/` with JB2A's own folders.
+  starts to clear. From rank 5 it leaves its mark, more of it with every
+  rank: glowing cracks in the ground; a shockwave from rank 6; the fireball
+  blazing on from rank 8, spreading wider and thinner as it burns out;
+  red-hot ground from rank 9. The fire is drawn above the scene's lighting,
+  so it shows on a dark map whether or not a light falls on it. Every client
+  starts loading the animations as soon as the template is placed, so even
+  the first fireball of a session plays in full. Uses free JB2A animations —
+  Fireball, Fire Bolt and generic fire, ground and shockwave files — copied
+  into `Data/ASSETS/Animations/` with JB2A's own folders.
 - Screen shake with the fireball's blast: none at rank 3, harder and longer
   with every rank above. Users flagged `noShake` are left out — meant for a
   TV used as a play mat.
-- Fireball sound, timed to what is on screen: the whoosh as the bead forms
-  at the caster's hand, the bang the moment it strikes, together with the
-  blast and the shake. Quiet at rank 3 and louder with every rank; the lower
+- Fireball sound, timed to what is on screen: the whoosh while the bolt
+  flies, the bang the moment it lands, together with the flash, the blast and
+  the shake. Quiet at rank 3 and louder with every rank; the lower
   ranks cut the bang's rumble short with a fade, since their blast is over
   sooner. Ranks 7 and 8 use a slower, deeper version of the sound with a
   longer tail, and ranks 9 and 10 a deeper and longer one still, both made
@@ -134,7 +135,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Wall of Stone templates are placed as a thin stone-coloured line instead of a
   square.
 
-[unreleased]: https://github.com/Ramzeth/ramzeth-customs/compare/1.3.1...HEAD
+[unreleased]: https://github.com/Ramzeth/ramzeth-customs/compare/1.4.0...HEAD
+[1.4.0]: https://github.com/Ramzeth/ramzeth-customs/compare/1.3.1...1.4.0
 [1.3.1]: https://github.com/Ramzeth/ramzeth-customs/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/Ramzeth/ramzeth-customs/compare/1.2.0...1.3.0
 [1.2.0]: https://github.com/Ramzeth/ramzeth-customs/compare/1.1.0...1.2.0

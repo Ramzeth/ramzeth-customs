@@ -4,10 +4,14 @@ Personal Foundry VTT library: prefabs, sounds and custom PF2e content.
 
 Requires Foundry v14, [lib-wrapper](https://foundryvtt.com/packages/lib-wrapper)
 and [Sequencer](https://foundryvtt.com/packages/sequencer), which plays the
-spells' sounds and effects for everyone.
+spells' animations for everyone. Sounds, the screen dazzle and fading lights
+go over the module's own socket, so after installing or updating to a version
+that first uses it, relaunch the world once.
 [Wall Height](https://foundryvtt.com/packages/wall-height) is recommended:
 walls have no height in core v14, and without it a levitated Sliding Block
-still stops everything beneath it.
+still stops everything beneath it. With
+[Dice So Nice](https://foundryvtt.com/packages/dice-so-nice), a fireball waits
+for its damage dice to land before it goes off.
 
 **Media are not included.** Every image and sound the module uses is expected
 under `Data/ASSETS/` on the server, which is backed up separately. The module
@@ -58,6 +62,13 @@ scripts/spells/<slug>.js        one file per automated spell
 `scripts/spells/wall-of-stone.js` narrows the placed template to a thin stone
 line, and adds GM buttons to the cast's chat card that turn the placed
 sections into real walls — or tear them down again.
+
+`scripts/spells/sliding-blocks.js` turns each placed square into a block with
+one-way walls that follow it when it is dragged or levitated.
+
+`scripts/spells/fireball.js` animates the spell when its damage is rolled from
+the chat card, at the template placed from that card, growing with every rank
+from 3 to 10.
 
 ## Working on it
 

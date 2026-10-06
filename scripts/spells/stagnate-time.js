@@ -40,8 +40,7 @@ export function registerStagnateTime() {
   Hooks.on("createRegion", onTemplatePlaced);
   Hooks.on("deleteRegion", onFieldDeleted);
   Hooks.on("deleteItem", onSpellEffectDeleted);
-  Hooks.on("combatStart", onTurnStart);
-  Hooks.on("combatTurnChange", onTurnStart);
+  Hooks.on("updateCombat", onCombatUpdated);
   document.addEventListener("click", onSaveButton);
   return { fields, endSpell };
 }
@@ -84,7 +83,7 @@ async function castField(template) {
   const caster = origin.actor ? await fromUuid(origin.actor) : null;
   const spell = origin.uuid ? await fromUuid(origin.uuid) : null;
   const dc = spellDC(spell, caster);
-  if (dc === null) ui.notifications.warn("Stagnate Time: не удалось узнать DC заклинателя.");
+  if (dc === null) ui.notifications.warn("Stagnate Time: could not find the caster's spell DC.");
 
   // A template placed again from the same card moves the field.
   const earlier = fields(scene).filter((f) => f.getFlag(MOD, "stagnateTime").castId === castId);
@@ -172,32 +171,48 @@ function turnKey(combat) {
 }
 
 // Slows from this spell last the turn they were taken on; any from another
-// turn are cleared as a new one begins.
+// turn are cleared as a new one begins. PF2e usually beats this to it — the
+// effect expires at the end of the turn, and PF2e deletes expired effects —
+// so an effect already gone by the time it is deleted here is no fault.
 async function clearSlows(scene, combat) {
   const now = turnKey(combat);
   for (const token of scene.tokens) {
-    const stale = token.actor?.items.filter((i) => {
+    const actor = token.actor;
+    const stale = actor?.items.filter((i) => {
       const key = i.getFlag(MOD, "stagnateSlowed");
       return key && key !== now;
     }) ?? [];
-    if (stale.length) await token.actor.deleteEmbeddedDocuments("Item", stale.map((i) => i.id));
+    for (const item of stale) {
+      if (!actor.items.has(item.id)) continue;
+      await item.delete().catch(() => {});
+    }
   }
 }
 
-function onTurnStart(combat) {
-  if (game.user !== game.users.activeGM || !combat?.started) return;
-  turnStart(combat).catch(report);
+// A new turn has begun — the first of the encounter included, which the
+// encounter's own start hook announces before the encounter counts as
+// started. Taken from the update itself, after it has gone through.
+function onCombatUpdated(combat, changed) {
+  if (!("turn" in changed) && !("round" in changed)) return;
+  onTurnStart(combat);
 }
 
-async function turnStart(combat) {
+// The start of a turn, on the active GM's client. Each step stands on its
+// own, so that tidying up after the last turn can never keep the next
+// creature from being asked for its save.
+function onTurnStart(combat) {
+  if (game.user !== game.users.activeGM || !combat?.started) return;
   const scene = combat.scene ?? canvas.scene;
   if (!scene) return;
-  await clearSlows(scene, combat);
-  await endLapsedFields(scene);
+  clearSlows(scene, combat).catch(report);
+  endLapsedFields(scene).catch(report);
+  askTurnSave(scene, combat).catch(report);
+}
 
+async function askTurnSave(scene, combat) {
   const token = combat.combatant?.token;
   if (!token || token.parent !== scene || !token.actor) return;
-  const holding = fields(scene).filter((f) => f.tokens.has(token));
+  const holding = fields(scene).filter((f) => isInside(token, f));
   if (!holding.length) return;
 
   // Inside more than one field, the hardest save is the one that counts.
@@ -205,6 +220,25 @@ async function turnStart(combat) {
     .map((f) => f.getFlag(MOD, "stagnateTime"))
     .sort((a, b) => (b.dc ?? 0) - (a.dc ?? 0))[0];
   await askSave(token, field);
+}
+
+// Whether a creature is in the field: any square it takes up has its centre
+// inside the circle, the way a burst is measured. Worked out here rather than
+// read from the region's own list of tokens, which Foundry brings up to date
+// only as tokens move, and so misses a creature that was already standing
+// there when the field appeared.
+function isInside(token, field) {
+  const shape = field.shapes?.[0];
+  if (!shape?.radius) return false;
+  const size = token.parent.grid.size;
+  for (let i = 0; i < Math.max(token.width, 1); i++) {
+    for (let j = 0; j < Math.max(token.height, 1); j++) {
+      const x = token.x + (i + 0.5) * size;
+      const y = token.y + (j + 0.5) * size;
+      if (Math.hypot(x - shape.x, y - shape.y) <= shape.radius) return true;
+    }
+  }
+  return false;
 }
 
 // A message to the creature's owners and the GM, with the button that rolls
@@ -220,9 +254,10 @@ async function askSave(token, { dc, spell }) {
     speaker: ChatMessage.getSpeaker({ token }),
     whisper,
     content:
-      `<p><strong>${name}</strong> начинает ход в зоне ${FIELD_NAME}.</p>` +
-      `<p><a class="rc-stagnate">Спасбросок Воли${against}</a></p>` +
-      "<p>Провал — Slowed 1, критический провал — Slowed 2, на 1 раунд.</p>",
+      `<p><strong>${name}</strong> begins its turn in ${FIELD_NAME}.</p>` +
+      `<p><a class="rc-stagnate">Will save${against}</a></p>` +
+      "<p><strong>Failure</strong> Slowed 1 for 1 round. " +
+      "<strong>Critical Failure</strong> Slowed 2 for 1 round.</p>",
     flags: { [MOD]: { stagnateSave: { token: token.uuid, dc, spell } } }
   });
 }
@@ -236,7 +271,7 @@ function onSaveButton(event) {
   if (!save) return;
   const actor = fromUuidSync(save.token)?.actor;
   if (!actor?.isOwner) {
-    ui.notifications.warn("Спасбросок бросает владелец этого существа.");
+    ui.notifications.warn("Stagnate Time: only the creature's owner can roll its save.");
     return;
   }
   rollSave(actor, save).catch(report);

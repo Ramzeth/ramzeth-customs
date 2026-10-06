@@ -7,8 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-10-06
+
 ### Changed
 
+- Fireball: how big the fireball looks follows the damage rolled rather than
+  the rank cast. It looks like the rank whose average damage the roll is
+  nearest — from 25 damage it looks like rank 4, then 32, 39, 46, 53, 60 and
+  67 for ranks 5 to 10 — so a lucky roll looks bigger and a poor one smaller,
+  about as often each way, and bonus damage beyond the rank shows too.
 - Wall of Stone: each section is shut in a rectangle of terrain walls around
   the stone drawn on its tile, its axis on the grid edge, instead of a single
   wall on the edge. The inside of the stone is now in view from either side,
@@ -144,7 +151,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Wall of Stone templates are placed as a thin stone-coloured line instead of a
   square.
 
-[unreleased]: https://github.com/Ramzeth/ramzeth-customs/compare/1.4.0...HEAD
+[unreleased]: https://github.com/Ramzeth/ramzeth-customs/compare/1.4.1...HEAD
+[1.4.1]: https://github.com/Ramzeth/ramzeth-customs/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/Ramzeth/ramzeth-customs/compare/1.3.1...1.4.0
 [1.3.1]: https://github.com/Ramzeth/ramzeth-customs/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/Ramzeth/ramzeth-customs/compare/1.2.0...1.3.0

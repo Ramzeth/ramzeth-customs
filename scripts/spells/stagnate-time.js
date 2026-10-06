@@ -17,7 +17,12 @@
 // - In an encounter, a creature starting its turn in the field gets a chat
 //   message, seen only by its owners and the GM, with a button that rolls its
 //   Will save against the DC. A failure or critical failure slows it, as an
-//   effect taken away again at the end of its turn.
+//   effect that runs out at the end of its turn.
+//
+// Effects with a timer — the caster's minute, the slow's turn — are removed
+// by PF2e when they run out, and never by the module: both would delete the
+// same effect at the turn change, and the second deletion fails with an
+// error.
 //
 // All of it runs on the active GM's client, except the save itself, rolled
 // by whoever presses the button for the creature they own.
@@ -151,43 +156,22 @@ function onFieldDeleted(region, options) {
   spellEffect(caster, field.castId)?.delete({ [ENDING]: true }).catch(report);
 }
 
-// PF2e may leave an expired effect in place rather than delete it, depending
-// on its settings; a field whose effect is expired or missing is ended here.
+// A field whose caster's effect is missing is ended — the effect deleted
+// while the GM was away, say. An effect running out on its timer is PF2e's to
+// delete, never the module's: both deletions would go out at the turn change,
+// and the second would be refused with an error. Its deletion then takes the
+// field with it.
 async function endLapsedFields(scene) {
   for (const field of fields(scene)) {
     const { castId, caster } = field.getFlag(MOD, "stagnateTime");
     if (!caster) continue;
-    const effect = spellEffect(fromUuidSync(caster), castId);
-    if (!effect || effect.isExpired) await endSpell(castId, { scene });
+    if (!spellEffect(fromUuidSync(caster), castId)) await endSpell(castId, { scene });
   }
 }
 
 /* -------------------------------------------- */
 /*  Turns: the save and the slow                */
 /* -------------------------------------------- */
-
-function turnKey(combat) {
-  return combat ? `${combat.id}:${combat.round}:${combat.turn}` : null;
-}
-
-// Slows from this spell last the turn they were taken on; any from another
-// turn are cleared as a new one begins. PF2e usually beats this to it — the
-// effect expires at the end of the turn, and PF2e deletes expired effects —
-// so an effect already gone by the time it is deleted here is no fault.
-async function clearSlows(scene, combat) {
-  const now = turnKey(combat);
-  for (const token of scene.tokens) {
-    const actor = token.actor;
-    const stale = actor?.items.filter((i) => {
-      const key = i.getFlag(MOD, "stagnateSlowed");
-      return key && key !== now;
-    }) ?? [];
-    for (const item of stale) {
-      if (!actor.items.has(item.id)) continue;
-      await item.delete().catch(() => {});
-    }
-  }
-}
 
 // A new turn has begun — the first of the encounter included, which the
 // encounter's own start hook announces before the encounter counts as
@@ -197,14 +181,13 @@ function onCombatUpdated(combat, changed) {
   onTurnStart(combat);
 }
 
-// The start of a turn, on the active GM's client. Each step stands on its
-// own, so that tidying up after the last turn can never keep the next
-// creature from being asked for its save.
+// The start of a turn, on the active GM's client. The two steps stand on
+// their own, so that ending a field can never keep the next creature from
+// being asked for its save.
 function onTurnStart(combat) {
   if (game.user !== game.users.activeGM || !combat?.started) return;
   const scene = combat.scene ?? canvas.scene;
   if (!scene) return;
-  clearSlows(scene, combat).catch(report);
   endLapsedFields(scene).catch(report);
   askTurnSave(scene, combat).catch(report);
 }
@@ -304,6 +287,6 @@ async function rollSave(actor, { dc, spell }) {
       }],
       tokenIcon: { show: false }
     },
-    flags: { [MOD]: { stagnateSlowed: turnKey(game.combat) } }
+    flags: { [MOD]: { stagnateSlowed: true } }
   }]);
 }

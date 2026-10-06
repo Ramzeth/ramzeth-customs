@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-10-06
+
 ### Added
 
 - Stagnate Time: placing the spell's template raises a field where time runs
@@ -17,7 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   removing the field ends the effect. In an encounter, a creature starting
   its turn in the field gets a message, for its owners and the GM, with a
   button that rolls its Will save against the caster's spell DC; a failure
-  slows it 1 and a critical failure 2, until the end of that turn.
+  slows it 1 and a critical failure 2, until the end of that turn. Creatures
+  already standing in the field when it appears are asked too, from the
+  first turn of the encounter. The caster's effect and the slows run on PF2e
+  timers and are removed by PF2e when they run out.
 - A reusable lens field (`scripts/lib/lens.js`): a shader bending the map
   inside any region a spell marks, drawn on each client and fading in and
   out with its region.
@@ -166,7 +171,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Wall of Stone templates are placed as a thin stone-coloured line instead of a
   square.
 
-[unreleased]: https://github.com/Ramzeth/ramzeth-customs/compare/1.4.1...HEAD
+[unreleased]: https://github.com/Ramzeth/ramzeth-customs/compare/1.5.0...HEAD
+[1.5.0]: https://github.com/Ramzeth/ramzeth-customs/compare/1.4.1...1.5.0
 [1.4.1]: https://github.com/Ramzeth/ramzeth-customs/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/Ramzeth/ramzeth-customs/compare/1.3.1...1.4.0
 [1.3.1]: https://github.com/Ramzeth/ramzeth-customs/compare/1.3.0...1.3.1

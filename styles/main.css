@@ -5,11 +5,12 @@
   color: var(--color-text-primary) !important;
 }
 
-/* GM controls injected into spell descriptions (Wall of Stone, Sliding
-   Blocks). Styled to read as buttons rather than links, since they act on the
-   scene. */
+/* Controls the module puts in spell descriptions and chat messages (Wall of
+   Stone, Sliding Blocks, the Stagnate Time save). Styled to read as buttons
+   rather than links, since they act on the scene. */
 a.rc-wall,
-a.rc-blocks {
+a.rc-blocks,
+a.rc-stagnate {
   display: inline-block;
   padding: 2px 8px;
   border: 1px solid var(--color-border-dark, #7a7971);
@@ -21,7 +22,8 @@ a.rc-blocks {
 }
 
 a.rc-wall:hover,
-a.rc-blocks:hover {
+a.rc-blocks:hover,
+a.rc-stagnate:hover {
   background: rgba(0, 0, 0, 0.12);
   text-shadow: none;
 }

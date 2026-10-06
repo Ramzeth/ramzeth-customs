@@ -70,6 +70,10 @@ one-way walls that follow it when it is dragged or levitated.
 the chat card, at the template placed from that card, growing with every rank
 from 3 to 10.
 
+`scripts/spells/stagnate-time.js` turns the placed template into a hidden field
+the map visibly bends inside (`scripts/lib/lens.js`), ties it to the caster's
+effect, and asks for a Will save from each creature starting its turn in it.
+
 ## Working on it
 
 Compendiums are stored as YAML under `src/packs/` and compiled into LevelDB

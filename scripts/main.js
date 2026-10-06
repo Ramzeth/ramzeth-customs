@@ -6,6 +6,7 @@ import { registerEffects } from "./lib/effects.js";
 import { registerRegionPlacement } from "./lib/region-placement.js";
 import { registerFireball } from "./spells/fireball.js";
 import { registerSlidingBlocks } from "./spells/sliding-blocks.js";
+import { registerStagnateTime } from "./spells/stagnate-time.js";
 import { registerWallOfStone } from "./spells/wall-of-stone.js";
 
 Hooks.once("init", () => {
@@ -23,6 +24,7 @@ Hooks.once("init", () => {
     api.wallOfStone = registerWallOfStone();
     api.slidingBlocks = registerSlidingBlocks();
     api.fireball = registerFireball();
+    api.stagnateTime = registerStagnateTime();
   }
 
   Hooks.once("ready", () => {

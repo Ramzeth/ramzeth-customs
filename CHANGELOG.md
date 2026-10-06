@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Stagnate Time: placing the spell's template raises a field where time runs
+  thick, hidden as a region but plain to see on the map, which bends inside
+  it — the picture rocks in a slow swirl, faint rings creep outward, its
+  colour drains to a cold grey, and the edge refracts like glass. The caster
+  gets the spell's effect for its minute; when it ends the field goes, and
+  removing the field ends the effect. In an encounter, a creature starting
+  its turn in the field gets a message, for its owners and the GM, with a
+  button that rolls its Will save against the caster's spell DC; a failure
+  slows it 1 and a critical failure 2, until the end of that turn.
+- A reusable lens field (`scripts/lib/lens.js`): a shader bending the map
+  inside any region a spell marks, drawn on each client and fading in and
+  out with its region.
+
 ## [1.4.1] - 2026-10-06
 
 ### Changed

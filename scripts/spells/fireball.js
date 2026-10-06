@@ -19,12 +19,18 @@
 // template or a roll without a card — placed or rolled from anywhere else —
 // sets nothing off.
 //
-// Every rank from 3 to 10 is a step up from the one before: the fire runs
-// from orange to a blinding white ball of plasma edged in violet, and grows
-// in size, length, loudness, glow, shake and the flash of light it throws
-// over the scene; from rank 5 on it leaves its mark — glowing cracks, then a
-// shockwave, then the fireball blazing on, then red-hot ground. Everyone's
-// view shakes, except users marked noShake.
+// The fireball is drawn in eight steps, one for each rank from 3 to 10, each
+// a step up from the one before: the fire runs from orange to a blinding
+// white ball of plasma edged in violet, and grows in size, length, loudness,
+// glow, shake and the flash of light it throws over the scene; from the
+// fifth step on it leaves its mark — glowing cracks, then a shockwave, then
+// the fireball blazing on, then red-hot ground. Everyone's view shakes,
+// except users marked noShake.
+//
+// Which step is played is set by the damage rolled, not by the rank cast:
+// the fireball looks like the rank whose average damage the roll is nearest.
+// A lucky roll looks bigger than its rank and a poor one smaller, about as
+// often each way, and whatever adds to the damage beyond the rank shows too.
 //
 // The spell itself needs no edit: PF2e already puts a template button on its
 // chat card. Any Automated Animations autorec entry for Fireball has to go,
@@ -385,6 +391,26 @@ function stepFor(rank) {
   return RANKS[index];
 }
 
+// Fireball deals 6d6 at rank 3 and 2d6 more for every rank above, so a
+// rank's average damage is 7 a rank: 21 at rank 3, 28 at 4, and so on up to
+// 70 at 10. The damage rolled is matched to the rank whose average it is
+// nearest — each step starts halfway between its average and the one below:
+// 25, 32, 39, 46, 53, 60 and 67 bring in ranks 4 to 10. Thresholds at the
+// averages themselves would put every below-average roll a step down but
+// need a whole step above average to go up, and most fireballs would look
+// smaller than they are.
+function averageDamage(rank) {
+  return 3.5 * 2 * rank;
+}
+
+function rankForDamage(damage) {
+  let rank = BASE_RANK;
+  for (let r = BASE_RANK + 1; r < BASE_RANK + RANKS.length; r++) {
+    if (damage >= (averageDamage(r - 1) + averageDamage(r)) / 2) rank = r;
+  }
+  return rank;
+}
+
 // The centre of the burst and its radius in pixels. A burst is a circle,
 // positioned by its centre.
 function burstOf(region) {
@@ -586,8 +612,11 @@ function onDamageRolled(message) {
   placed.delete(card);
   if (game.user !== game.users.activeGM) return;
 
+  // The step to play, from the damage rolled; the rank cast only if the roll
+  // has no total to read.
   const { origin, context } = message.flags.pf2e;
-  shot.rank = origin.castRank ?? shot.rank;
+  const damage = message.rolls?.[0]?.total;
+  shot.rank = Number.isFinite(damage) ? rankForDamage(damage) : (origin.castRank ?? shot.rank);
   shot.tokenId = context.token;
 
   if (!game.modules.get(DSN)?.active || decided === false) {

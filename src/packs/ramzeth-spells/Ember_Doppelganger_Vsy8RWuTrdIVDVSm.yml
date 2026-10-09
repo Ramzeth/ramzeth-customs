@@ -1,0 +1,102 @@
+_id: Vsy8RWuTrdIVDVSm
+img: icons/magic/fire/elemental-fire-humanoid.webp
+name: Ember Doppelgänger
+system:
+  description:
+    gm: ''
+    value: >-
+      <p>Sending forth swirls of fire and smoke, you summon a magical glowing
+      being in an unoccupied space that resembles your form, though not your
+      features. This duplicate is a creature created from the ashes of battle
+      and glowing embers, dressed in a cloak of smoke. It has AC 10; 50 Hit
+      Points; is immune to critical hits, precision damage, and the
+      @UUID[Compendium.pf2e.conditionitems.Item.eIcWbB5o3pP6OIMe]{Immobilized},
+      @UUID[Compendium.pf2e.conditionitems.Item.j91X7x0XSomq8d60]{Prone}, and
+      @UUID[Compendium.pf2e.conditionitems.Item.VcDeM8A5oI6VqhbM]{Restrained}
+      conditions; and has weakness 10 to cold and water. This creature doesn't
+      provide or benefit from flanking and automatically fails all skill checks
+      and saving throws, and all skill checks attempted against it
+      automatically succeed. When you Cast the Spell and the first time you
+      Sustain it each turn on subsequent rounds, the duplicate Strides up to 30
+      feet and launches a blast of fire in a @Template[type:burst|distance:10]
+      up to 30 feet away. Each creature in the burst takes 6d6 fire damage with
+      a basic Reflex saving throw, using your spell DC.</p>
+
+      <p>@Template[line|distance:5]{Summon Ember Hussar}</p>
+
+      <hr>
+
+      <p><strong>Heightened (+1)</strong> The duplicate has an additional 10
+      Hit Points, and the damage increases by 1d6.</p>
+  rules: []
+  slug: ember-doppelgänger
+  _migration:
+    version: 0.959
+    lastMigration: null
+    previous: null
+  traits:
+    otherTags: []
+    value:
+      - concentrate
+      - fire
+      - manipulate
+    rarity: common
+    traditions:
+      - arcane
+      - primal
+  publication:
+    title: Pathfinder Impossible Magic
+    authors: ''
+    license: ORC
+    remaster: true
+  level:
+    value: 5
+  requirements: ''
+  target:
+    value: ''
+  range:
+    value: 30 feet
+  area:
+    type: burst
+    value: 10
+  time:
+    value: '2'
+  duration:
+    value: 1 minute
+    sustained: true
+  damage:
+    Sg1zPRkjilgUvjp4:
+      applyMod: false
+      category: null
+      formula: 6d6
+      kinds:
+        - damage
+      materials: []
+      type: fire
+  defense:
+    save:
+      basic: true
+      statistic: reflex
+  cost:
+    value: ''
+  location:
+    value: null
+  counteraction: false
+  heightening:
+    area: 0
+    damage:
+      Sg1zPRkjilgUvjp4: 1d6
+    interval: 1
+    type: interval
+type: spell
+_stats:
+  coreVersion: '14.367'
+  systemId: pf2e
+  systemVersion: 8.4.1
+  compendiumSource: Compendium.pf2e.spells-srd.Item.Vsy8RWuTrdIVDVSm
+  duplicateSource: null
+effects: []
+flags: {}
+ownership:
+  default: 0
+_key: '!items!Vsy8RWuTrdIVDVSm'

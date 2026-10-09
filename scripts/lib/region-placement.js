@@ -17,6 +17,10 @@ const handlers = new Map();
 
 // handler:
 //   shape(data)        data for one placement — required
+//   accepts(data)      whether this placement is the handler's at all —
+//                      default yes. A spell with an area of its own also has
+//                      PF2e's template for it, carrying the same roll option,
+//                      which is to be left alone.
 //   limit(data)        how many placements one click allows — default 1
 //   options(options)   placement options — default unchanged
 //   done(placed, limit) called once the run ends
@@ -27,9 +31,48 @@ export function handlePlacement(rollOption, handler) {
 function handlerFor(data) {
   const rollOptions = data?.flags?.pf2e?.origin?.rollOptions ?? [];
   for (const [option, handler] of handlers) {
-    if (rollOptions.includes(option)) return handler;
+    if (rollOptions.includes(option) && (handler.accepts?.(data) ?? true)) return handler;
   }
   return null;
+}
+
+// A template of one grid square, for spells that conjure something into a
+// square of the player's choosing. It is a rectangle held by its corner: PF2e's
+// own lines snap their start to a grid vertex while being placed, and a
+// rectangle anchored at its corner snaps the same way and so fills exactly one
+// cell. Where the thing ends up is still worked out from the centre and
+// snapped again on the GM's side (placedCell), so a template that lands off
+// the grid cannot put it off the grid.
+export function squareTemplate(data, { color } = {}) {
+  const size = canvas.grid.size;
+  const shaped = foundry.utils.deepClone(data);
+  shaped.shapes = [{
+    type: "rectangle",
+    x: data.shapes[0].x ?? 0,
+    y: data.shapes[0].y ?? 0,
+    width: size,
+    height: size,
+    anchorX: 0,
+    anchorY: 0,
+    rotation: 0,
+    hole: false
+  }];
+  if (color) shaped.color = color;
+  return shaped;
+}
+
+// The centre of the grid square under a placed square template.
+export function placedCell(region) {
+  const scene = region.parent;
+  const s = region.shapes[0];
+  const centre = {
+    x: s.x + s.width * (0.5 - (s.anchorX ?? 0)),
+    y: s.y + s.height * (0.5 - (s.anchorY ?? 0))
+  };
+  return scene.grid.getSnappedPoint(centre, {
+    mode: CONST.GRID_SNAPPING_MODES.CENTER,
+    resolution: 1
+  });
 }
 
 // One click on the link starts a run of placements rather than a single one:

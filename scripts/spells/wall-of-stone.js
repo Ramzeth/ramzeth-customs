@@ -15,6 +15,7 @@ import { MOD } from "../const.js";
 import { playSound } from "../lib/effects.js";
 import { lineEndpoints } from "../lib/region-geometry.js";
 import { handlePlacement } from "../lib/region-placement.js";
+import { spellActorFolder } from "../lib/spell-actors.js";
 
 const SLUG = "origin:item:slug:wall-of-stone";
 const STONE_COLOR = "#6b6b6b";
@@ -204,6 +205,8 @@ async function deleteRubbleRegions(messageId) {
   return ids.length;
 }
 
+// Not part of demolishing: the actor goes by itself with its last token. Kept
+// for the API, to clear an actor by hand.
 async function deleteSectionActor(messageId) {
   const actor = game.actors.find((a) => a.getFlag(MOD, "castId") === messageId);
   if (!actor) return 0;
@@ -211,18 +214,15 @@ async function deleteSectionActor(messageId) {
   return 1;
 }
 
-// The spell is over: the stone, what it blocked, the draft and the throwaway
-// actor all go away.
+// The spell is over: the stone, what it blocked and the draft all go away;
+// the throwaway actor follows its last token (lib/spell-actors.js).
 //
-// Order matters twice over. Walls go first, so a failure halfway through
-// cannot leave invisible walls standing with nothing on the map to explain
-// them. The actor goes after its tokens, because deleting it first would
-// leave them pointing at nothing.
+// Walls go first, so a failure halfway through cannot leave invisible walls
+// standing with nothing on the map to explain them.
 async function demolish(messageId) {
   const walls = await deleteWalls(messageId);
   const tiles = await deleteTiles(messageId);
   const tokens = await deleteTokens(messageId);
-  await deleteSectionActor(messageId);
   await deleteRubbleRegions(messageId);
   const sections = await deleteSections(messageId);
   return { walls, tiles, tokens, sections };
@@ -395,6 +395,7 @@ async function ensureSectionActor(messageId) {
     name: `Wall of Stone (rank ${rank})`,
     type: "hazard",
     img: TILE_TEXTURE,
+    folder: (await spellActorFolder())?.id ?? null,
     system: {
       attributes: {
         ac: { value: SECTION_AC },

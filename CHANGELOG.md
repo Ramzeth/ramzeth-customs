@@ -7,6 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Ember Doppelgänger: the spell, forked into Ramzeth Spells, gets a "Summon
+  Ember Hussar" link that places one square. The square becomes the Hussar: a
+  new actor with the duplicate's statistics — AC, Hit Points by rank,
+  immunities, weaknesses, failing its own saves and skill checks, no
+  flanking — and a token named only "Ember Hussar" wearing the caster's
+  token picture, size and side, drawn as ash with glowing seams of embers, a
+  smouldering outline and a thin haze of smoke with rising sparks, in a
+  little flickering firelight. The caster gets the spell's effect for its
+  minute; when it ends the Hussar goes, and when the Hussar is destroyed or
+  removed the effect ends. When the spell's damage is rolled from its card,
+  the Hussar hurls a fireball at the placed burst — Fireball's animation,
+  sound, light, shake and dazzle, drawn to the 10-foot burst and looking like
+  the fireball of the same damage. With PF2e Auto Action Tracker, choosing
+  Sustain posts the spell's own card again — at the rank cast, as the user
+  who cast it — for the next blast, with its burst, damage, targets and saves
+  working as on any spell card; letting the spell lapse ends it and the
+  Hussar goes.
+- Support for sustaining spells through PF2e Auto Action Tracker
+  (`scripts/lib/sustain.js`): a spell can be told when it is sustained, and
+  post its own card again.
+- A reusable token shader (`scripts/lib/token-shader.js`): draws a spell's
+  shader on the picture of any token it marks, beyond its edge too, on each
+  client.
+
+### Changed
+
+- Actors made by spells — Wall of Stone's sections, Sliding Blocks, the Ember
+  Hussar — are kept in a "Ramzeth Customs" folder in the Actors sidebar, and
+  deleted as soon as their last token leaves the map. On loading, the GM's
+  client also sweeps away any left without tokens.
+- The lens field is now a plain region shader (`scripts/lib/region-shader.js`)
+  that knows no spell: Stagnate Time's look lives in its own file.
+- Setting off a burst when its damage is rolled from the card, after the
+  dice land, is now its own piece (`scripts/lib/damage-burst.js`), shared by
+  Fireball and Ember Doppelgänger; Fireball keeps its look.
+
 ## [1.5.0] - 2026-10-06
 
 ### Added

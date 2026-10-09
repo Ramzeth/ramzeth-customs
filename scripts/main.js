@@ -4,6 +4,8 @@ import { MOD } from "./const.js";
 import { registerAttach } from "./lib/attach.js";
 import { registerEffects } from "./lib/effects.js";
 import { registerRegionPlacement } from "./lib/region-placement.js";
+import { registerSpellActors } from "./lib/spell-actors.js";
+import { registerEmberDoppelganger } from "./spells/ember-doppelganger.js";
 import { registerFireball } from "./spells/fireball.js";
 import { registerSlidingBlocks } from "./spells/sliding-blocks.js";
 import { registerStagnateTime } from "./spells/stagnate-time.js";
@@ -12,6 +14,7 @@ import { registerWallOfStone } from "./spells/wall-of-stone.js";
 Hooks.once("init", () => {
   // Infrastructure knows nothing about any game system, so it is always on.
   registerEffects();
+  registerSpellActors();
   const api = {
     attach: registerAttach()
   };
@@ -25,6 +28,7 @@ Hooks.once("init", () => {
     api.slidingBlocks = registerSlidingBlocks();
     api.fireball = registerFireball();
     api.stagnateTime = registerStagnateTime();
+    api.emberDoppelganger = registerEmberDoppelganger();
   }
 
   Hooks.once("ready", () => {

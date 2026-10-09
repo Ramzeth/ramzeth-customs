@@ -11,7 +11,8 @@ import { ASSETS } from "../assets.js";
 import { MOD } from "../const.js";
 import { attach } from "../lib/attach.js";
 import { playSound } from "../lib/effects.js";
-import { handlePlacement } from "../lib/region-placement.js";
+import { handlePlacement, placedCell, squareTemplate } from "../lib/region-placement.js";
+import { spellActorFolder, spellActorOwnership } from "../lib/spell-actors.js";
 
 // Marks a deletion as the spell ending rather than a block being destroyed,
 // so the clean-up is silent.
@@ -42,7 +43,7 @@ const HP_PER_HEIGHTENING = 10;
 export function registerSlidingBlocks() {
   document.addEventListener("click", onButtonClick);
   handlePlacement(SLUG, {
-    shape: squareTemplate,
+    shape: (data) => squareTemplate(data, { color: BLOCK_COLOR }),
     limit: (data) => Math.max(0,
       MAX_BLOCKS - collectBlocks(canvas.scene, data.flags?.pf2e?.messageId).length),
     // Turning a one-square block only pushes it off the grid.
@@ -57,44 +58,6 @@ export function registerSlidingBlocks() {
 /* -------------------------------------------- */
 /*  Placement                                   */
 /* -------------------------------------------- */
-
-// The template becomes a one-square rectangle held by its corner. PF2e's own
-// lines snap their start to a grid vertex while being placed; a rectangle
-// anchored at its corner should snap the same way and so fill exactly one
-// cell. Where the block ends up is still worked out from the centre and
-// snapped again on the GM's side, so a template that lands off the grid
-// cannot put a block off it.
-function squareTemplate(data) {
-  const size = canvas.grid.size;
-  const shaped = foundry.utils.deepClone(data);
-  shaped.shapes = [{
-    type: "rectangle",
-    x: data.shapes[0].x ?? 0,
-    y: data.shapes[0].y ?? 0,
-    width: size,
-    height: size,
-    anchorX: 0,
-    anchorY: 0,
-    rotation: 0,
-    hole: false
-  }];
-  shaped.color = BLOCK_COLOR;
-  return shaped;
-}
-
-// The centre of the grid square under the placed template.
-function placedCell(region) {
-  const scene = region.parent;
-  const s = region.shapes[0];
-  const centre = {
-    x: s.x + s.width * (0.5 - (s.anchorX ?? 0)),
-    y: s.y + s.height * (0.5 - (s.anchorY ?? 0))
-  };
-  return scene.grid.getSnappedPoint(centre, {
-    mode: CONST.GRID_SNAPPING_MODES.CENTER,
-    resolution: 1
-  });
-}
 
 // A player cannot create tokens or walls, so the template they placed is only
 // a request. The GM's client receives every region creation anyway and does
@@ -236,16 +199,13 @@ async function ensureBlockActor(messageId, origin) {
   const hp = blockHitPoints(rank);
 
   const caster = origin?.actor ? await fromUuid(origin.actor) : null;
-  const OWNER = CONST.DOCUMENT_OWNERSHIP_LEVELS.OWNER;
-  const owners = Object.entries(caster?.ownership ?? {})
-    .filter(([id, level]) => id !== "default" && level >= OWNER)
-    .map(([id]) => [id, OWNER]);
 
   return CONFIG.Actor.documentClass.create({
     name: `Sliding Block (rank ${rank})`,
     type: "hazard",
     img: ASSETS.slidingBlocks.cube,
-    ownership: { default: CONST.DOCUMENT_OWNERSHIP_LEVELS.NONE, ...Object.fromEntries(owners) },
+    folder: (await spellActorFolder())?.id ?? null,
+    ownership: spellActorOwnership(caster),
     system: {
       attributes: {
         ac: { value: BLOCK_AC },
@@ -299,9 +259,9 @@ function onBlockDeleted(token, options) {
   playSound(ASSETS.slidingBlocks.destroy);
 }
 
-// The spell is over: every block of the casting, its throwaway actor and any
-// template still lying about. Walls go with their tokens through
-// lib/attach.js; the actor goes last so no token is left pointing at nothing.
+// The spell is over: every block of the casting and any template still lying
+// about. Walls go with their tokens through lib/attach.js, and the throwaway
+// actor follows its last token through lib/spell-actors.js.
 async function clear(scene, messageId) {
   const blocks = collectBlocks(scene, messageId).map((t) => t.id);
   if (blocks.length) {
@@ -313,10 +273,6 @@ async function clear(scene, messageId) {
       (r.flags?.pf2e?.origin?.rollOptions ?? []).includes(SLUG))
     .map((r) => r.id);
   if (drafts.length) await scene.deleteEmbeddedDocuments("Region", drafts);
-
-  const actor = game.actors.find((a) =>
-    a.getFlag(MOD, "castId") === messageId && a.getFlag(MOD, "slidingBlocks"));
-  if (actor) await actor.delete();
 
   return blocks.length;
 }

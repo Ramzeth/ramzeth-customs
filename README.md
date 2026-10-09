@@ -11,7 +11,9 @@ that first uses it, relaunch the world once.
 walls have no height in core v14, and without it a levitated Sliding Block
 still stops everything beneath it. With
 [Dice So Nice](https://foundryvtt.com/packages/dice-so-nice), a fireball waits
-for its damage dice to land before it goes off.
+for its damage dice to land before it goes off. With
+[PF2e Auto Action Tracker](https://foundryvtt.com/packages/pf2e-auto-action-tracker),
+sustaining Ember Doppelgänger brings its card back for the next blast.
 
 **Media are not included.** Every image and sound the module uses is expected
 under `Data/ASSETS/` on the server, which is backed up separately. The module
@@ -71,8 +73,17 @@ the chat card, at the template placed from that card, growing with every rank
 from 3 to 10.
 
 `scripts/spells/stagnate-time.js` turns the placed template into a hidden field
-the map visibly bends inside (`scripts/lib/lens.js`), ties it to the caster's
+the map visibly bends inside (drawn by `scripts/lib/region-shader.js`), ties it to the caster's
 effect, and asks for a Will save from each creature starting its turn in it.
+
+`scripts/spells/ember-doppelganger.js` turns the placed square into the Ember
+Hussar — a token in the caster's likeness drawn as ash and embers in a haze of
+smoke (by `scripts/lib/token-shader.js`) — ties it to the caster's effect, and
+has it hurl a fireball, sized to the 10-foot burst, when the damage is
+rolled. Both spells' blasts are set off by `scripts/lib/damage-burst.js`.
+
+Actors that spells create live in the "Ramzeth Customs" folder and are
+deleted with their last token (`scripts/lib/spell-actors.js`).
 
 ## Working on it
 

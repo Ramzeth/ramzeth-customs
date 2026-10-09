@@ -6,18 +6,10 @@
 // the burst and explodes there.
 //
 // Placing the burst template only marks where. The fireball goes off when its
-// damage is rolled, once Dice So Nice's dice have landed, so the table sees
-// the dice, then the blast, then rolls its saves. The template itself may be
-// long gone by then — the target helper removes it once targets are picked —
-// so where it lay is remembered when it is placed.
-//
-// Template and damage are tied together by the spell's chat card: a roll sets
-// off only the template placed from its own card, and only once, so a reroll
-// does not explode again and two casts never swap places. PF2e marks the
-// template with its card but not the damage roll, so the module marks the
-// roll itself, on the client of whoever presses the card's damage button. A
-// template or a roll without a card — placed or rolled from anywhere else —
-// sets nothing off.
+// damage is rolled from the spell's card, once Dice So Nice's dice have
+// landed (lib/damage-burst.js), so the table sees the dice, then the blast,
+// then rolls its saves. Only the active GM plays it, and Sequencer shows it to
+// everyone.
 //
 // The fireball is drawn in eight steps, one for each rank from 3 to 10, each
 // a step up from the one before: the fire runs from orange to a blinding
@@ -32,32 +24,21 @@
 // A lucky roll looks bigger than its rank and a poor one smaller, about as
 // often each way, and whatever adds to the damage beyond the rank shows too.
 //
+// The fireball is drawn to the size of the burst it is placed as, so another
+// spell's blast of fire can be played as one (playFireball, rankForDamage):
+// Ember Doppelgänger's is.
+//
 // The spell itself needs no edit: PF2e already puts a template button on its
 // chat card. Any Automated Animations autorec entry for Fireball has to go,
 // or both animations play.
 
 import { ASSETS } from "../assets.js";
 import { MOD } from "../const.js";
+import { registerDamageBurst } from "../lib/damage-burst.js";
 import { dazzle, fadeLight, playSound, preloadSounds, shakeUsers } from "../lib/effects.js";
 
 const SLUG = "origin:item:slug:fireball";
 const BASE_RANK = 3;
-
-// Dice So Nice says, for each roll message, whether this client will animate
-// its dice, and later when they have landed. Should neither ever come, the
-// fireball goes off after this long anyway.
-const DSN = "dice-so-nice";
-const DICE_WAIT_MS = 15000;
-
-// A damage button is any button on a chat card whose action names damage —
-// PF2e's spell card has "spell-damage". Pressing one is held for the roll it
-// starts for this long, which leaves time for PF2e's damage dialog; a press
-// that led to no roll is forgotten after it.
-const DAMAGE_BUTTON = '[data-action*="damage"]';
-const PRESS_HELD_MS = 120000;
-
-// Used only if the template's own radius cannot be read.
-const BURST_RADIUS_FEET = 20;
 
 // How JB2A's beam-style files — the Fireball beam and the Fire Bolt alike —
 // are laid out, in the file's own pixels; nothing here refers to the scene's
@@ -357,30 +338,16 @@ const RANKS = [
   }
 ];
 
-// Fireballs placed and not yet rolled for, by chat card. Every GM keeps them,
-// so that whichever GM is active when the damage is rolled has them; only
-// that one plays the fireball.
-const placed = new Map();
-
-// The chat card whose damage button this client pressed last, and when.
-let pressed = null;
-
-// Damage rolls whose dice are still rolling, by message id.
-const rolling = new Map();
-
-// What Dice So Nice decided about a fireball's damage message, when it
-// decided before this module heard of the message.
-const diceDecided = new Map();
-
+// The step to play is taken from the damage rolled; from the rank cast only
+// if the roll has no total to read.
 export function registerFireball() {
-  // Capturing, so the press is seen before PF2e acts on it.
-  document.addEventListener("click", onButtonPressed, true);
-  Hooks.on("preCreateChatMessage", markDamageCard);
-  Hooks.on("createRegion", preloadAnimations);
-  Hooks.on("createRegion", onFireballPlaced);
-  Hooks.on("createChatMessage", onDamageRolled);
-  Hooks.on("diceSoNiceMessageProcessed", onDiceProcessed);
-  Hooks.on("diceSoNiceRollComplete", release);
+  registerDamageBurst(SLUG, {
+    onPlaced: preloadFireball,
+    fire: (shot) => fire({
+      ...shot,
+      rank: Number.isFinite(shot.damage) ? rankForDamage(shot.damage) : (shot.rank ?? BASE_RANK)
+    })
+  });
   Hooks.on("canvasReady", sweepFlashes);
   Hooks.once("ready", () => preloadSounds(Object.values(SOUNDS).map((s) => s.src)));
   return { play: playFireball };
@@ -403,29 +370,12 @@ function averageDamage(rank) {
   return 3.5 * 2 * rank;
 }
 
-function rankForDamage(damage) {
+export function rankForDamage(damage) {
   let rank = BASE_RANK;
   for (let r = BASE_RANK + 1; r < BASE_RANK + RANKS.length; r++) {
     if (damage >= (averageDamage(r - 1) + averageDamage(r)) / 2) rank = r;
   }
   return rank;
-}
-
-// The centre of the burst and its radius in pixels. A burst is a circle,
-// positioned by its centre.
-function burstOf(region) {
-  const grid = region.parent.grid;
-  const shape = region.shapes[0];
-  const radius = shape.radius ?? (BURST_RADIUS_FEET / grid.distance) * grid.size;
-  return { centre: { x: shape.x, y: shape.y }, radius };
-}
-
-// Everything a fireball needs to go off, taken from its template while there
-// is one.
-function shotOf(region) {
-  const { centre, radius } = burstOf(region);
-  const origin = region.flags.pf2e.origin;
-  return { scene: region.parent, centre, radius, rank: origin.castRank ?? BASE_RANK, actor: origin.actor };
 }
 
 // The caster's token on the scene the fireball is on. The damage roll names
@@ -544,38 +494,12 @@ function paint(effect, { tint, hue, saturate, brightness, glow }) {
   return effect;
 }
 
-function isFireballDamage(message) {
-  const pf2e = message?.flags?.pf2e;
-  return pf2e?.context?.type === "damage-roll" && (pf2e.origin?.rollOptions ?? []).includes(SLUG);
-}
-
-// On the client of whoever presses a damage button on a chat card.
-function onButtonPressed(event) {
-  const card = event.target.closest?.(DAMAGE_BUTTON)?.closest("[data-message-id]");
-  if (card) pressed = { card: card.dataset.messageId, at: Date.now() };
-}
-
-// Still on that client, as the roll it started becomes a message: the card
-// is written into it, for the active GM to read.
-function markDamageCard(message) {
-  if (!pressed || !isFireballDamage(message)) return;
-  if (Date.now() - pressed.at <= PRESS_HELD_MS) {
-    message.updateSource({ [`flags.${MOD}.card`]: pressed.card });
-  }
-  pressed = null;
-}
-
-function isFireballTemplate(region) {
-  return (region.flags?.pf2e?.origin?.rollOptions ?? []).includes(SLUG);
-}
-
 // Every client begins loading the fireball's animations the moment its
 // template is placed, in the seconds before the damage is rolled and the
 // dice land. Sequencer otherwise fetches a file only when it is first played,
 // and a bolt that flies for a second was over before its file arrived the
 // first time a client saw one. Files already loaded are not fetched again.
-function preloadAnimations(region) {
-  if (!isFireballTemplate(region)) return;
+export function preloadFireball() {
   const fb = ASSETS.fireball;
   const files = [
     fb.explosion, fb.afterglow, fb.shockwave,
@@ -586,79 +510,20 @@ function preloadAnimations(region) {
     .catch((err) => console.warn(`${MOD} | fireball preload`, err));
 }
 
-// Placing the template and rolling the damage are things every client hears
-// about. The GMs keep track of them; only the active GM plays the fireball,
-// and Sequencer shows it to everyone. A template placed again from the same
-// card replaces the one before.
-function onFireballPlaced(region) {
-  if (!game.user.isGM) return;
-  const card = region.flags?.pf2e?.messageId;
-  if (!isFireballTemplate(region) || !card) return;
-  placed.set(card, shotOf(region));
-}
-
-// The damage of a placed fireball has been rolled. Without Dice So Nice, or
-// when it has already said it will not animate these dice, the fireball goes
-// off at once; otherwise once the dice land.
-function onDamageRolled(message) {
-  if (!game.user.isGM) return;
-  if (!isFireballDamage(message)) return;
-  const decided = diceDecided.get(message.id);
-  diceDecided.delete(message.id);
-
-  const card = message.flags[MOD]?.card;
-  const shot = card && placed.get(card);
-  if (!shot) return;
-  placed.delete(card);
-  if (game.user !== game.users.activeGM) return;
-
-  // The step to play, from the damage rolled; the rank cast only if the roll
-  // has no total to read.
-  const { origin, context } = message.flags.pf2e;
-  const damage = message.rolls?.[0]?.total;
-  shot.rank = Number.isFinite(damage) ? rankForDamage(damage) : (origin.castRank ?? shot.rank);
-  shot.tokenId = context.token;
-
-  if (!game.modules.get(DSN)?.active || decided === false) {
-    fire(shot);
-    return;
-  }
-  rolling.set(message.id, { shot, timer: setTimeout(() => release(message.id), DICE_WAIT_MS) });
-}
-
-// Dice So Nice has decided whether this client animates a message's dice. It
-// may decide before or after this module hears of the message.
-function onDiceProcessed(messageId, interception) {
-  if (game.user !== game.users.activeGM) return;
-  if (rolling.has(messageId)) {
-    if (!interception.willTrigger3DRoll) release(messageId);
-    return;
-  }
-  if (isFireballDamage(game.messages.get(messageId))) {
-    diceDecided.set(messageId, interception.willTrigger3DRoll);
-  }
-}
-
-// The dice of a damage roll have landed, or will not be shown, or were
-// waited for long enough.
-function release(messageId) {
-  const waiting = rolling.get(messageId);
-  if (!waiting) return;
-  rolling.delete(messageId);
-  clearTimeout(waiting.timer);
-  fire(waiting.shot);
-}
-
 function fire(shot) {
   playFireball(shot).catch(report);
 }
 
-async function playFireball(shot) {
+// Plays a fireball for everyone. shot: scene, centre {x, y} and radius in
+// pixels — the burst it fills —, rank — the step to play —, and where the
+// bolt is launched from: the token from, or else the caster's token, found
+// from actor (uuid) and tokenId.
+export async function playFireball(shot) {
   const grid = shot.scene.grid;
   const { centre, radius } = shot;
   const diameterSquares = (2 * radius) / grid.size;
   const step = stepFor(shot.rank);
-  const caster = await casterToken(shot);
+  const caster = shot.from ?? await casterToken(shot);
   const size = diameterSquares * step.blast.cover / EXPLOSION_DISC;
 
   const seq = new Sequence();

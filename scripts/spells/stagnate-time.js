@@ -8,9 +8,10 @@
 // PF2e's template button, and placing the template sets everything up:
 //
 // - The template is swapped for a field: a region of the same circle, hidden
-//   from everyone, that the map visibly bends inside (lib/lens.js). The
-//   template is not kept, because a target helper set to remove templates
-//   after picking targets would take the spell down with it.
+//   from everyone, that the map visibly bends inside (FIELD_SHADER below,
+//   drawn by lib/region-shader.js). The template is not kept, because a
+//   target helper set to remove templates after picking targets would take
+//   the spell down with it.
 // - The caster gets the spell's effect for its minute. When the effect ends
 //   — expired, or removed by hand — the field goes; when the field is
 //   removed by hand, the effect goes with it.
@@ -28,7 +29,7 @@
 // by whoever presses the button for the creature they own.
 
 import { MOD } from "../const.js";
-import { registerLensField } from "../lib/lens.js";
+import { registerRegionShader } from "../lib/region-shader.js";
 
 const SLUG = "origin:item:slug:stagnate-time";
 const ICON = "systems/pf2e/icons/spells/stagnate-time.webp";
@@ -40,8 +41,94 @@ const FIELD_COLOR = "#8fb8ff";
 // hooks that tie the two together leave such deletions alone.
 const ENDING = `${MOD}StagnateEnding`;
 
+// What the field looks like: the map inside it rocks in a slow swirl, faint
+// rings creep out from the centre, its colour drains to a cold grey, and the
+// edge refracts like the rim of a glass dome, splitting colours and blurring
+// a little. Every pixel reads the map from a nearby point instead of its own,
+// and that displacement is the whole effect.
+const FIELD_SHADER = `
+precision highp float;
+varying vec2 vTextureCoord;
+uniform sampler2D uSampler;
+uniform vec4 inputSize;
+uniform vec4 outputFrame;
+uniform vec4 inputClamp;
+uniform vec2 center;
+uniform float radius;
+uniform float time;
+uniform float fade;
+uniform float strength, speed;
+uniform float desat; uniform vec3 tint;
+uniform float waveAmp, waveCount, waveSpeed;
+uniform float rimWidth, rimSharp, rimSoft, rimBlur, rimAmp, rimSplit, rimSpeed, rimGlow;
+
+vec4 at(vec2 px) {
+  vec2 uv = (px - outputFrame.xy) * inputSize.zw;
+  return texture2D(uSampler, clamp(uv, inputClamp.xy, inputClamp.zw));
+}
+vec3 rgbAt(vec2 o, vec2 split) {
+  return vec3(at(o + split).r, at(o).g, at(o - split).b);
+}
+
+void main() {
+  vec2 px = vTextureCoord * inputSize.xy + outputFrame.xy;
+  vec2 d = px - center;
+  float r = length(d);
+  if (r >= radius || fade <= 0.0) { gl_FragColor = texture2D(uSampler, vTextureCoord); return; }
+  float q = r / radius;
+  float k = 1.0 - q;
+  vec2 dir = r > 0.0 ? d / r : vec2(0.0);
+
+  // the swirl, rocking one way and back
+  float a = fade * strength * sin(time * speed) * k * k;
+  float s = sin(a), c = cos(a);
+  vec2 p = vec2(c * d.x - s * d.y, s * d.x + c * d.y);
+
+  // slow rings creeping out from the centre
+  float wave = sin((q * waveCount - time * waveSpeed) * 6.2831853);
+  p += dir * wave * waveAmp * radius * k * fade;
+
+  // the rim: rising towards the edge and easing to nothing just short of it
+  float e = clamp((q - (1.0 - rimWidth)) / rimWidth, 0.0, 1.0);
+  float outer = rimSoft > 0.0 ? 1.0 - smoothstep(1.0 - rimSoft, 1.0, q) : 1.0;
+  float band = pow(e, rimSharp) * outer * fade;
+  float shimmer = 0.85 + 0.15 * sin(time * rimSpeed + atan(d.y, d.x) * 7.0);
+  vec2 bend = -dir * rimAmp * radius * band * shimmer;
+  vec2 split = dir * rimSplit * radius * band;
+  vec2 o = center + p + bend;
+
+  // blurred across the rim, as through frosted glass
+  vec2 b = dir * rimBlur * radius * band;
+  vec3 rgb = (rgbAt(o - 2.0 * b, split) + rgbAt(o - b, split) + rgbAt(o, split)
+            + rgbAt(o + b, split) + rgbAt(o + 2.0 * b, split)) / 5.0;
+  vec4 col = vec4(rgb, at(o).a);
+
+  // colour drained to a cold grey, easing off towards the edge
+  float grey = dot(col.rgb, vec3(0.299, 0.587, 0.114));
+  col.rgb = mix(col.rgb, grey * tint, desat * smoothstep(1.0, 0.6, q) * fade);
+  col.rgb += rimGlow * band * tint * col.a;
+
+  gl_FragColor = col;
+}`;
+
+// Chosen at the table by turning each one live. Lengths are shares of the
+// radius, so the look holds at any zoom. strength and speed: how far the swirl
+// rocks, in radians, and how fast. desat and tint: how much colour is drained,
+// and to what. waveAmp, waveCount, waveSpeed: the rings' depth, how many
+// across the radius, and how fast they creep out. rim…: the band at the edge —
+// its width, how sharply it rises, how softly it ends, its blur, how far it
+// bends the picture, how far it splits the colours, how fast it shimmers, and
+// how bright its edge glows.
+const FIELD_LOOK = {
+  strength: 0.6, speed: 1,
+  desat: 0.7, tint: [0.8, 0.9, 1.0],
+  waveAmp: 0.1, waveCount: 4, waveSpeed: 0.15,
+  rimWidth: 0.12, rimSharp: 3, rimSoft: 0.04, rimBlur: 0.01,
+  rimAmp: 0.06, rimSplit: 0.02, rimSpeed: 0.6, rimGlow: 0.15
+};
+
 export function registerStagnateTime() {
-  registerLensField({ test: isField });
+  registerRegionShader({ test: isField, fragment: FIELD_SHADER, uniforms: FIELD_LOOK });
   Hooks.on("createRegion", onTemplatePlaced);
   Hooks.on("deleteRegion", onFieldDeleted);
   Hooks.on("deleteItem", onSpellEffectDeleted);

@@ -42,6 +42,10 @@ const NAME = "Light";
 const ICON = "systems/pf2e/icons/spells/light.webp";
 const MAX_LIGHTS = 4;
 
+// The orb is half a square across, token and placed square alike: it takes
+// up little of the map, and centred in its cell it still sits on the grid.
+const ORB_SIZE = 0.5;
+
 // The system's own Light effect is this cold white.
 const DEFAULT_COLOR = "#e7f3f1";
 
@@ -137,19 +141,21 @@ void main() {
 // rays, how fast they turn, how strong they are. breath…: how far and how
 // fast it all breathes. reach: where the halo has faded to nothing, short of
 // the edge of the padded frame. Chosen from rendered previews: the rays kept
-// faint, so the orb reads as a soft light rather than a star.
+// faint, so the orb reads as a soft light rather than a star. The token being
+// half a square, a token width here is half a square: the sphere is a third
+// of a square across, and the glow and halo spread over a square and more.
 const ORB_LOOK = {
-  coreRadius: 0.08, coreSoft: 0.7, coreWhite: 0.9,
-  glowRadius: 0.22, glowStrength: 0.85,
-  haloRadius: 0.28, haloStrength: 0.5, haloScale: 4, haloSpeed: 0.35,
+  coreRadius: 0.32, coreSoft: 0.7, coreWhite: 0.9,
+  glowRadius: 0.88, glowStrength: 0.85,
+  haloRadius: 1.12, haloStrength: 0.5, haloScale: 1, haloSpeed: 0.35,
   rayCount: 5, raySpeed: 0.2, rayStrength: 0.08,
   breathAmp: 0.12, breathSpeed: 1.6,
-  reach: 1.05
+  reach: 4.2
 };
 
 // How far beyond the token the shader may draw, in token widths: the frame
-// then reaches 1.1 widths from the centre, past where the halo fades out.
-const PADDING = 0.6;
+// then reaches 4.3 widths from the centre, past where the halo fades out.
+const PADDING = 3.8;
 
 export function registerLight() {
   registerTokenShader({
@@ -162,7 +168,7 @@ export function registerLight() {
   handlePlacement(SLUG, {
     prepare: chooseColor,
     shape: (data) => {
-      const shaped = squareTemplate(data, { color: data.flags?.[MOD]?.lightColor ?? DEFAULT_COLOR });
+      const shaped = squareTemplate(data, { color: data.flags?.[MOD]?.lightColor ?? DEFAULT_COLOR, share: ORB_SIZE });
       foundry.utils.setProperty(shaped, `flags.${MOD}.lightSummon`, true);
       return shaped;
     },
@@ -272,25 +278,31 @@ async function createOrb(scene, castId, cell, origin, color) {
   const number = Array.from({ length: MAX_LIGHTS }, (_, i) => i + 1).find((n) => !taken.has(n)) ?? MAX_LIGHTS;
   const name = `${NAME} ${number}`;
 
+  // PF2e sizes a token by its actor and scales its picture to it unless told
+  // not to; the orb keeps the size set here, its picture filling it.
+  const sizing = { pf2e: { linkToActorSize: false, autoscale: false } };
+
   const actor = await CONFIG.Actor.documentClass.create({
     name: caster ? `${name} (${caster.name})` : name,
     type: "hazard",
     img: ICON,
     folder: (await spellActorFolder())?.id ?? null,
     ownership: spellActorOwnership(caster),
-    prototypeToken: { name, actorLink: true },
+    system: { traits: { size: { value: "tiny" } } },
+    prototypeToken: { name, actorLink: true, width: ORB_SIZE, height: ORB_SIZE, flags: sizing },
     flags: { [MOD]: { castId, lightOrb: true } }
   });
 
-  const size = scene.grid.size;
+  // Centred in the cell chosen.
+  const across = scene.grid.size * ORB_SIZE;
   await scene.createEmbeddedDocuments("Token", [{
     name,
     actorId: actor.id,
     actorLink: true,
-    x: cell.x - size / 2,
-    y: cell.y - size / 2,
-    width: 1,
-    height: 1,
+    x: cell.x - across / 2,
+    y: cell.y - across / 2,
+    width: ORB_SIZE,
+    height: ORB_SIZE,
     texture: { src: ICON },
     ring: { enabled: false },
     lockRotation: true,
@@ -299,7 +311,10 @@ async function createOrb(scene, castId, cell, origin, color) {
     displayBars: CONST.TOKEN_DISPLAY_MODES.NONE,
     sight: { enabled: false },
     light: { ...LIGHT, ...lightRadii(rank), color },
-    flags: { [MOD]: { castId, lightOrb: true, caster: origin.actor ?? null, color, number, castAt: Date.now() } }
+    flags: {
+      ...sizing,
+      [MOD]: { castId, lightOrb: true, caster: origin.actor ?? null, color, number, castAt: Date.now() }
+    }
   }]);
 
   if (caster && !spellEffect(caster, castId)) {

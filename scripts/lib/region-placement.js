@@ -40,14 +40,22 @@ function handlerFor(data) {
   return null;
 }
 
-// A template of one grid square, for spells that conjure something into a
-// square of the player's choosing: a rectangle anchored at its corner, placed
-// with squarePlacement's options. Where the thing ends up is still worked out
-// from the centre and snapped again on the GM's side (placedCell), so a
-// template that lands off the grid cannot put it off the grid.
-export function squareTemplate(data, { color } = {}) {
-  const size = canvas.grid.size;
+// A template choosing one grid square, for spells that conjure something into
+// a square of the player's choosing: a square the size of the cell, or of
+// share of it across — the size of what is conjured — anchored at its corner
+// and placed with squarePlacement's options, which keep its centre on the
+// centre of a cell. Where the thing ends up is still worked out from that
+// centre and snapped again on the GM's side (placedCell), so a template that
+// lands off the grid cannot put it off the grid.
+//
+// It shows no measurements. PF2e's region layer takes over the placement of
+// any template that does — its own snapping and aiming, put in place of the
+// callbacks it is given — and squarePlacement's would never be called; a
+// single square has nothing to measure anyway.
+export function squareTemplate(data, { color, share = 1 } = {}) {
+  const size = canvas.grid.size * share;
   const shaped = foundry.utils.deepClone(data);
+  shaped.displayMeasurements = false;
   shaped.shapes = [{
     type: "rectangle",
     x: data.shapes[0].x ?? 0,
@@ -110,6 +118,11 @@ export function squarePlacement(options) {
 //
 // Registered at "ready" because the target path resolves through
 // canvas.regions, which does not exist before the canvas is up.
+//
+// Registered as MIXED, not WRAPPER: a run that has nothing to place — the
+// limit already reached — or that the player calls off returns without
+// calling placeRegion at all, and libWrapper unregisters a WRAPPER that does
+// that, after which every template would be placed unshaped until reload.
 export function registerRegionPlacement() {
   Hooks.once("ready", () => {
     libWrapper.register(MOD,
@@ -139,6 +152,6 @@ export function registerRegionPlacement() {
 
         handler.done?.(placed, limit);
         return last;
-      }, "WRAPPER");
+      }, "MIXED");
   });
 }

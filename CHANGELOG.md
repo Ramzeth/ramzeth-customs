@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- A placement link pressed with nothing left to place — "already on the map",
+  every block of a cast placed — or a colour choice called off no longer
+  switches the module's template shaping off until reload, after which no
+  orb, block or Hussar could be placed at all.
+
 ### Added
 
 - Ember Doppelgänger: the spell, forked into Ramzeth Spells, gets a "Summon
@@ -31,8 +38,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   post its own card again.
 - Light: the cantrip, forked into Ramzeth Spells, gets a "Create Light" link.
   The player picks the light's colour — offered as the one they picked last
-  — and places one square, which becomes the orb: a token the caster's
-  owners drag about, drawn as a small bright sphere in a soft glow and a
+  — and places a half-square marker on the middle of a cell, which becomes
+  the orb: a half-square token the caster's owners drag about, drawn as a
+  small bright sphere in a soft glow and a
   slowly shimmering halo of that colour, shedding the spell's light in it,
   softly pulsing — 20 feet bright and 20 dim, 60 and 60 from rank 4. Each of
   a caster's orbs is numbered, "Light 1" to "Light 4", shown on hover, and the
@@ -58,7 +66,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Fireball and Ember Doppelgänger; Fireball keeps its look.
 - The one-square template — Sliding Blocks, the Ember Hussar, Light — is held
   by its centre while being placed, snapping to the centre of the cell under
-  the cursor (freely with Shift), instead of by its corner.
+  the cursor (freely with Shift), instead of by its corner. It no longer shows
+  measurements: PF2e's own placement of measured templates replaced the
+  centring.
 
 ## [1.5.0] - 2026-10-06
 

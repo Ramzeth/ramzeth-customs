@@ -11,7 +11,7 @@ import { ASSETS } from "../assets.js";
 import { MOD } from "../const.js";
 import { attach } from "../lib/attach.js";
 import { playSound } from "../lib/effects.js";
-import { handlePlacement, placedCell, squareTemplate } from "../lib/region-placement.js";
+import { handlePlacement, placedCell, squarePlacement, squareTemplate } from "../lib/region-placement.js";
 import { spellActorFolder, spellActorOwnership } from "../lib/spell-actors.js";
 
 // Marks a deletion as the spell ending rather than a block being destroyed,
@@ -46,8 +46,7 @@ export function registerSlidingBlocks() {
     shape: (data) => squareTemplate(data, { color: BLOCK_COLOR }),
     limit: (data) => Math.max(0,
       MAX_BLOCKS - collectBlocks(canvas.scene, data.flags?.pf2e?.messageId).length),
-    // Turning a one-square block only pushes it off the grid.
-    options: (options) => ({ ...options, allowRotation: false })
+    options: squarePlacement
   });
   Hooks.on("createRegion", onBlockPlaced);
   Hooks.on("updateActor", onBlockDamaged);

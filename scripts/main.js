@@ -7,6 +7,7 @@ import { registerRegionPlacement } from "./lib/region-placement.js";
 import { registerSpellActors } from "./lib/spell-actors.js";
 import { registerEmberDoppelganger } from "./spells/ember-doppelganger.js";
 import { registerFireball } from "./spells/fireball.js";
+import { registerLight } from "./spells/light.js";
 import { registerSlidingBlocks } from "./spells/sliding-blocks.js";
 import { registerStagnateTime } from "./spells/stagnate-time.js";
 import { registerWallOfStone } from "./spells/wall-of-stone.js";
@@ -29,6 +30,7 @@ Hooks.once("init", () => {
     api.fireball = registerFireball();
     api.stagnateTime = registerStagnateTime();
     api.emberDoppelganger = registerEmberDoppelganger();
+    api.light = registerLight();
   }
 
   Hooks.once("ready", () => {

@@ -1,0 +1,83 @@
+_id: WBmvzNDfpwka3qT4
+img: systems/pf2e/icons/spells/light.webp
+name: Light
+system:
+  description:
+    gm: ''
+    value: >-
+      <p>You create an orb of light that sheds bright light in a 20-foot radius
+      (and dim light for the next 20 feet) in a color you choose. If you create
+      the light in the same space as a willing creature, you can attach the
+      light to the creature, causing it to float near that creature as it
+      moves. You can Sustain the spell to move the light up to 60 feet; you can
+      attach or detach it from a creature as part of this movement.</p>
+
+      <p>You can Dismiss the spell. If you Cast the Spell while you already
+      have four <em>light</em> spells active, you must choose one of the
+      existing spells to end.</p>
+
+      <p>@UUID[Compendium.pf2e.spell-effects.Item.cVVZXNbV0nElVOPZ]{Spell
+      Effect: Light}</p>
+
+      <p>@Template[line|distance:5]{Create Light}</p>
+
+      <hr>
+
+      <p><strong>Heightened (4th)</strong> The orb sheds light in a 60-foot
+      radius (and dim light for the next 60 feet).</p>
+  rules: []
+  slug: light
+  _migration:
+    version: 0.959
+    lastMigration: null
+    previous: null
+  traits:
+    otherTags: []
+    value:
+      - cantrip
+      - concentrate
+      - light
+      - manipulate
+    rarity: common
+    traditions:
+      - arcane
+      - divine
+      - occult
+      - primal
+  publication:
+    title: Pathfinder Player Core
+    authors: ''
+    license: ORC
+    remaster: true
+  level:
+    value: 1
+  requirements: ''
+  target:
+    value: ''
+  range:
+    value: 120 feet
+  area: null
+  time:
+    value: '2'
+  duration:
+    value: until your next daily preparations
+    sustained: false
+  damage: {}
+  defense: null
+  cost:
+    value: ''
+  location:
+    value: null
+  counteraction: false
+type: spell
+_stats:
+  coreVersion: '14.367'
+  systemId: pf2e
+  systemVersion: 8.4.1
+  compendiumSource: Compendium.pf2e.spells-srd.Item.WBmvzNDfpwka3qT4
+  duplicateSource: null
+effects: []
+flags: {}
+ownership:
+  default: 0
+_key: '!items!WBmvzNDfpwka3qT4'

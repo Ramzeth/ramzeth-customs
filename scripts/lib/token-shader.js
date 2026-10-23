@@ -31,10 +31,12 @@ const shaded = new Map();
 let hooked = false;
 
 // test(tokenDocument): whether a token is shaded. fragment: the shader's
-// source. uniforms: its settings. padding: how far it may draw beyond the
-// token, as a share of the token's width.
-export function registerTokenShader({ test, fragment, uniforms = {}, padding = 0 }) {
-  kinds.push({ test, fragment, uniforms, padding });
+// source. uniforms: its settings. uniformsFor(tokenDocument): settings of
+// one token's own, read from its data — a colour chosen for it, say — and
+// read again whenever the token is redrawn or refreshed. padding: how far it
+// may draw beyond the token, as a share of the token's width.
+export function registerTokenShader({ test, fragment, uniforms = {}, uniformsFor = null, padding = 0 }) {
+  kinds.push({ test, fragment, uniforms, uniformsFor, padding });
   if (hooked) return;
   hooked = true;
   Hooks.on("drawToken", dress);
@@ -58,6 +60,7 @@ function dress(token) {
   // A redrawn token may come with a new sprite, which needs the filter again.
   s.token = token;
   s.mesh = mesh;
+  if (kind.uniformsFor) Object.assign(s.filter.uniforms, kind.uniformsFor(token.document));
   if (!(mesh.filters ?? []).includes(s.filter)) mesh.filters = [...(mesh.filters ?? []), s.filter];
 }
 

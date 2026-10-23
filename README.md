@@ -82,6 +82,10 @@ smoke (by `scripts/lib/token-shader.js`) — ties it to the caster's effect, and
 has it hurl a fireball, sized to the 10-foot burst, when the damage is
 rolled. Both spells' blasts are set off by `scripts/lib/damage-burst.js`.
 
+`scripts/spells/light.js` turns the placed square into an orb of light in the
+chosen colour — a token drawn by its own shader, shedding the spell's light —
+tied to the caster's effect, four at most.
+
 Actors that spells create live in the "Ramzeth Customs" folder and are
 deleted with their last token (`scripts/lib/spell-actors.js`).
 

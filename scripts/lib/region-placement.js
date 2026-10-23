@@ -22,6 +22,10 @@ const handlers = new Map();
 //                      PF2e's template for it, carrying the same roll option,
 //                      which is to be left alone.
 //   limit(data)        how many placements one click allows — default 1
+//   prepare(data)      async, once before placing, when there is anything to
+//                      place: data for the run — a choice the player makes
+//                      first, written into its flags, say — or null to call
+//                      the run off. Default unchanged.
 //   options(options)   placement options — default unchanged
 //   done(placed, limit) called once the run ends
 export function handlePlacement(rollOption, handler) {
@@ -37,12 +41,10 @@ function handlerFor(data) {
 }
 
 // A template of one grid square, for spells that conjure something into a
-// square of the player's choosing. It is a rectangle held by its corner: PF2e's
-// own lines snap their start to a grid vertex while being placed, and a
-// rectangle anchored at its corner snaps the same way and so fills exactly one
-// cell. Where the thing ends up is still worked out from the centre and
-// snapped again on the GM's side (placedCell), so a template that lands off
-// the grid cannot put it off the grid.
+// square of the player's choosing: a rectangle anchored at its corner, placed
+// with squarePlacement's options. Where the thing ends up is still worked out
+// from the centre and snapped again on the GM's side (placedCell), so a
+// template that lands off the grid cannot put it off the grid.
 export function squareTemplate(data, { color } = {}) {
   const size = canvas.grid.size;
   const shaped = foundry.utils.deepClone(data);
@@ -75,6 +77,26 @@ export function placedCell(region) {
   });
 }
 
+// Placement options for a square template. It cannot be turned, and the
+// cursor holds it by its centre, which snaps to the centre of the cell under
+// the cursor — or follows the cursor freely while Shift is held — so the
+// square covers the cell pointed at. Left to itself, Foundry would hold it by
+// its anchor, the corner. The callback taking over the move is the layer's
+// own placement option.
+export function squarePlacement(options) {
+  return {
+    ...options,
+    allowRotation: false,
+    onMove: ({ shape, position, snap }) => {
+      const centre = snap
+        ? canvas.grid.getSnappedPoint(position, { mode: CONST.GRID_SNAPPING_MODES.CENTER, resolution: 1 })
+        : position;
+      shape.updateSource({ x: centre.x - shape.width / 2, y: centre.y - shape.height / 2 });
+      return false;
+    }
+  };
+}
+
 // One click on the link starts a run of placements rather than a single one:
 // a wall is two dozen sections, a spell may conjure six blocks, and clicking
 // back into the chat card between each of them is unusable at the table.
@@ -97,6 +119,13 @@ export function registerRegionPlacement() {
         if (!handler) return wrapped(data, options);
 
         const limit = handler.limit?.(data) ?? 1;
+        if (limit > 0 && handler.prepare) {
+          data = await handler.prepare(data);
+          if (!data) {
+            handler.done?.(0, limit);
+            return null;
+          }
+        }
         const placementOptions = handler.options?.(options) ?? options;
         let last = null;
         let placed = 0;

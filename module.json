@@ -30,6 +30,16 @@
               "id": "wall-height",
               "type": "module",
               "reason": "Gives the walls of Sliding Blocks a height, so a levitated block can be passed beneath."
+          },
+          {
+              "id": "dice-so-nice",
+              "type": "module",
+              "reason": "A fireball, or an Ember Hussar's blast, waits for its damage dice to land before it goes off."
+          },
+          {
+              "id": "pf2e-auto-action-tracker",
+              "type": "module",
+              "reason": "Sustaining Ember Doppelgänger posts its card again for the next blast, and letting it lapse ends the spell."
           }
       ]
   },

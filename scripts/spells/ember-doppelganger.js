@@ -41,7 +41,7 @@
 
 import { MOD } from "../const.js";
 import { registerDamageBurst } from "../lib/damage-burst.js";
-import { handlePlacement, placedCell, squareTemplate } from "../lib/region-placement.js";
+import { handlePlacement, placedCell, squarePlacement, squareTemplate } from "../lib/region-placement.js";
 import { spellActorFolder, spellActorOwnership } from "../lib/spell-actors.js";
 import { onSustain, postSpellCard } from "../lib/sustain.js";
 import { registerTokenShader } from "../lib/token-shader.js";
@@ -222,7 +222,7 @@ export function registerEmberDoppelganger() {
       return shaped;
     },
     limit: (data) => (hussarsOf(castOf(data.flags?.pf2e?.messageId)).length ? 0 : 1),
-    options: (options) => ({ ...options, allowRotation: false }),
+    options: squarePlacement,
     done: (placed, limit) => {
       if (!limit) ui.notifications.warn(`${SPELL_NAME}: this cast's ${NAME} is already on the map.`);
     }

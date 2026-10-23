@@ -29,9 +29,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for sustaining spells through PF2e Auto Action Tracker
   (`scripts/lib/sustain.js`): a spell can be told when it is sustained, and
   post its own card again.
+- Light: the cantrip, forked into Ramzeth Spells, gets a "Create Light" link.
+  The player picks the light's colour — offered as the one they picked last
+  — and places one square, which becomes the orb: a token the caster's
+  owners drag about, drawn as a small bright sphere in a soft glow and a
+  slowly shimmering halo of that colour, shedding the spell's light in it,
+  softly pulsing — 20 feet bright and 20 dim, 60 and 60 from rank 4. Each of
+  a caster's orbs is numbered, "Light 1" to "Light 4", shown on hover, and the
+  caster gets an effect for the day with the same number; deleting it
+  dismisses that orb, and deleting the orb ends the effect. A fifth orb puts
+  out the caster's oldest.
+- Dice So Nice and PF2e Auto Action Tracker are listed as recommended
+  modules.
 - A reusable token shader (`scripts/lib/token-shader.js`): draws a spell's
   shader on the picture of any token it marks, beyond its edge too, on each
-  client.
+  client, with settings of each token's own where the spell gives them.
 
 ### Changed
 
@@ -44,6 +56,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Setting off a burst when its damage is rolled from the card, after the
   dice land, is now its own piece (`scripts/lib/damage-burst.js`), shared by
   Fireball and Ember Doppelgänger; Fireball keeps its look.
+- The one-square template — Sliding Blocks, the Ember Hussar, Light — is held
+  by its centre while being placed, snapping to the centre of the cell under
+  the cursor (freely with Shift), instead of by its corner.
 
 ## [1.5.0] - 2026-10-06
 
